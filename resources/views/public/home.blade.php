@@ -4,7 +4,7 @@
 <section class="landing-hero">
     <nav class="landing-nav container" aria-label="Public navigation">
         <a class="landing-brand" href="{{ route('home') }}">
-            <img src="{{ asset('images/tmc-logo.png') }}" alt="Trinidad Municipal College logo">
+            <img loading="lazy" decoding="async" src="{{ asset('images/tmc-logo.png') }}" alt="Trinidad Municipal College logo">
             <span>
                 <strong>TMC</strong>
                 <small>Lost and Found</small>

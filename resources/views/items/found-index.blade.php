@@ -73,7 +73,7 @@
                             <td>
                                 <div class="found-item-cell">
                                     @if($item->image)
-                                        <img class="found-thumb" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                                        <img class="found-thumb lazy-thumb skeleton" loading="lazy" decoding="async" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" onload="this.classList.remove('skeleton')">
                                     @else
                                         <span class="found-thumb-placeholder"><i class="fa-solid {{ $item->category->icon ?? 'fa-box-open' }}"></i></span>
                                     @endif

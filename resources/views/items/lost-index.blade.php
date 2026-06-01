@@ -75,7 +75,7 @@
                             <td>
                                 <div class="lost-item-cell">
                                     @if($item->image)
-                                        <img class="lost-thumb" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                                        <img class="lost-thumb lazy-thumb skeleton" loading="lazy" decoding="async" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" onload="this.classList.remove('skeleton')">
                                     @else
                                         <span class="lost-thumb-placeholder"><i class="fa-solid {{ $item->category->icon ?? 'fa-box' }}"></i></span>
                                     @endif

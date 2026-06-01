@@ -73,7 +73,7 @@
                     @forelse($recentLostReports as $item)
                         <a class="student-list-item" href="{{ route('student.lost-items.show', $item) }}">
                             @if($item->image)
-                                <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                                <img class="lazy-thumb skeleton" loading="lazy" decoding="async" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" onload="this.classList.remove('skeleton')">
                             @else
                                 <span><i class="fa-solid fa-magnifying-glass"></i></span>
                             @endif

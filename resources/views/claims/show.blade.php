@@ -56,7 +56,7 @@
                 <h2>Submitted Image</h2>
             </div>
             @if($claim->proof_image)
-                <img src="{{ asset('storage/'.$claim->proof_image) }}" alt="Claim proof">
+                <img class="lazy-thumb skeleton" loading="lazy" decoding="async" src="{{ asset('storage/'.$claim->proof_image) }}" alt="Claim proof" onload="this.classList.remove('skeleton')">
             @else
                 <div class="claim-proof-empty">
                     <i class="fa-solid fa-image"></i>
