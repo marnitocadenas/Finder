@@ -33,7 +33,7 @@
 
         <aside class="lost-photo-card">
             @if($item->image)
-                <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                <img class="lazy-thumb skeleton" loading="lazy" decoding="async" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" onload="this.classList.remove('skeleton')">
             @else
                 <div class="lost-photo-empty">
                     <i class="fa-solid fa-image"></i>

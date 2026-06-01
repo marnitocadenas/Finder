@@ -8,7 +8,7 @@
     <section class="profile-hero">
         <div class="profile-identity">
             @if($user->profile_photo)
-                <img src="{{ asset('storage/'.$user->profile_photo) }}" alt="{{ $user->name }} profile photo">
+                <img class="lazy-thumb skeleton rounded-circle" loading="lazy" decoding="async" src="{{ asset('storage/'.$user->profile_photo) }}" alt="{{ $user->name }} profile photo" onload="this.classList.remove('skeleton')">
             @else
                 <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
             @endif
@@ -70,7 +70,7 @@
             <section class="profile-summary">
                 <div class="profile-summary-photo">
                     @if($user->profile_photo)
-                        <img src="{{ asset('storage/'.$user->profile_photo) }}" alt="{{ $user->name }} profile photo">
+                        <img class="lazy-thumb skeleton rounded-circle" loading="lazy" decoding="async" src="{{ asset('storage/'.$user->profile_photo) }}" alt="{{ $user->name }} profile photo" onload="this.classList.remove('skeleton')">
                     @else
                         <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                     @endif

@@ -76,7 +76,7 @@
                     <label class="form-label" for="found-image">Image</label>
                     @if($item->image)
                         <div class="found-current-image">
-                            <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                            <img class="lazy-thumb skeleton" loading="lazy" decoding="async" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" onload="this.classList.remove('skeleton')">
                             <span>Current image</span>
                         </div>
                     @endif
