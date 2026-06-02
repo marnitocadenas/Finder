@@ -117,8 +117,10 @@
                     <a href="{{ route('admin.lost-items.index') }}"><i class="fa-solid fa-magnifying-glass"></i><span>Lost Items</span></a>
                     <a href="{{ route('admin.found-items.index') }}"><i class="fa-solid fa-box-open"></i><span>Found Items</span></a>
                     <a href="{{ route('admin.claims.index') }}"><i class="fa-solid fa-file-signature"></i><span>Claims</span></a>
+                    <a href="{{ route('admin.matches') }}"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Smart Matches</span></a>
                     <a href="{{ route('admin.categories.index') }}"><i class="fa-solid fa-tags"></i><span>Categories</span></a>
                     <a href="{{ route('admin.logs') }}"><i class="fa-solid fa-clock-rotate-left"></i><span>Activity Logs</span></a>
+                    <a href="{{ route('admin.settings') }}"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
                 </div>
             </section>
         </div>

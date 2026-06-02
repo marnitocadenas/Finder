@@ -51,8 +51,10 @@
                 </div>
                 <div class="student-quick-links">
                     <a href="{{ route('student.lost-items.create') }}"><i class="fa-solid fa-plus"></i><span>Report Lost</span></a>
+                    <a href="{{ route('student.matches') }}"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Smart Matches</span></a>
                     <a href="{{ route('student.lost-items.index') }}"><i class="fa-solid fa-list"></i><span>My Reports</span></a>
                     <a href="{{ route('student.browse') }}"><i class="fa-solid fa-box-open"></i><span>Browse Found</span></a>
+                    <a href="{{ route('student.watchlist') }}"><i class="fa-solid fa-bookmark"></i><span>Saved Items</span></a>
                     <a href="{{ route('student.claims.index') }}"><i class="fa-solid fa-file-signature"></i><span>My Claims</span></a>
                 </div>
             </section>
@@ -87,9 +89,10 @@
                             <x-status :status="$item->status" />
                         </a>
                     @empty
-                        <div class="empty-state">
+                        <div class="empty-state student-empty-action">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <p>No lost reports submitted yet.</p>
+                            <a href="{{ route('student.lost-items.create') }}" class="btn btn-primary btn-sm">Report Lost Item</a>
                         </div>
                     @endforelse
                 </div>
@@ -116,9 +119,10 @@
                             <x-status :status="$claim->status" />
                         </a>
                     @empty
-                        <div class="empty-state">
+                        <div class="empty-state student-empty-action">
                             <i class="fa-solid fa-file-signature"></i>
                             <p>No claims submitted yet.</p>
+                            <a href="{{ route('student.browse') }}" class="btn btn-primary btn-sm">Browse Found Items</a>
                         </div>
                     @endforelse
                 </div>
@@ -145,9 +149,10 @@
                     <time>{{ $notification->created_at->diffForHumans() }}</time>
                 </a>
             @empty
-                <div class="empty-state">
+                <div class="empty-state student-empty-action">
                     <i class="fa-solid fa-bell"></i>
                     <p>No notifications yet.</p>
+                    <a href="{{ route('student.matches') }}" class="btn btn-primary btn-sm">Check Matches</a>
                 </div>
             @endforelse
         </div>

@@ -8,6 +8,7 @@ use App\Models\Claim;
 use App\Models\FoundItem;
 use App\Models\LostItem;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\View\View;
 
 class ReportController extends Controller
@@ -68,5 +69,31 @@ class ReportController extends Controller
             'unclaimedFoundItems',
             'reportStats'
         ));
+    }
+
+    public function export(): StreamedResponse
+    {
+        $filename = 'tmc-lost-found-report-'.now()->format('Y-m-d').'.csv';
+
+        return response()->streamDownload(function () {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['Metric', 'Value']);
+            fputcsv($handle, ['Lost records', LostItem::count()]);
+            fputcsv($handle, ['Open lost records', LostItem::where('status', 'lost')->count()]);
+            fputcsv($handle, ['Found records', FoundItem::count()]);
+            fputcsv($handle, ['Unclaimed found records', FoundItem::where('status', 'unclaimed')->count()]);
+            fputcsv($handle, ['Claims', Claim::count()]);
+            fputcsv($handle, ['Pending claims', Claim::where('status', 'pending')->count()]);
+            fputcsv($handle, ['Approved claims', Claim::where('status', 'approved')->count()]);
+            fputcsv($handle, ['Rejected claims', Claim::where('status', 'rejected')->count()]);
+            fputcsv($handle, []);
+            fputcsv($handle, ['Category', 'Lost Items', 'Found Items']);
+
+            Category::withCount(['lostItems', 'foundItems'])->orderBy('name')->each(function ($category) use ($handle) {
+                fputcsv($handle, [$category->name, $category->lost_items_count, $category->found_items_count]);
+            });
+
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv']);
     }
 }

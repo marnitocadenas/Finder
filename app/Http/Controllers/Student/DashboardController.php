@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Claim;
 use App\Models\FoundItem;
 use App\Models\LostItem;
+use App\Models\WatchedFoundItem;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -21,6 +22,21 @@ class DashboardController extends Controller
         $approvedClaims = Claim::where('student_id', $studentId)->where('status', 'approved')->count();
         $availableFoundItems = FoundItem::where('status', 'unclaimed')->count();
         $unreadNotifications = $request->user()->notifications()->where('is_read', false)->count();
+        $watchedItems = WatchedFoundItem::where('user_id', $studentId)->count();
+        $possibleMatches = LostItem::where('user_id', $studentId)
+            ->where('status', 'lost')
+            ->whereExists(function ($query) {
+                $query->selectRaw(1)
+                    ->from('found_items')
+                    ->whereColumn('found_items.category_id', 'lost_items.category_id')
+                    ->where('found_items.status', 'unclaimed')
+                    ->whereNull('found_items.deleted_at');
+            })
+            ->count();
+        $readyForPickup = Claim::where('student_id', $studentId)
+            ->where('status', 'approved')
+            ->whereNull('released_at')
+            ->count();
 
         $stats = [
             ['label' => 'My Lost Reports', 'value' => $lostReports, 'helper' => $openLostReports.' still open', 'icon' => 'fa-magnifying-glass', 'color' => 'danger'],
@@ -50,6 +66,27 @@ class DashboardController extends Controller
                 'icon' => 'fa-bell',
                 'tone' => 'primary',
                 'route' => route('notifications'),
+            ],
+            [
+                'label' => 'Possible matches',
+                'value' => $possibleMatches,
+                'icon' => 'fa-wand-magic-sparkles',
+                'tone' => 'success',
+                'route' => route('student.matches'),
+            ],
+            [
+                'label' => 'Ready for pickup',
+                'value' => $readyForPickup,
+                'icon' => 'fa-handshake',
+                'tone' => 'warning',
+                'route' => route('student.claims.index', ['status' => 'approved']),
+            ],
+            [
+                'label' => 'Saved found items',
+                'value' => $watchedItems,
+                'icon' => 'fa-bookmark',
+                'tone' => 'primary',
+                'route' => route('student.watchlist'),
             ],
         ];
 

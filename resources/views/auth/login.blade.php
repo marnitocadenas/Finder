@@ -32,37 +32,43 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('login') }}" class="auth-form">
+            <form method="POST" action="{{ route('login') }}" class="auth-form auth-enhanced-form">
                 @csrf
 
                 <div class="mb-3">
                     <label class="form-label" for="login-email">Email Address</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                        <input id="login-email" name="email" value="{{ old('email') }}" class="form-control" type="email" placeholder="you@example.com" required autofocus>
+                        <input id="login-email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" type="email" placeholder="you@example.com" autocomplete="email" required autofocus>
                     </div>
+                    @error('email')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="login-password">Password</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                        <input id="login-password" name="password" class="form-control" type="password" placeholder="Enter password" required>
-                        <button type="button" class="btn btn-outline-secondary" onclick="const input=document.getElementById('login-password'); input.type=input.type==='password'?'text':'password';">
+                        <input id="login-password" name="password" class="form-control @error('password') is-invalid @enderror" type="password" placeholder="Enter password" autocomplete="current-password" data-caps-lock required>
+                        <button type="button" class="btn btn-outline-secondary auth-icon-button" data-password-toggle="#login-password" aria-label="Show password">
                             <i class="fa-solid fa-eye"></i>
                         </button>
                     </div>
+                    <div class="auth-caps-warning" data-caps-lock-warning><i class="fa-solid fa-triangle-exclamation"></i> Caps Lock is on.</div>
+                    @error('password')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="auth-form-row">
-                    <label class="auth-check">
-                        <input type="checkbox" name="remember">
-                        <span>Remember me</span>
-                    </label>
+                    <div class="auth-remember-group">
+                        <label class="auth-check">
+                            <input type="checkbox" name="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <small class="auth-helper-text">Keep me signed in on this device.</small>
+                    </div>
                     <a href="{{ route('password.request') }}">Forgot password?</a>
                 </div>
 
-                <button class="btn btn-primary w-100">
+                <button class="btn btn-primary w-100" data-loading-text="Signing in">
                     <i class="fa-solid fa-right-to-bracket me-2"></i>Login
                 </button>
 

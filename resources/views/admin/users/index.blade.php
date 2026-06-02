@@ -59,10 +59,21 @@
             </button>
         </form>
 
+        <form id="users-bulk-form" class="bulk-toolbar" method="POST" action="{{ route('admin.users.bulk') }}">
+            @csrf
+            <select name="action" class="form-select form-select-sm" required>
+                <option value="">Bulk action</option>
+                <option value="delete">Delete selected</option>
+                <option value="restore">Restore selected</option>
+            </select>
+            <button class="btn btn-sm btn-primary" type="submit"><i class="fa-solid fa-bolt me-1"></i>Apply</button>
+        </form>
+
         <div class="users-table-wrap">
             <table class="table users-table align-middle">
                 <thead>
                     <tr>
+                        <th><input type="checkbox" data-check-all></th>
                         <th>User</th>
                         <th>Role</th>
                         <th>Student ID</th>
@@ -74,6 +85,7 @@
                     @forelse($users as $user)
                         @php($roleTone = ['admin' => 'primary', 'staff' => 'warning text-dark', 'student' => 'success'][$user->role] ?? 'secondary')
                         <tr>
+                            <td><input type="checkbox" name="ids[]" value="{{ $user->id }}" form="users-bulk-form" @disabled($user->id === auth()->id())></td>
                             <td>
                                 <div class="user-identity">
                                     <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
@@ -117,7 +129,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">
+                            <td colspan="6">
                                 <div class="users-empty">
                                     <i class="fa-solid fa-users-slash"></i>
                                     <p>No users found.</p>

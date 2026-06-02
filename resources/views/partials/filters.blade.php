@@ -48,3 +48,28 @@
         <a class="btn btn-light" href="{{ url()->current() }}">Reset</a>
     </div>
 </form>
+@php
+    $activeFilters = collect(request()->only(['q','category_id','status','from','to']))->filter(fn($value) => filled($value));
+@endphp
+@if($activeFilters->isNotEmpty())
+    <div class="filter-chip-row">
+        @foreach($activeFilters as $key => $value)
+            @php
+                $label = match($key) {
+                    'q' => 'Search',
+                    'category_id' => 'Category',
+                    'status' => 'Status',
+                    'from' => 'From',
+                    'to' => 'To',
+                    default => Illuminate\Support\Str::title($key),
+                };
+                $display = $key === 'category_id' && isset($categories) ? optional($categories->firstWhere('id', $value))->name : Illuminate\Support\Str::title(str_replace('_', ' ', $value));
+                $query = request()->except($key, 'page');
+            @endphp
+            <a href="{{ url()->current().(count($query) ? '?'.http_build_query($query) : '') }}">
+                <span>{{ $label }}: {{ $display }}</span>
+                <i class="fa-solid fa-xmark"></i>
+            </a>
+        @endforeach
+    </div>
+@endif

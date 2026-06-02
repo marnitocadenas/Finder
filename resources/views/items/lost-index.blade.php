@@ -57,10 +57,26 @@
 
         @include('partials.filters', ['statuses' => ['lost','found','closed']])
 
+        @if($role === 'admin')
+            <form id="lost-bulk-form" class="bulk-toolbar" method="POST" action="{{ route('admin.lost-items.bulk') }}">
+                @csrf
+                <select name="action" class="form-select form-select-sm" required>
+                    <option value="">Bulk action</option>
+                    <option value="lost">Mark lost</option>
+                    <option value="found">Mark found</option>
+                    <option value="closed">Mark closed</option>
+                    <option value="delete">Delete selected</option>
+                    <option value="restore">Restore selected</option>
+                </select>
+                <button class="btn btn-sm btn-primary" type="submit"><i class="fa-solid fa-bolt me-1"></i>Apply</button>
+            </form>
+        @endif
+
         <div class="lost-table-wrap">
             <table class="table lost-table align-middle">
                 <thead>
                     <tr>
+                        @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Item</th>
                         <th>Student</th>
                         <th>Category</th>
@@ -72,6 +88,7 @@
                 <tbody>
                     @forelse($items as $item)
                         <tr>
+                            @if($role === 'admin')<td><input type="checkbox" name="ids[]" value="{{ $item->id }}" form="lost-bulk-form"></td>@endif
                             <td>
                                 <div class="lost-item-cell">
                                     @if($item->image)
@@ -114,6 +131,25 @@
                                     <a class="btn btn-sm btn-outline-primary" href="{{ $role === 'student' ? route('student.lost-items.edit', $item) : route('admin.lost-items.edit', $item) }}">
                                         <i class="fa-solid fa-pen-to-square me-1"></i>View/Edit
                                     </a>
+                                    @if($role === 'student')
+                                        <form method="POST" action="{{ route('student.lost-items.status', $item) }}" class="d-inline">
+                                            @csrf @method('PUT')
+                                            <input type="hidden" name="status" value="{{ $item->status === 'lost' ? 'found' : 'lost' }}">
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="fa-solid fa-arrows-rotate me-1"></i>{{ $item->status === 'lost' ? 'Mark Found' : 'Reopen' }}
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ route('student.lost-items.status', $item) }}" class="d-inline">
+                                            @csrf @method('PUT')
+                                            <input type="hidden" name="status" value="closed">
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fa-solid fa-folder-closed me-1"></i>Close
+                                            </button>
+                                        </form>
+                                        <a class="btn btn-sm btn-outline-warning" href="{{ route('student.matches') }}">
+                                            <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Matches
+                                        </a>
+                                    @endif
                                     <form method="POST" action="{{ $role === 'student' ? route('student.lost-items.destroy', $item) : route('admin.lost-items.destroy', $item) }}" class="d-inline">
                                         @csrf @method('DELETE')
                                         <button type="button" class="btn btn-sm btn-outline-danger" data-confirm-submit data-confirm-title="Delete lost report" data-confirm-message="Move this lost report to deleted records?" data-confirm-button="Delete">
@@ -125,7 +161,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="{{ $role === 'admin' ? 7 : 6 }}">
                                 <div class="lost-empty">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                     <p>No lost reports found.</p>

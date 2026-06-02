@@ -13,7 +13,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ $action }}" enctype="multipart/form-data" class="lost-form-card">
+    <form method="POST" action="{{ $action }}" enctype="multipart/form-data" class="lost-form-card {{ $role === 'student' ? 'student-lost-wizard' : '' }}">
         @csrf
         @if($method !== 'POST')
             @method($method)
@@ -21,6 +21,7 @@
 
         <div class="lost-form-section">
             <div>
+                @if($role === 'student')<span class="intake-step">Step 1</span>@endif
                 <h2>Item Details</h2>
                 <p>Use a specific title, category, and description to improve matching.</p>
             </div>
@@ -46,6 +47,7 @@
 
         <div class="lost-form-section">
             <div>
+                @if($role === 'student')<span class="intake-step">Step 2</span>@endif
                 <h2>Loss Information</h2>
                 <p>Dates and locations help staff compare the report against found item logs.</p>
             </div>
@@ -89,6 +91,11 @@
             <button class="btn btn-primary">
                 <i class="fa-solid fa-floppy-disk me-1"></i>Save Report
             </button>
+            @if($role === 'student')
+                <a href="{{ route('student.matches') }}" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Review Matches
+                </a>
+            @endif
             <a href="{{ $role === 'student' ? route('student.lost-items.index') : route('admin.lost-items.index') }}" class="btn btn-outline-secondary">Cancel</a>
         </div>
     </form>

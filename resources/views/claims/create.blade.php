@@ -13,10 +13,19 @@
         </a>
     </div>
 
+    @if($existingClaim)
+        <div class="alert alert-warning student-duplicate-alert">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+            You already have a pending claim for this found item.
+            <a href="{{ route('student.claims.show', $existingClaim) }}">Open existing claim</a>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('student.claims.store') }}" enctype="multipart/form-data" class="claim-form-card">
         @csrf
         <div class="claim-form-section">
             <div>
+                <span class="intake-step">Step 1</span>
                 <h2>Item Match</h2>
                 <p>Select the found item and optionally connect it with one of your lost reports.</p>
             </div>
@@ -43,23 +52,30 @@
 
         <div class="claim-form-section">
             <div>
+                <span class="intake-step">Step 2</span>
                 <h2>Ownership Proof</h2>
-                <p>Give staff enough detail to verify the item before pickup.</p>
+                <p>Describe unique marks, color, brand, contents, or anything only the owner would know.</p>
             </div>
             <div class="row g-3">
                 <div class="col-12">
                     <label class="form-label" for="claim-description">Why is this yours?</label>
-                    <textarea id="claim-description" class="form-control" name="claim_description" rows="6" required minlength="30">{{ old('claim_description') }}</textarea>
+                    <textarea id="claim-description" class="form-control" name="claim_description" rows="6" required minlength="30" data-character-counter="#claim-description-count" placeholder="Example: brand, color, scratches, contents, where you last had it, or a matching photo/receipt.">{{ old('claim_description') }}</textarea>
+                    <div class="student-form-help">
+                        <span id="claim-description-count">0</span>/1000 characters. Minimum 30 characters.
+                    </div>
                 </div>
                 <div class="col-12">
                     <label class="form-label" for="proof-image">Proof Image</label>
-                    <input id="proof-image" class="form-control" type="file" name="proof_image" accept="image/*">
+                    <input id="proof-image" class="form-control" type="file" name="proof_image" accept="image/*" @required($proofRequired)>
+                    <div class="student-form-help">
+                        {{ $proofRequired ? 'Proof image is required.' : 'Optional: upload an old photo, receipt, or proof that helps staff verify ownership.' }}
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="claim-form-actions">
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" @disabled($existingClaim)>
                 <i class="fa-solid fa-paper-plane me-1"></i>Submit Claim
             </button>
             <a href="{{ route('student.claims.index') }}" class="btn btn-outline-secondary">Cancel</a>

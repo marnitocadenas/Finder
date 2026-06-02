@@ -55,10 +55,33 @@
 
         @include('partials.filters', ['statuses' => ['unclaimed','claimed','turned_over']])
 
+        @if($role === 'staff')
+            <div class="staff-view-actions">
+                <a class="btn btn-light btn-sm" href="{{ route('staff.matches') }}"><i class="fa-solid fa-wand-magic-sparkles me-1"></i>Find Matches</a>
+                <a class="btn btn-warning btn-sm" href="{{ route('staff.found-items.create') }}"><i class="fa-solid fa-plus me-1"></i>Post Found</a>
+            </div>
+        @endif
+
+        @if($role === 'admin')
+            <form id="found-bulk-form" class="bulk-toolbar" method="POST" action="{{ route('admin.found-items.bulk') }}">
+                @csrf
+                <select name="action" class="form-select form-select-sm" required>
+                    <option value="">Bulk action</option>
+                    <option value="unclaimed">Mark unclaimed</option>
+                    <option value="claimed">Mark claimed</option>
+                    <option value="turned_over">Mark turned over</option>
+                    <option value="delete">Delete selected</option>
+                    <option value="restore">Restore selected</option>
+                </select>
+                <button class="btn btn-sm btn-primary" type="submit"><i class="fa-solid fa-bolt me-1"></i>Apply</button>
+            </form>
+        @endif
+
         <div class="found-table-wrap">
             <table class="table found-table align-middle">
                 <thead>
                     <tr>
+                        @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Item</th>
                         <th>Staff</th>
                         <th>Category</th>
@@ -70,6 +93,7 @@
                 <tbody>
                     @forelse($items as $item)
                         <tr>
+                            @if($role === 'admin')<td><input type="checkbox" name="ids[]" value="{{ $item->id }}" form="found-bulk-form"></td>@endif
                             <td>
                                 <div class="found-item-cell">
                                     @if($item->image)
@@ -108,6 +132,22 @@
                                     <a class="btn btn-sm btn-outline-primary" href="{{ $role === 'staff' ? route('staff.found-items.edit', $item) : route('admin.found-items.edit', $item) }}">
                                         <i class="fa-solid fa-pen-to-square me-1"></i>View/Edit
                                     </a>
+                                    @if($role === 'staff')
+                                        <form method="POST" action="{{ route('staff.found-items.status', $item) }}" class="d-inline">
+                                            @csrf @method('PUT')
+                                            <input type="hidden" name="status" value="{{ $item->status === 'unclaimed' ? 'claimed' : 'unclaimed' }}">
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="fa-solid fa-arrows-rotate me-1"></i>{{ $item->status === 'unclaimed' ? 'Mark Claimed' : 'Reopen' }}
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ route('staff.found-items.status', $item) }}" class="d-inline">
+                                            @csrf @method('PUT')
+                                            <input type="hidden" name="status" value="turned_over">
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fa-solid fa-building-columns me-1"></i>Turn Over
+                                            </button>
+                                        </form>
+                                    @endif
                                     <form method="POST" action="{{ $role === 'staff' ? route('staff.found-items.destroy', $item) : route('admin.found-items.destroy', $item) }}" class="d-inline">
                                         @csrf @method('DELETE')
                                         <button type="button" class="btn btn-sm btn-outline-danger" data-confirm-submit data-confirm-title="Delete found item" data-confirm-message="Move this found item to deleted records?" data-confirm-button="Delete">
@@ -119,7 +159,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="{{ $role === 'admin' ? 7 : 6 }}">
                                 <div class="found-empty">
                                     <i class="fa-solid fa-box-open"></i>
                                     <p>No found items found.</p>
@@ -131,6 +171,50 @@
             </table>
             {{ $items->links() }}
         </div>
+
+        @if($role === 'staff')
+            <div class="staff-preview-header">
+                <div>
+                    <span class="module-eyebrow">Visual preview</span>
+                    <h2>Item Cards</h2>
+                </div>
+                <small>Click an image to preview it.</small>
+            </div>
+            <div class="staff-card-grid">
+                @forelse($items as $item)
+                    <article class="staff-item-card">
+                        <button type="button" class="staff-card-photo" data-image-preview="{{ $item->image ? asset('storage/'.$item->image) : '' }}" @disabled(!$item->image)>
+                            @if($item->image)
+                                <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                            @else
+                                <i class="fa-solid {{ $item->category->icon ?? 'fa-box-open' }}"></i>
+                            @endif
+                        </button>
+                        <div class="staff-item-card-body">
+                            <div class="staff-card-meta">
+                                <small>Category</small>
+                                <span><i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>{{ $item->category->name ?? '-' }}</span>
+                            </div>
+                            <div class="staff-card-meta">
+                                <small>Item</small>
+                                <strong>{{ $item->title }}</strong>
+                            </div>
+                            <div class="staff-card-meta">
+                                <small>Location</small>
+                                <span><i class="fa-solid fa-location-dot"></i>{{ $item->location_found }}</span>
+                            </div>
+                            <div class="staff-card-status"><x-status :status="$item->status" /></div>
+                            <div class="staff-card-actions">
+                                <a class="btn btn-sm btn-outline-primary" href="{{ route('staff.found-items.edit', $item) }}"><i class="fa-solid fa-pen-to-square me-1"></i>Open</a>
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('staff.matches') }}"><i class="fa-solid fa-wand-magic-sparkles me-1"></i>Matches</a>
+                            </div>
+                        </div>
+                    </article>
+                @empty
+                @endforelse
+            </div>
+            @include('partials.image-preview-modal')
+        @endif
     </section>
 </div>
 @include('partials.confirm-modal')

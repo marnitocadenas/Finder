@@ -31,26 +31,28 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('password.email') }}" class="auth-form">
+            <form method="POST" action="{{ route('password.email') }}" class="auth-form auth-enhanced-form">
                 @csrf
 
                 <div class="mb-3">
                     <label class="form-label" for="recovery-email">Email Address</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                        <input id="recovery-email" class="form-control" type="email" name="email" value="{{ old('email') }}" placeholder="you@example.com" required autofocus>
+                        <input id="recovery-email" class="form-control @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" placeholder="you@example.com" autocomplete="email" required autofocus>
                     </div>
+                    @error('email')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label" for="recovery-student-id">Student ID</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
-                        <input id="recovery-student-id" class="form-control" name="student_id" value="{{ old('student_id') }}" placeholder="Required for student accounts">
+                        <input id="recovery-student-id" class="form-control @error('student_id') is-invalid @enderror" name="student_id" value="{{ old('student_id') }}" placeholder="Required for student accounts">
                     </div>
+                    @error('student_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
 
-                <button class="btn btn-primary w-100">
+                <button class="btn btn-primary w-100" data-loading-text="Sending OTP">
                     <i class="fa-solid fa-paper-plane me-2"></i>Send OTP
                 </button>
 

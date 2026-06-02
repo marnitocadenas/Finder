@@ -18,6 +18,19 @@ class DashboardController extends Controller
         $pendingClaims = Claim::whereIn('found_item_id', $ids)->where('status', 'pending')->count();
         $approvedClaims = Claim::whereIn('found_item_id', $ids)->where('status', 'approved')->count();
         $unclaimedItems = FoundItem::where('staff_id', $request->user()->id)->where('status', 'unclaimed')->count();
+        $agingItems = FoundItem::where('staff_id', $request->user()->id)->where('status', 'unclaimed')->where('created_at', '<=', now()->subDays(14))->count();
+        $readyForRelease = Claim::whereIn('found_item_id', $ids)->where('status', 'approved')->whereNull('released_at')->count();
+        $releasedThisMonth = Claim::where('released_by', $request->user()->id)->whereMonth('released_at', now()->month)->whereYear('released_at', now()->year)->count();
+        $possibleMatches = FoundItem::where('staff_id', $request->user()->id)
+            ->where('status', 'unclaimed')
+            ->whereExists(function ($query) {
+                $query->selectRaw(1)
+                    ->from('lost_items')
+                    ->whereColumn('lost_items.category_id', 'found_items.category_id')
+                    ->where('lost_items.status', 'lost')
+                    ->whereNull('lost_items.deleted_at');
+            })
+            ->count();
 
         $stats = [
             ['label' => 'Items Posted', 'value' => $itemsPosted, 'icon' => 'fa-box-open', 'color' => 'primary'],
@@ -48,6 +61,27 @@ class DashboardController extends Controller
                 'tone' => 'primary',
                 'route' => route('staff.lost-reports.index', ['status' => 'lost']),
             ],
+            [
+                'label' => 'Possible matches',
+                'value' => $possibleMatches,
+                'icon' => 'fa-wand-magic-sparkles',
+                'tone' => 'success',
+                'route' => route('staff.matches'),
+            ],
+            [
+                'label' => 'Ready for pickup',
+                'value' => $readyForRelease,
+                'icon' => 'fa-handshake',
+                'tone' => 'warning',
+                'route' => route('staff.claims.index', ['status' => 'approved']),
+            ],
+            [
+                'label' => 'Aging unclaimed',
+                'value' => $agingItems,
+                'icon' => 'fa-triangle-exclamation',
+                'tone' => 'danger',
+                'route' => route('staff.found-items.index', ['status' => 'unclaimed']),
+            ],
         ];
 
         $recentFoundItems = FoundItem::with('category')
@@ -62,6 +96,12 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboards.staff', compact('stats', 'workQueue', 'recentFoundItems', 'recentClaims'));
+        $performance = [
+            ['label' => 'Posted this month', 'value' => FoundItem::where('staff_id', $request->user()->id)->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count(), 'icon' => 'fa-calendar-plus', 'tone' => 'primary'],
+            ['label' => 'Reviewed claims', 'value' => Claim::where('reviewed_by', $request->user()->id)->count(), 'icon' => 'fa-clipboard-check', 'tone' => 'success'],
+            ['label' => 'Released this month', 'value' => $releasedThisMonth, 'icon' => 'fa-handshake', 'tone' => 'warning'],
+        ];
+
+        return view('dashboards.staff', compact('stats', 'workQueue', 'recentFoundItems', 'recentClaims', 'performance'));
     }
 }

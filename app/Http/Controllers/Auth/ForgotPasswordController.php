@@ -1,13 +1,17 @@
 <?php
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
+use App\Support\AuthPasswordRules;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use App\Models\User;
 class ForgotPasswordController extends Controller
@@ -27,10 +31,18 @@ class ForgotPasswordController extends Controller
 
     public function sendOtp(Request $request): RedirectResponse
     {
+        $throttleKey = 'password-reset|'.Str::lower((string) $request->input('email')).'|'.$request->ip();
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            throw ValidationException::withMessages([
+                'email' => 'Too many OTP requests. Please try again in '.RateLimiter::availableIn($throttleKey).' seconds.',
+            ]);
+        }
+
         $data = $request->validate([
             'email' => ['required', 'email'],
             'student_id' => ['nullable', 'string', 'max:20'],
         ]);
+        RateLimiter::hit($throttleKey, 600);
 
         $user = User::where('email', $data['email'])->first();
         if (! $user) {
@@ -57,6 +69,7 @@ class ForgotPasswordController extends Controller
 
         $request->session()->put('password_reset_email', $user->email);
         $request->session()->forget('password_reset_verified');
+        ActivityLog::create(['user_id' => $user->id, 'action' => 'Requested password reset OTP', 'target_type' => 'Authentication', 'target_id' => $user->id, 'ip_address' => $request->ip()]);
 
         return redirect()->route('password.otp')->with('success', 'We sent a 6-digit OTP to your email address.');
     }
@@ -96,7 +109,7 @@ class ForgotPasswordController extends Controller
     public function reset(Request $request): RedirectResponse
     {
         abort_unless($request->session()->get('password_reset_verified'), 403);
-        $data = $request->validate(['password'=>'required|min:8|confirmed']);
+        $data = $request->validate(['password' => AuthPasswordRules::rules()]);
         $email = $request->session()->get('password_reset_email');
         $user = User::where('email', $email)->firstOrFail();
 
@@ -108,6 +121,7 @@ class ForgotPasswordController extends Controller
         DB::table('password_reset_otps')->where('email', $email)->delete();
         $request->session()->forget(['password_reset_email', 'password_reset_verified']);
         event(new PasswordReset($user));
+        ActivityLog::create(['user_id' => $user->id, 'action' => 'Reset password', 'target_type' => 'Authentication', 'target_id' => $user->id, 'ip_address' => $request->ip()]);
 
         return redirect()->route('login')->with('success', 'Your password has been reset. You may now login.');
     }

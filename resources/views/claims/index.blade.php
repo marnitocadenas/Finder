@@ -49,10 +49,24 @@
 
         @include('partials.filters', ['statuses' => ['pending','approved','rejected']])
 
+        @if($role === 'admin')
+            <form id="claims-bulk-form" class="bulk-toolbar" method="POST" action="{{ route('admin.claims.bulk') }}">
+                @csrf
+                <select name="action" class="form-select form-select-sm" required>
+                    <option value="">Bulk action</option>
+                    <option value="approved">Approve selected pending</option>
+                    <option value="rejected">Reject selected pending</option>
+                </select>
+                <input class="form-control form-control-sm" name="review_note" placeholder="Optional review note">
+                <button class="btn btn-sm btn-primary" type="submit"><i class="fa-solid fa-bolt me-1"></i>Apply</button>
+            </form>
+        @endif
+
         <div class="claims-table-wrap">
             <table class="table claims-table align-middle">
                 <thead>
                     <tr>
+                        @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Claim</th>
                         <th>Student</th>
                         <th>Found Item</th>
@@ -64,6 +78,7 @@
                 <tbody>
                     @forelse($claims as $claim)
                         <tr>
+                            @if($role === 'admin')<td><input type="checkbox" name="ids[]" value="{{ $claim->id }}" form="claims-bulk-form" @disabled($claim->status !== 'pending')></td>@endif
                             <td>
                                 <div class="claim-id">
                                     <span>#{{ $claim->id }}</span>
@@ -98,7 +113,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="{{ $role === 'admin' ? 7 : 6 }}">
                                 <div class="claims-empty">
                                     <i class="fa-solid fa-file-circle-question"></i>
                                     <p>No claims found.</p>

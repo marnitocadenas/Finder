@@ -13,7 +13,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ $action }}" enctype="multipart/form-data" class="found-form-card">
+    <form method="POST" action="{{ $action }}" enctype="multipart/form-data" class="found-form-card {{ $role === 'staff' ? 'staff-intake-form' : '' }}">
         @csrf
         @if($method !== 'POST')
             @method($method)
@@ -21,6 +21,7 @@
 
         <div class="found-form-section">
             <div>
+                @if($role === 'staff')<span class="intake-step">Step 1</span>@endif
                 <h2>Item Details</h2>
                 <p>Use clear naming and descriptions so students can recognize their belongings.</p>
             </div>
@@ -46,6 +47,7 @@
 
         <div class="found-form-section">
             <div>
+                @if($role === 'staff')<span class="intake-step">Step 2</span>@endif
                 <h2>Found Information</h2>
                 <p>Dates, locations, and status help staff process claims accurately.</p>
             </div>
@@ -72,6 +74,16 @@
                         <option value="turned_over" @selected(old('status', $item->status)==='turned_over')>Turned Over</option>
                     </select>
                 </div>
+                @if($role === 'admin')
+                    <div class="col-md-6">
+                        <label class="form-label" for="found-staff">Assigned Staff</label>
+                        <select id="found-staff" class="form-select" name="staff_id" required>
+                            @foreach($staffUsers ?? [] as $staff)
+                                <option value="{{ $staff->id }}" @selected(old('staff_id', $item->staff_id)==$staff->id)>{{ $staff->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
                 <div class="col-md-6">
                     <label class="form-label" for="found-image">Image</label>
                     @if($item->image)
@@ -86,6 +98,11 @@
         </div>
 
         <div class="found-form-actions">
+            @if($role === 'staff')
+                <a href="{{ route('staff.matches') }}" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Review Matches
+                </a>
+            @endif
             <button class="btn btn-primary">
                 <i class="fa-solid fa-floppy-disk me-1"></i>Save Item
             </button>

@@ -33,7 +33,9 @@
 
         <aside class="lost-photo-card">
             @if($item->image)
-                <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                <button type="button" class="image-preview-button" data-image-preview="{{ asset('storage/'.$item->image) }}">
+                    <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
+                </button>
             @else
                 <div class="lost-photo-empty">
                     <i class="fa-solid fa-image"></i>
@@ -43,4 +45,5 @@
         </aside>
     </div>
 </div>
+@include('partials.image-preview-modal')
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Concerns\LogsActivity;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\AuthPasswordRules;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -48,7 +49,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'student_id' => 'nullable|string|max:20|unique:users,student_id',
             'role' => ['required', Rule::in(['admin', 'staff', 'student'])],
-            'password' => 'required|min:8',
+            'password' => AuthPasswordRules::rules(false),
         ]);
 
         $data['password'] = Hash::make($data['password']);
@@ -75,7 +76,7 @@ class UserController extends Controller
             'email' => ['required', 'email', Rule::unique('users')->ignore($user)],
             'student_id' => ['nullable', 'string', 'max:20', Rule::unique('users')->ignore($user)],
             'role' => ['required', Rule::in(['admin', 'staff', 'student'])],
-            'password' => 'nullable|min:8',
+            'password' => AuthPasswordRules::optionalRules(),
         ]);
 
         if ($data['password'] ?? false) {
@@ -106,5 +107,27 @@ class UserController extends Controller
         $this->logAction($request, 'Restored user '.$user->email, $user);
 
         return back()->with('success', 'User restored.');
+    }
+
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+            'action' => ['required', Rule::in(['delete', 'restore'])],
+        ]);
+
+        $ids = collect($data['ids'])->reject(fn($id) => (int) $id === $request->user()->id);
+        $query = User::withTrashed()->whereIn('id', $ids);
+
+        if ($data['action'] === 'restore') {
+            $count = (clone $query)->onlyTrashed()->get()->each->restore()->count();
+        } else {
+            $count = (clone $query)->whereNull('deleted_at')->get()->each->delete()->count();
+        }
+
+        $this->logAction($request, 'Bulk '.$data['action'].' on '.$count.' users');
+
+        return back()->with('success', $count.' users updated.');
     }
 }

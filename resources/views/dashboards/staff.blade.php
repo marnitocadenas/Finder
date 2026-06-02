@@ -51,13 +51,35 @@
                 </div>
                 <div class="staff-quick-links">
                     <a href="{{ route('staff.found-items.create') }}"><i class="fa-solid fa-plus"></i><span>Post Found</span></a>
+                    <a href="{{ route('staff.matches') }}"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Smart Matches</span></a>
                     <a href="{{ route('staff.found-items.index') }}"><i class="fa-solid fa-box-open"></i><span>My Found Items</span></a>
                     <a href="{{ route('staff.claims.index') }}"><i class="fa-solid fa-inbox"></i><span>Claims Inbox</span></a>
                     <a href="{{ route('staff.lost-reports.index') }}"><i class="fa-solid fa-magnifying-glass"></i><span>Lost Reports</span></a>
+                    <a href="{{ route('staff.activity') }}"><i class="fa-solid fa-clock-rotate-left"></i><span>My Activity</span></a>
                 </div>
             </section>
         </div>
     </div>
+
+    <section class="staff-panel">
+        <div class="staff-panel-header">
+            <div>
+                <span class="module-eyebrow">Performance</span>
+                <h2>Staff Snapshot</h2>
+            </div>
+        </div>
+        <div class="staff-performance-grid">
+            @foreach($performance as $item)
+                <div class="staff-performance-card staff-performance-{{ $item['tone'] }}">
+                    <span><i class="fa-solid {{ $item['icon'] }}"></i></span>
+                    <div>
+                        <small>{{ $item['label'] }}</small>
+                        <strong>{{ $item['value'] }}</strong>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
 
     <div class="row g-3">
         <div class="col-xl-7">

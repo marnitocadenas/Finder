@@ -21,6 +21,16 @@ class DashboardController extends Controller
         $approvedClaims = Claim::where('status', 'approved')->count();
         $totalClaims = Claim::count();
         $resolutionRate = $totalClaims > 0 ? round(($approvedClaims / $totalClaims) * 100) : 0;
+        $staleFoundItems = FoundItem::where('status', 'unclaimed')->where('created_at', '<=', now()->subDays(14))->count();
+        $recentPotentialMatches = LostItem::where('status', 'lost')
+            ->whereExists(function ($query) {
+                $query->selectRaw(1)
+                    ->from('found_items')
+                    ->whereColumn('found_items.category_id', 'lost_items.category_id')
+                    ->where('found_items.status', 'unclaimed')
+                    ->whereNull('found_items.deleted_at');
+            })
+            ->count();
 
         $overview = [
             [
@@ -42,6 +52,20 @@ class DashboardController extends Controller
                 'value' => $unclaimedFound,
                 'icon' => 'fa-box',
                 'tone' => 'success',
+                'route' => route('admin.found-items.index', ['status' => 'unclaimed']),
+            ],
+            [
+                'label' => 'Possible matches',
+                'value' => $recentPotentialMatches,
+                'icon' => 'fa-wand-magic-sparkles',
+                'tone' => 'primary',
+                'route' => route('admin.matches'),
+            ],
+            [
+                'label' => 'Aging unclaimed',
+                'value' => $staleFoundItems,
+                'icon' => 'fa-triangle-exclamation',
+                'tone' => 'warning',
                 'route' => route('admin.found-items.index', ['status' => 'unclaimed']),
             ],
         ];

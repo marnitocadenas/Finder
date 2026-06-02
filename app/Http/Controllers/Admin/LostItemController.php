@@ -92,4 +92,27 @@ class LostItemController extends Controller
 
         return back()->with('success', 'Lost report restored.');
     }
+
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+            'action' => ['required', Rule::in(['delete', 'restore', 'lost', 'found', 'closed'])],
+        ]);
+
+        $query = LostItem::withTrashed()->whereIn('id', $data['ids']);
+
+        if ($data['action'] === 'delete') {
+            $count = (clone $query)->whereNull('deleted_at')->get()->each->delete()->count();
+        } elseif ($data['action'] === 'restore') {
+            $count = (clone $query)->onlyTrashed()->get()->each->restore()->count();
+        } else {
+            $count = (clone $query)->whereNull('deleted_at')->update(['status' => $data['action']]);
+        }
+
+        $this->logAction($request, 'Bulk '.$data['action'].' on '.$count.' lost reports');
+
+        return back()->with('success', $count.' lost reports updated.');
+    }
 }

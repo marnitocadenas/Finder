@@ -15,6 +15,9 @@
             <button type="button" class="btn btn-light" onclick="window.print()">
                 <i class="fa-solid fa-print me-1"></i>Print
             </button>
+            <a href="{{ route('admin.reports.export') }}" class="btn btn-warning">
+                <i class="fa-solid fa-file-csv me-1"></i>Export CSV
+            </a>
         </div>
     </div>
 
