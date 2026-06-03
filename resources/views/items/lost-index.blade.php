@@ -73,16 +73,16 @@
         @endif
 
         <div class="lost-table-wrap">
-            <table class="table lost-table align-middle">
+            <table class="table lost-table {{ $role === 'student' ? 'student-lost-table' : '' }} {{ $role === 'staff' ? 'staff-lost-table' : '' }} {{ $role !== 'student' ? 'excel-lost-table' : '' }} align-middle">
                 <thead>
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Item</th>
-                        <th>Student</th>
+                        @if($role !== 'student')<th>Student</th>@endif
                         <th>Category</th>
                         <th>Date Lost</th>
                         <th>Status</th>
-                        <th class="text-end">Actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,7 +102,9 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ $item->user->name ?? auth()->user()->name }}</td>
+                            @if($role !== 'student')
+                                <td>{{ $item->user->name ?? auth()->user()->name }}</td>
+                            @endif
                             <td>
                                 <span class="lost-category">
                                     <i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>{{ $item->category->name ?? '-' }}
@@ -115,7 +117,7 @@
                                     <span class="badge bg-dark ms-1">Deleted</span>
                                 @endif
                             </td>
-                            <td class="text-end">
+                            <td class="{{ $role === 'student' ? 'student-lost-actions-cell' : '' }}">
                                 @if($role === 'staff')
                                     <a class="btn btn-sm btn-outline-primary" href="{{ route('staff.lost-reports.show', $item) }}">
                                         <i class="fa-solid fa-eye me-1"></i>View
@@ -128,6 +130,7 @@
                                         </button>
                                     </form>
                                 @else
+                                    @if($role === 'student')<div class="student-lost-actions">@endif
                                     <a class="btn btn-sm btn-outline-primary" href="{{ $role === 'student' ? route('student.lost-items.edit', $item) : route('admin.lost-items.edit', $item) }}">
                                         <i class="fa-solid fa-pen-to-square me-1"></i>View/Edit
                                     </a>
@@ -156,12 +159,13 @@
                                             <i class="fa-solid fa-trash-can me-1"></i>Delete
                                         </button>
                                     </form>
+                                    @if($role === 'student')</div>@endif
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ $role === 'admin' ? 7 : 6 }}">
+                            <td colspan="{{ $role === 'admin' ? 7 : ($role === 'student' ? 5 : 6) }}">
                                 <div class="lost-empty">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                     <p>No lost reports found.</p>

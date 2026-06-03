@@ -70,15 +70,15 @@
         </form>
 
         <div class="users-table-wrap">
-            <table class="table users-table align-middle">
+            <table class="table users-table excel-users-table align-middle text-center">
                 <thead>
                     <tr>
                         <th><input type="checkbox" data-check-all></th>
-                        <th>User</th>
+                        <th class="text-center">User</th>
                         <th>Role</th>
                         <th>Student ID</th>
                         <th>Status</th>
-                        <th class="text-end">Actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,7 +104,7 @@
                                     <span class="badge bg-success">Active</span>
                                 @endif
                             </td>
-                            <td class="text-end">
+                            <td>
                                 @if($user->trashed())
                                     <form class="d-inline" method="POST" action="{{ route('admin.users.restore', $user->id) }}">
                                         @csrf @method('PUT')

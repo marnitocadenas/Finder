@@ -36,13 +36,14 @@
         @include('partials.filters', ['statuses' => []])
 
         <div class="logs-table-wrap">
-            <table class="table logs-table align-middle">
+            <table class="table logs-table excel-logs-table align-middle">
                 <thead>
                     <tr>
                         <th>User</th>
                         <th>Action</th>
                         <th>Target</th>
                         <th>IP Address</th>
+                        <th>Date</th>
                         <th>Time</th>
                     </tr>
                 </thead>
@@ -74,15 +75,17 @@
                             </td>
                             <td><span class="log-ip">{{ $log->ip_address ?: '-' }}</span></td>
                             <td>
+                                <strong>{{ $log->created_at->format('M d, Y') }}</strong>
+                            </td>
+                            <td>
                                 <div class="log-time">
-                                    <strong>{{ $log->created_at->format('M d, Y') }}</strong>
-                                    <small>{{ $log->created_at->format('h:i A') }}</small>
+                                    <span>{{ $log->created_at->format('h:i A') }}</span>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">
+                            <td colspan="6">
                                 <div class="logs-empty">
                                     <i class="fa-solid fa-clock"></i>
                                     <p>No activity logs found.</p>

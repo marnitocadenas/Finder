@@ -63,7 +63,7 @@
         @endif
 
         <div class="claims-table-wrap">
-            <table class="table claims-table align-middle">
+            <table class="table claims-table excel-claims-table {{ $role === 'admin' ? 'admin-claims-table' : ($role === 'staff' ? 'staff-claims-table' : '') }} align-middle">
                 <thead>
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif

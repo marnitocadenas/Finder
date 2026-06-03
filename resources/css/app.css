@@ -90,11 +90,36 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     body.app-page{height:auto;min-height:100dvh;overflow-x:hidden;overflow-y:auto}
     .app-shell,.main-pane{height:auto;min-height:100dvh;overflow:visible}
     .content-wrap{overflow:visible}
+    .topbar{
+        position:sticky!important;
+        top:0;
+        z-index:60!important;
+        background:#fff;
+        border-bottom:1px solid var(--border);
+        box-shadow:0 10px 20px rgba(26,60,110,.10);
+    }
+    .topbar .dropdown-menu{position:absolute}
     .sidebar{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:.35rem;align-items:start;height:auto;max-height:none;padding:.85rem}
     .sidebar{overflow:visible;overscroll-behavior:auto;scrollbar-gutter:auto}
     .sidebar>.d-flex{grid-column:1/-1;margin-bottom:.5rem!important}
     .sidebar a{margin:0;padding:.65rem .75rem}
-    .topbar{position:relative;align-items:flex-start!important;gap:.75rem;flex-wrap:wrap;padding:.8rem 1rem}
+    .topbar{position:sticky!important;top:0;z-index:60!important;align-items:flex-start!important;gap:.75rem;flex-wrap:wrap;padding:.8rem 1rem}
+    .student-topbar{
+        position:fixed!important;
+        top:0!important;
+        left:0!important;
+        right:0!important;
+        z-index:70!important;
+        background:#fff!important;
+        border-bottom:1px solid var(--border)!important;
+        box-shadow:0 10px 20px rgba(26,60,110,.10)!important;
+    }
+    .student-content-wrap{
+        padding-top:146px!important;
+        padding-bottom:96px!important;
+    }
+    .student-content-wrap > *:first-child{margin-top:.25rem}
+    .student-content-wrap > *:last-child{margin-bottom:.25rem}
     .topbar>div{width:100%;justify-content:space-between;gap:.5rem!important;flex-wrap:wrap}
     .content-wrap{padding:1rem}
     .landing-hero-inner{gap:1.4rem;padding-bottom:4rem}
@@ -106,6 +131,698 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .hero{background-size:cover}
     .student-preview-grid{grid-template-columns:1fr!important}
     .match-actions{display:grid}
+}
+@media(max-width:575px){
+    .student-content-wrap{
+        padding-top:156px!important;
+    }
+}
+
+@media(max-width:991px){
+    .lost-panel,
+    .claims-panel{
+        min-width:0!important;
+        overflow-x:visible;
+    }
+    .lost-table-wrap,
+    .claims-table-wrap{
+        width:100%!important;
+        max-width:100%!important;
+        overflow-x:auto!important;
+        -webkit-overflow-scrolling:touch;
+    }
+    .lost-table,
+    .claims-table{
+        min-width:760px!important;
+    }
+    .student-lost-table{
+        min-width:680px!important;
+    }
+    .student-lost-table th,
+    .student-lost-table td{
+        white-space:nowrap;
+    }
+    .student-lost-table .lost-item-cell{
+        min-width:220px;
+    }
+    .student-lost-table .text-end{
+        min-width:250px;
+    }
+    .student-lost-actions-cell{
+        vertical-align:middle;
+    }
+    .student-lost-actions{
+        display:flex;
+        flex-wrap:wrap;
+        gap:.4rem;
+        justify-content:flex-end;
+        min-width:380px;
+    }
+    .student-lost-actions .btn,
+    .student-lost-actions form{
+        flex:0 0 auto;
+    }
+    .student-match-module .matches-hero{
+        display:grid!important;
+        grid-template-columns:1fr!important;
+        align-items:start!important;
+    }
+    .student-match-module .matches-hero .btn{
+        width:100%!important;
+        max-width:220px;
+        justify-self:start;
+        white-space:nowrap!important;
+        padding:.6rem .9rem!important;
+    }
+}
+@media(min-width:992px){
+    .student-lost-table{
+        table-layout:auto;
+    }
+    .student-lost-actions{
+        display:flex;
+        flex-wrap:wrap;
+        gap:.4rem;
+        justify-content:flex-end;
+    }
+}
+
+/* Excel-like table styling for student lost reports */
+.student-lost-table{
+    border-collapse:collapse!important;
+    background:#fff;
+}
+.student-lost-table thead th{
+    background:#F3F4F6!important;
+    color:#1F2937;
+    font-weight:800;
+    text-transform:uppercase;
+    font-size:.74rem;
+    letter-spacing:.02em;
+    border:1px solid #D1D5DB!important;
+    white-space:nowrap;
+}
+.student-lost-table tbody td{
+    border:1px solid #D1D5DB!important;
+    vertical-align:middle;
+    background:#fff;
+}
+.student-lost-table tbody tr:nth-child(even) td{
+    background:#FAFAFA;
+}
+.student-lost-table .lost-item-cell{
+    align-items:center;
+}
+
+/* Excel-like grid for Admin > Users table */
+.excel-users-table{
+    border-collapse:collapse!important;
+    background:#fff;
+}
+.excel-users-table thead th{
+    background:#F3F4F6!important;
+    color:#1F2937;
+    font-weight:800;
+    text-transform:uppercase;
+    font-size:.74rem;
+    letter-spacing:.02em;
+    border:1px solid #D1D5DB!important;
+    white-space:nowrap;
+}
+.excel-users-table tbody td{
+    border:1px solid #D1D5DB!important;
+    background:#fff;
+    vertical-align:middle;
+}
+.excel-users-table tbody tr:nth-child(even) td{
+    background:#FAFAFA;
+}
+
+/* Excel-like grid for Admin > Lost Items table */
+.excel-lost-table{
+    border-collapse:collapse!important;
+    background:#fff;
+}
+.excel-lost-table thead th{
+    background:#F3F4F6!important;
+    color:#1F2937;
+    font-weight:800;
+    text-transform:uppercase;
+    font-size:.74rem;
+    letter-spacing:.02em;
+    border:1px solid #D1D5DB!important;
+    white-space:nowrap;
+    text-align:center!important;
+    vertical-align:middle!important;
+}
+.excel-lost-table tbody td{
+    border:1px solid #D1D5DB!important;
+    background:#fff;
+    vertical-align:middle;
+}
+.excel-lost-table tbody td:nth-child(3),
+.excel-lost-table tbody td:nth-child(4),
+.excel-lost-table tbody td:nth-child(5),
+.excel-lost-table tbody td:nth-child(6),
+.excel-lost-table tbody td:nth-child(7){
+    text-align:center!important;
+}
+.excel-lost-table tbody tr:nth-child(even) td{
+    background:#FAFAFA;
+}
+.excel-lost-table th,
+.excel-lost-table td{
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+}
+.excel-lost-table thead th:nth-child(2),
+.excel-lost-table tbody td:nth-child(2){
+    min-width:280px;
+}
+.excel-lost-table thead th:nth-child(3),
+.excel-lost-table tbody td:nth-child(3){
+    min-width:160px;
+}
+.excel-lost-table thead th:nth-child(4),
+.excel-lost-table tbody td:nth-child(4){
+    min-width:130px;
+    white-space:nowrap;
+}
+.excel-lost-table thead th:nth-child(5),
+.excel-lost-table tbody td:nth-child(5){
+    min-width:120px;
+    white-space:nowrap;
+}
+.excel-lost-table thead th:nth-child(6),
+.excel-lost-table tbody td:nth-child(6){
+    min-width:110px;
+    white-space:nowrap;
+}
+.excel-lost-table thead th:nth-child(7),
+.excel-lost-table tbody td:nth-child(7){
+    min-width:190px;
+    white-space:nowrap;
+}
+.excel-lost-table .lost-item-cell{
+    display:flex;
+    align-items:center;
+    gap:.75rem;
+}
+.excel-lost-table .lost-item-cell > div{
+    text-align:left;
+}
+.excel-lost-table tbody td:nth-child(6) .badge{
+    margin-inline:auto;
+}
+.excel-lost-table tbody td:nth-child(7){
+    white-space:normal;
+}
+.excel-lost-table tbody td:nth-child(7) .btn{
+    display:inline-flex;
+    justify-content:center;
+}
+.excel-lost-table tbody td:nth-child(7) form{
+    display:inline-flex;
+    margin:0 .15rem;
+}
+
+/* Excel-like grid for Admin > Found Items table */
+.excel-found-table{
+    border-collapse:collapse!important;
+    background:#fff;
+}
+.excel-found-table thead th{
+    background:#F3F4F6!important;
+    color:#1F2937;
+    font-weight:800;
+    text-transform:uppercase;
+    font-size:.74rem;
+    letter-spacing:.02em;
+    border:1px solid #D1D5DB!important;
+    white-space:nowrap;
+}
+/* Admin Found Items: center header row and Staff–Actions body cells */
+.found-table.excel-found-table:not(.staff-found-table) thead th{
+    text-align:center!important;
+    vertical-align:middle!important;
+}
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(3),
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(4),
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(5),
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(6),
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(7){
+    text-align:center!important;
+}
+.found-table.excel-found-table:not(.staff-found-table) .found-category{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.35rem;
+}
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(6) .badge{
+    margin-inline:auto;
+}
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(7){
+    white-space:normal;
+}
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(7).text-end{
+    text-align:center!important;
+}
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(7) .btn{
+    display:inline-flex;
+    justify-content:center;
+}
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(7) form{
+    display:inline-flex;
+    margin:0 .15rem;
+}
+.excel-found-table tbody td{
+    border:1px solid #D1D5DB!important;
+    background:#fff;
+    vertical-align:middle;
+}
+.excel-found-table tbody tr:nth-child(even) td{
+    background:#FAFAFA;
+}
+.excel-found-table th,
+.excel-found-table td{
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+}
+.excel-found-table thead th:nth-child(2),
+.excel-found-table tbody td:nth-child(2){
+    min-width:220px;
+}
+/* Admin Found Items: control Item column width only */
+.found-table.excel-found-table:not(.staff-found-table) thead th:nth-child(2),
+.found-table.excel-found-table:not(.staff-found-table) tbody td:nth-child(2){
+    width:24%;
+    min-width:180px;
+    max-width:240px;
+}
+.excel-found-table thead th:nth-child(3),
+.excel-found-table tbody td:nth-child(3){
+    min-width:120px;
+    white-space:nowrap;
+}
+.excel-found-table thead th:nth-child(4),
+.excel-found-table tbody td:nth-child(4){
+    min-width:150px;
+    white-space:nowrap;
+}
+.excel-found-table thead th:nth-child(5),
+.excel-found-table tbody td:nth-child(5){
+    min-width:105px;
+    white-space:nowrap;
+}
+.excel-found-table thead th:nth-child(6),
+.excel-found-table tbody td:nth-child(6){
+    min-width:100px;
+    white-space:nowrap;
+}
+.excel-found-table thead th:nth-child(7),
+.excel-found-table tbody td:nth-child(7){
+    min-width:130px;
+    white-space:normal;
+}
+
+/* Prevent breaking inside the Category label */
+.excel-found-table .found-category{
+    white-space:nowrap!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+}
+.excel-found-table .found-category i{
+    flex:0 0 auto;
+}
+
+/* Excel-like grid for Admin > Claims table */
+.excel-claims-table{
+    border-collapse:collapse!important;
+    background:#fff;
+}
+.excel-claims-table thead th{
+    background:#F3F4F6!important;
+    color:#1F2937;
+    font-weight:800;
+    text-transform:uppercase;
+    font-size:.74rem;
+    letter-spacing:.02em;
+    border:1px solid #D1D5DB!important;
+    white-space:nowrap;
+}
+.excel-claims-table tbody td{
+    border:1px solid #D1D5DB!important;
+    background:#fff;
+    vertical-align:middle;
+}
+.excel-claims-table tbody tr:nth-child(even) td{
+    background:#FAFAFA;
+}
+
+/* Admin Claims: center headers, Claim column, and Status/Reviewed/Action cells */
+.admin-claims-table thead th{
+    text-align:center!important;
+    vertical-align:middle!important;
+}
+.admin-claims-table tbody td:nth-child(2){
+    text-align:center!important;
+}
+.admin-claims-table tbody td:nth-child(2) .claim-id{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+}
+.admin-claims-table tbody td:nth-child(5),
+.admin-claims-table tbody td:nth-child(6),
+.admin-claims-table tbody td:nth-child(7){
+    text-align:center!important;
+}
+.admin-claims-table tbody td:nth-child(5) .badge{
+    margin-inline:auto;
+}
+.admin-claims-table tbody td:nth-child(7).text-end{
+    text-align:center!important;
+}
+.admin-claims-table tbody td:nth-child(7) .btn{
+    display:inline-flex;
+    justify-content:center;
+}
+
+/* Excel-like grid for Admin > Activity Logs table */
+.excel-logs-table{
+    border-collapse:collapse!important;
+    background:#fff;
+}
+.excel-logs-table thead th{
+    background:#F3F4F6!important;
+    color:#1F2937;
+    font-weight:800;
+    text-transform:uppercase;
+    font-size:.74rem;
+    letter-spacing:.02em;
+    border:1px solid #D1D5DB!important;
+    white-space:nowrap;
+}
+.excel-logs-table tbody td{
+    border:1px solid #D1D5DB!important;
+    background:#fff;
+    vertical-align:middle;
+}
+.excel-logs-table tbody tr:nth-child(even) td{
+    background:#FAFAFA;
+}
+
+/* Admin Activity Logs: center Action–Time columns; User stays left */
+.excel-logs-table thead th:nth-child(2),
+.excel-logs-table thead th:nth-child(3),
+.excel-logs-table thead th:nth-child(4),
+.excel-logs-table thead th:nth-child(5),
+.excel-logs-table thead th:nth-child(6){
+    text-align:center!important;
+    vertical-align:middle!important;
+}
+.excel-logs-table tbody td:nth-child(2),
+.excel-logs-table tbody td:nth-child(3),
+.excel-logs-table tbody td:nth-child(4),
+.excel-logs-table tbody td:nth-child(5),
+.excel-logs-table tbody td:nth-child(6){
+    text-align:center!important;
+}
+.excel-logs-table .log-user{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    text-align:left;
+    gap:.3rem;
+}
+.excel-logs-table .log-action,
+.excel-logs-table .log-time{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:.3rem;
+}
+.excel-logs-table .log-target,
+.excel-logs-table .log-ip{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:.3rem;
+}
+
+/* Found Items table: prevent oversized Actions column on staff/admin */
+.found-table.excel-found-table td.text-end{
+    min-width:0;
+}
+.found-table.excel-found-table td.text-end .btn{
+    padding:.24rem .5rem;
+    font-size:.78rem;
+}
+.found-table.excel-found-table td.text-end form{
+    margin:.05rem;
+}
+@media(min-width:992px){
+    .found-table.excel-found-table td.text-end{
+        min-width:170px;
+    }
+}
+
+/* Staff panel: tune My Found Items Item/Staff column widths */
+.staff-found-table th:nth-child(1),
+.staff-found-table td:nth-child(1){
+    width:auto;
+    min-width:340px!important;
+}
+.staff-found-table th:nth-child(2),
+.staff-found-table td:nth-child(2){
+    width:auto;
+    min-width:170px;
+}
+.staff-found-table{
+    table-layout:auto;
+}
+.staff-found-table td:nth-child(1),
+.staff-found-table td:nth-child(2){
+    white-space:normal;
+    word-break:break-word;
+}
+.staff-found-table .found-item-cell{
+    min-width:0;
+}
+.staff-found-table .found-item-cell > div{
+    min-width:0;
+}
+.staff-found-table td.text-end{
+    min-width:240px!important;
+    white-space:normal;
+}
+.staff-found-table td.text-end .btn{
+    white-space:normal;
+}
+.staff-found-table td.text-end form{
+    display:inline-block;
+    margin:.12rem;
+}
+.staff-found-table th,
+.staff-found-table td{
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+}
+.staff-found-table td:nth-child(1){
+    min-width:360px!important;
+}
+.staff-found-table td:nth-child(2){
+    min-width:180px!important;
+}
+.staff-found-table td:nth-child(3){
+    min-width:150px!important;
+}
+.staff-found-table td:nth-child(4),
+.staff-found-table td:nth-child(5){
+    white-space:nowrap;
+}
+.staff-found-table .found-item-cell{
+    display:flex!important;
+    align-items:center;
+    gap:.8rem;
+}
+.staff-found-table .found-item-cell > div strong,
+.staff-found-table .found-item-cell > div small{
+    white-space:normal;
+}
+
+/* Staff Lost Reports: center Student column */
+.staff-lost-table thead th:nth-child(2),
+.staff-lost-table tbody td:nth-child(2){
+    text-align:center!important;
+}
+
+/* Staff Claims: center headers, Claim column, Status/Reviewed/Action */
+.staff-claims-table thead th{
+    text-align:center!important;
+    vertical-align:middle!important;
+}
+.staff-claims-table tbody td:nth-child(1){
+    text-align:center!important;
+}
+.staff-claims-table tbody td:nth-child(1) .claim-id{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+}
+.staff-claims-table tbody td:nth-child(4),
+.staff-claims-table tbody td:nth-child(5),
+.staff-claims-table tbody td:nth-child(6){
+    text-align:center!important;
+}
+.staff-claims-table tbody td:nth-child(4) .badge{
+    margin-inline:auto;
+}
+.staff-claims-table tbody td:nth-child(6).text-end{
+    text-align:center!important;
+}
+.staff-claims-table tbody td:nth-child(6) .btn{
+    display:inline-flex;
+    justify-content:center;
+}
+
+/* Staff Found Items: center headers and Staff–Actions columns */
+.staff-found-table thead th{
+    text-align:center!important;
+    vertical-align:middle!important;
+}
+.staff-found-table tbody td:nth-child(2),
+.staff-found-table tbody td:nth-child(3),
+.staff-found-table tbody td:nth-child(4),
+.staff-found-table tbody td:nth-child(5),
+.staff-found-table tbody td:nth-child(6){
+    text-align:center!important;
+}
+.staff-found-table .found-category{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.35rem;
+}
+.staff-found-table tbody td:nth-child(5) .badge{
+    margin-inline:auto;
+}
+.staff-found-table tbody td.text-end{
+    text-align:center!important;
+}
+.staff-found-table tbody td.text-end .btn{
+    display:inline-flex;
+    justify-content:center;
+    white-space:nowrap;
+}
+.staff-found-table tbody td.text-end form{
+    display:inline-flex;
+    margin:0 .15rem;
+}
+
+/* Staff found items: keep module width inside viewport */
+.found-module,
+.found-panel,
+.found-panel-header,
+.found-table-wrap{
+    min-width:0;
+}
+.found-table-wrap{
+    overflow-x:auto;
+}
+.staff-found-table{
+    width:100%;
+    table-layout:auto;
+}
+.staff-found-table th,
+.staff-found-table td{
+    min-width:0!important;
+}
+.staff-found-table th:nth-child(1),
+.staff-found-table td:nth-child(1){
+    width:16%;
+    max-width:180px;
+    min-width:140px!important;
+}
+.staff-found-table th:nth-child(2),
+.staff-found-table td:nth-child(2){
+    width:13%;
+    white-space:normal;
+}
+.staff-found-table th:nth-child(3),
+.staff-found-table td:nth-child(3){
+    width:15%;
+}
+.staff-found-table th:nth-child(4),
+.staff-found-table td:nth-child(4){
+    width:12%;
+}
+.staff-found-table th:nth-child(5),
+.staff-found-table td:nth-child(5){
+    width:10%;
+}
+.staff-found-table td.text-end{
+    width:26%;
+    min-width:185px!important;
+    white-space:normal;
+}
+.staff-found-table td.text-end .btn{
+    white-space:nowrap;
+    padding:.22rem .44rem;
+    font-size:.76rem;
+}
+.staff-found-table td.text-end form{
+    margin:.06rem;
+}
+.staff-found-table .found-item-cell{
+    display:grid!important;
+    grid-template-columns:34px minmax(0,1fr);
+    align-items:center;
+    gap:.45rem;
+}
+.staff-found-table .found-item-cell > div{
+    min-width:0;
+}
+.staff-found-table .found-item-cell > div strong,
+.staff-found-table .found-item-cell > div small{
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+@media (max-width:1200px){
+    .found-hero{
+        align-items:flex-start;
+        flex-wrap:wrap;
+    }
+    .found-hero .btn{
+        width:100%;
+    }
+    .staff-found-table td.text-end{
+        min-width:165px!important;
+    }
+    .staff-found-table th:nth-child(1),
+    .staff-found-table td:nth-child(1){
+        width:16%;
+        max-width:170px;
+        min-width:125px!important;
+    }
+}
+
+@media(max-width:991px){
+    .student-sidebar{display:none}
+    .main-pane,.content-wrap{transform:none!important}
+    .topbar .btn-outline-primary,
+    .topbar .btn-primary{
+        border-width:1px;
+        box-shadow:0 2px 10px rgba(26,60,110,.08);
+    }
 }
 
 @media(max-width:767px){
@@ -154,10 +871,99 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 .student-mobile-menu{display:none}
 @media(max-width:991px){
     .topbar>.student-mobile-menu{display:block;width:auto;flex:0 0 auto}
-    .student-mobile-menu .btn{gap:.45rem;white-space:nowrap}
-    .student-mobile-menu .dropdown-menu{min-width:230px;border:1px solid var(--border);border-radius:8px;box-shadow:0 18px 38px rgba(26,60,110,.18)}
-    .student-mobile-menu .dropdown-item{font-weight:800;color:var(--text-dark);padding:.72rem 1rem}
-    .student-mobile-menu .dropdown-item.active,.student-mobile-menu .dropdown-item:active,.student-mobile-menu .dropdown-item:hover{background:#EEF4FF;color:var(--primary)}
+    .student-mobile-menu .btn{gap:.45rem;white-space:nowrap;min-width:44px;padding:.52rem .72rem}
+    .student-mobile-menu .dropdown-menu{min-width:250px;border:1px solid rgba(255,255,255,.16);border-radius:10px;box-shadow:0 18px 38px rgba(26,60,110,.22);background:var(--primary);padding:.35rem}
+    .student-mobile-menu .dropdown-divider{border-color:rgba(255,255,255,.18);margin:.35rem 0}
+    .student-mobile-brand{display:flex;align-items:center;gap:.6rem;padding:.5rem .55rem;color:#fff}
+    .student-mobile-brand img{width:36px;height:36px;object-fit:contain;flex:0 0 36px}
+    .student-mobile-brand strong{display:block;font-size:.95rem;line-height:1.1}
+    .student-mobile-brand small{display:block;color:rgba(255,255,255,.78);font-size:.73rem;line-height:1.1}
+    .student-mobile-menu .dropdown-item{font-weight:800;color:#fff;padding:.72rem .9rem;border-radius:8px;display:flex;align-items:center;gap:.2rem}
+    .student-mobile-menu .dropdown-item i{color:rgba(255,255,255,.92)}
+    .student-mobile-menu .dropdown-item.active,.student-mobile-menu .dropdown-item:active,.student-mobile-menu .dropdown-item:hover{background:rgba(255,255,255,.12);color:#fff}
     .student-sidebar{display:none}
     .topbar .student-mobile-menu+strong{flex:1 1 auto}
+}
+@media(max-width:991px){
+    .browse-grid{grid-template-columns:1fr!important}
+    .browse-card{width:100%;min-width:0}
+    .browse-card-media{display:block;overflow:hidden;border-radius:8px}
+    .browse-card-media img{width:100%;height:180px;object-fit:cover}
+    .browse-card-footer{display:grid!important;grid-template-columns:1fr!important;gap:.55rem}
+    .browse-card-footer .btn,.browse-card-footer form,.browse-card-footer button,.browse-unavailable{width:100%!important}
+}
+@media(max-width:575px){
+    .topbar{padding:.7rem .75rem}
+    .topbar>strong{font-size:.95rem}
+    .student-mobile-menu .dropdown-menu{min-width:min(88vw,280px)}
+    .browse-card-media img{height:150px}
+}
+
+/* Keep Browse Found cards stable even with very large images. */
+.browse-card{
+    display:grid!important;
+    grid-template-rows:auto 1fr auto!important;
+    min-width:0;
+    overflow:hidden;
+}
+.browse-card-media{
+    display:block!important;
+    width:100%!important;
+    max-height:140px!important;
+    overflow:hidden!important;
+    border-radius:8px;
+}
+.browse-card-media img{
+    display:block;
+    width:100%!important;
+    height:140px!important;
+    object-fit:contain!important;
+    object-position:center;
+    background:#F4F7FD;
+}
+.browse-card-body{
+    min-width:0;
+}
+.browse-card-footer{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:.55rem;
+}
+.browse-card-footer .btn,
+.browse-card-footer form,
+.browse-card-footer button,
+.browse-unavailable{
+    width:100%!important;
+}
+
+/* Staff found form actions should scroll with content (not fixed/sticky). */
+.staff-intake-form .found-form-actions{
+    position:static!important;
+    bottom:auto!important;
+    inset:auto!important;
+    z-index:auto!important;
+}
+
+/* Center content in Admin > Users table */
+.excel-users-table th,
+.excel-users-table td{
+    text-align:center!important;
+}
+.excel-users-table .user-identity{
+    justify-content:center;
+    text-align:center;
+}
+.excel-users-table th:nth-child(2),
+.excel-users-table td:nth-child(2){
+    text-align:justify!important;
+}
+.excel-users-table thead th:nth-child(2){
+    text-align:center!important;
+}
+.excel-users-table td:nth-child(2) .user-identity{
+    justify-content:flex-start;
+    text-align:justify;
+}
+.excel-users-table td:nth-child(2) .user-identity > div{
+    text-align:justify;
 }

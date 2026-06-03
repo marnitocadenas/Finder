@@ -78,7 +78,7 @@
         @endif
 
         <div class="found-table-wrap">
-            <table class="table found-table align-middle">
+            <table class="table found-table excel-found-table {{ $role === 'staff' ? 'staff-found-table' : '' }} align-middle">
                 <thead>
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
