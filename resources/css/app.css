@@ -103,7 +103,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .sidebar{overflow:visible;overscroll-behavior:auto;scrollbar-gutter:auto}
     .sidebar>.d-flex{grid-column:1/-1;margin-bottom:.5rem!important}
     .sidebar a{margin:0;padding:.65rem .75rem}
-    .topbar{position:sticky!important;top:0;z-index:60!important;align-items:flex-start!important;gap:.75rem;flex-wrap:wrap;padding:.8rem 1rem}
+    .topbar{position:sticky!important;top:0;z-index:60!important;align-items:center!important;gap:.75rem;flex-wrap:nowrap!important;padding:.8rem 1rem}
     .student-topbar{
         position:fixed!important;
         top:0!important;
@@ -115,12 +115,12 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         box-shadow:0 10px 20px rgba(26,60,110,.10)!important;
     }
     .student-content-wrap{
-        padding-top:146px!important;
-        padding-bottom:96px!important;
+        padding-top:84px!important;
+        padding-bottom:64px!important;
     }
     .student-content-wrap > *:first-child{margin-top:.25rem}
     .student-content-wrap > *:last-child{margin-bottom:.25rem}
-    .topbar>div{width:100%;justify-content:space-between;gap:.5rem!important;flex-wrap:wrap}
+    .topbar>div{width:auto;justify-content:flex-end;gap:.75rem!important;flex-wrap:nowrap}
     .content-wrap{padding:1rem}
     .landing-hero-inner{gap:1.4rem;padding-bottom:4rem}
     .landing-nav{flex-wrap:wrap}
@@ -134,7 +134,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 }
 @media(max-width:575px){
     .student-content-wrap{
-        padding-top:156px!important;
+        padding-top:72px!important;
     }
 }
 
@@ -232,8 +232,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     white-space:nowrap!important;
 }
 .student-lost-table thead th{
-    background:#F3F4F6!important;
-    color:#1F2937;
+    background:#EEF2F8!important;
+    color:#334155;
     font-weight:800;
     text-transform:uppercase;
     font-size:.74rem;
@@ -250,7 +250,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     text-align:center!important;
 }
 .student-lost-table tbody tr:nth-child(even) td{
-    background:#FAFAFA;
+    background:#F5F8FC;
 }
 .student-lost-table .lost-item-cell{
     align-items:center;
@@ -307,8 +307,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     background:#fff;
 }
 .excel-users-table thead th{
-    background:#F3F4F6!important;
-    color:#1F2937;
+    background:#EEF2F8!important;
+    color:#334155;
     font-weight:800;
     text-transform:uppercase;
     font-size:.74rem;
@@ -322,7 +322,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     vertical-align:middle;
 }
 .excel-users-table tbody tr:nth-child(even) td{
-    background:#FAFAFA;
+    background:#F5F8FC;
 }
 
 /* Excel-like grid for Admin > Lost Items table */
@@ -331,8 +331,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     background:#fff;
 }
 .excel-lost-table thead th{
-    background:#F3F4F6!important;
-    color:#1F2937;
+    background:#EEF2F8!important;
+    color:#334155;
     font-weight:800;
     text-transform:uppercase;
     font-size:.74rem;
@@ -355,7 +355,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     text-align:center!important;
 }
 .excel-lost-table tbody tr:nth-child(even) td{
-    background:#FAFAFA;
+    background:#F5F8FC;
 }
 .excel-lost-table th,
 .excel-lost-table td{
@@ -419,8 +419,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     background:#fff;
 }
 .excel-found-table thead th{
-    background:#F3F4F6!important;
-    color:#1F2937;
+    background:#EEF2F8!important;
+    color:#334155;
     font-weight:800;
     text-transform:uppercase;
     font-size:.74rem;
@@ -469,7 +469,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     vertical-align:middle;
 }
 .excel-found-table tbody tr:nth-child(even) td{
-    background:#FAFAFA;
+    background:#F5F8FC;
 }
 .excel-found-table th,
 .excel-found-table td{
@@ -529,8 +529,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     background:#fff;
 }
 .excel-claims-table thead th{
-    background:#F3F4F6!important;
-    color:#1F2937;
+    background:#EEF2F8!important;
+    color:#334155;
     font-weight:800;
     text-transform:uppercase;
     font-size:.74rem;
@@ -544,7 +544,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     vertical-align:middle;
 }
 .excel-claims-table tbody tr:nth-child(even) td{
-    background:#FAFAFA;
+    background:#F5F8FC;
 }
 
 /* Admin Claims: center headers, Claim column, and Status/Reviewed/Action cells */
@@ -583,8 +583,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     background:#fff;
 }
 .excel-logs-table thead th{
-    background:#F3F4F6!important;
-    color:#1F2937;
+    background:#EEF2F8!important;
+    color:#334155;
     font-weight:800;
     text-transform:uppercase;
     font-size:.74rem;
@@ -598,7 +598,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     vertical-align:middle;
 }
 .excel-logs-table tbody tr:nth-child(even) td{
-    background:#FAFAFA;
+    background:#F5F8FC;
 }
 
 /* Admin Activity Logs: center Action–Time columns; User stays left */
@@ -896,8 +896,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     html{font-size:14.5px}
     .container,.container-fluid{max-width:min(100% - 1rem,1320px)}
     .content-wrap{padding:.85rem}
-    .topbar .dropdown,.topbar .dropdown-toggle{width:100%}
-    .topbar .dropdown-toggle{justify-content:space-between}
+    .topbar .dropdown,.topbar .dropdown-toggle{width:auto!important}
+    .topbar .dropdown-toggle{justify-content:center}
     .sidebar{grid-template-columns:repeat(2,minmax(0,1fr))}
     .brand-logo{width:44px;height:44px;flex-basis:44px}
     .landing-hero h1,.hero h1,.overview-hero h1,.users-hero h1,.user-form-hero h1,.admin-search-hero h1,.matches-hero h1,.settings-hero h1,.staff-activity-hero h1,.student-hero h1{font-size:clamp(2rem,10vw,2.6rem)!important;line-height:1.03}
@@ -949,7 +949,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .student-mobile-menu .dropdown-item i{color:rgba(255,255,255,.92)}
     .student-mobile-menu .dropdown-item.active,.student-mobile-menu .dropdown-item:active,.student-mobile-menu .dropdown-item:hover{background:rgba(255,255,255,.12);color:#fff}
     .student-sidebar{display:none}
-    .topbar .student-mobile-menu+strong{flex:1 1 auto}
+    .topbar .student-mobile-menu+strong{display:none!important}
 }
 @media(max-width:991px){
     .browse-grid{grid-template-columns:1fr!important}
@@ -1034,3 +1034,44 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 .excel-users-table td:nth-child(2) .user-identity > div{
     text-align:justify;
 }
+
+/* Premium hover highlight for excel tables */
+.excel-users-table tbody tr:hover td,
+.excel-lost-table tbody tr:hover td,
+.excel-found-table tbody tr:hover td,
+.excel-claims-table tbody tr:hover td,
+.excel-logs-table tbody tr:hover td,
+.student-lost-table tbody tr:hover td,
+.student-claims-table tbody tr:hover td,
+.staff-found-table tbody tr:hover td,
+.staff-lost-table tbody tr:hover td,
+.staff-claims-table tbody tr:hover td {
+    background: #E8EFF9 !important;
+    transition: background 0.15s ease;
+}
+
+/* Explicit styling for staff tables */
+.staff-found-table thead th,
+.staff-lost-table thead th,
+.staff-claims-table thead th {
+    background: #EEF2F8 !important;
+    color: #334155 !important;
+}
+.staff-found-table tbody tr:nth-child(even) td,
+.staff-lost-table tbody tr:nth-child(even) td,
+.staff-claims-table tbody tr:nth-child(even) td {
+    background: #F5F8FC !important;
+}
+
+/* Explicit styling for student tables */
+.student-lost-table thead th,
+.student-claims-table thead th {
+    background: #EEF2F8 !important;
+    color: #334155 !important;
+}
+.student-lost-table tbody tr:nth-child(even) td,
+.student-claims-table tbody tr:nth-child(even) td {
+    background: #F5F8FC !important;
+}
+
+
