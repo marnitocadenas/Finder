@@ -68,7 +68,7 @@
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Claim</th>
-                        <th>Student</th>
+                        @if($role !== 'student')<th>Student</th>@endif
                         <th>Found Item</th>
                         <th>Status</th>
                         <th>Reviewed</th>
@@ -85,15 +85,17 @@
                                     <small>{{ $claim->created_at->format('M d, Y') }}</small>
                                 </div>
                             </td>
-                            <td>
-                                <div class="claim-person">
-                                    <span>{{ strtoupper(substr($claim->student->name ?? auth()->user()->name, 0, 1)) }}</span>
-                                    <div>
-                                        <strong>{{ $claim->student->name ?? auth()->user()->name }}</strong>
-                                        <small>{{ $claim->student->email ?? auth()->user()->email }}</small>
+                            @if($role !== 'student')
+                                <td>
+                                    <div class="claim-person">
+                                        <span>{{ strtoupper(substr($claim->student->name ?? auth()->user()->name, 0, 1)) }}</span>
+                                        <div>
+                                            <strong>{{ $claim->student->name ?? auth()->user()->name }}</strong>
+                                            <small>{{ $claim->student->email ?? auth()->user()->email }}</small>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            @endif
                             <td>
                                 <div class="claim-item">
                                     <i class="fa-solid {{ $claim->foundItem->category->icon ?? 'fa-box-open' }}"></i>
@@ -113,7 +115,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ $role === 'admin' ? 7 : 6 }}">
+                            <td colspan="{{ $role === 'admin' ? 7 : ($role === 'student' ? 5 : 6) }}">
                                 <div class="claims-empty">
                                     <i class="fa-solid fa-file-circle-question"></i>
                                     <p>No claims found.</p>
