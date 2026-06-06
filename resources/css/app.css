@@ -200,8 +200,8 @@
 
 @media(max-width:767px){
     .student-hero{display:grid!important;align-items:start!important}
-    .student-hero-actions{display:flex!important;gap:.5rem!important;width:100%!important}
-    .student-hero-actions .btn{flex:1!important;width:auto!important;min-height:36px!important;padding:.4rem .6rem!important;font-size:.82rem!important;white-space:nowrap!important}
+    .student-hero-actions{display:flex!important;gap:.4rem!important;width:auto!important;flex-wrap:nowrap!important}
+    .student-hero-actions .btn{flex:0 0 auto!important;width:auto!important;min-height:32px!important;padding:.25rem .5rem!important;font-size:.78rem!important;white-space:nowrap!important}
     .student-panel-header{display:grid}
     .student-list-item,.student-claim-item{grid-template-columns:52px minmax(0,1fr)}
     .student-list-item .badge,.student-claim-item .badge{grid-column:2;justify-self:start}
@@ -293,13 +293,15 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .sidebar a{margin:0;padding:.65rem .75rem}
     .topbar{position:sticky!important;top:0;z-index:60!important;align-items:center!important;gap:.75rem;flex-wrap:nowrap!important;padding:.8rem 1rem}
     .topbar-start{flex:1 1 auto;min-width:0}
-    .topbar-title{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .topbar-title{display:none}
     .topbar-actions{flex:0 0 auto;width:auto;justify-content:flex-end;gap:.75rem!important;flex-wrap:nowrap}
     .content-wrap{padding:1rem}
     .landing-hero-inner{gap:1.4rem;padding-bottom:4rem}
-    .landing-nav{flex-wrap:wrap}
-    .landing-nav-actions{width:100%}
-    .landing-nav-actions .btn,.landing-hero-actions .btn,.landing-final-actions .btn{flex:1 1 160px}
+    .landing-nav{flex-wrap:wrap;align-items:flex-start;height:auto;padding:.7rem 0;gap:.5rem}
+    .landing-nav-actions{width:100%;flex:1 1 100%;display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end}
+    .landing-nav-actions .btn{flex:0 0 auto;width:auto;white-space:nowrap;font-size:.82rem;padding:.32rem .55rem;min-height:30px}
+    .landing-hero-actions .btn,.landing-final-actions .btn{flex:1 1 160px}
+    .landing-browse-btn{flex:0 0 auto}
     .landing-search{gap:.7rem}
     .landing-search .btn,.landing-search a.btn{width:100%}
     .hero{background-size:cover}
@@ -345,11 +347,13 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         align-items:start!important;
     }
     .student-match-module .matches-hero .btn{
-        width:100%!important;
+        width:auto!important;
         max-width:220px;
         justify-self:start;
         white-space:nowrap!important;
-        padding:.6rem .9rem!important;
+        padding:.3rem .65rem!important;
+        font-size:.82rem!important;
+        min-height:32px!important;
     }
 }
 @media(min-width:992px){
@@ -1072,8 +1076,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .overview-hero,.users-hero,.user-form-hero,.student-hero,.landing-final-cta .container{display:grid!important;align-items:start!important}
     .overview-hero-actions,.landing-final-actions{justify-content:stretch}
     .overview-hero-actions .btn,.landing-final-actions .btn{width:100%}
-    .student-hero-actions{display:flex!important;gap:.5rem!important;width:100%!important}
-    .student-hero-actions .btn{flex:1!important;width:auto!important;min-height:36px!important;padding:.4rem .6rem!important;font-size:.82rem!important;white-space:nowrap!important}
+    .student-hero-actions{display:flex!important;gap:.4rem!important;width:auto!important;flex-wrap:nowrap!important}
+    .student-hero-actions .btn{flex:0 0 auto!important;width:auto!important;min-height:32px!important;padding:.25rem .5rem!important;font-size:.78rem!important;white-space:nowrap!important}
     .module-stats,.user-stat-grid,.landing-stats-grid,.staff-performance-grid,.claim-timeline{grid-template-columns:1fr!important}
     .activity-item,.match-lost,.match-candidate{grid-template-columns:1fr!important;text-align:left}
     .student-list-item strong, .student-claim-item strong {
@@ -1110,11 +1114,32 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .modal-dialog{margin:.5rem}
 }
 
-.student-mobile-menu{display:none}
-.student-mobile-menu .student-mobile-menu-label{display:none}
-@media(min-width:992px){
-    .student-sidebar{display:block}
+/* Generic mobile menu for all roles */
+.mobile-menu{display:none}
+.mobile-menu .mobile-menu-label{display:none}
+.desktop-sidebar{display:block}
+@media(max-width:1199px){
+    .desktop-sidebar{display:none}
+    .topbar>.topbar-start .mobile-menu{display:block;width:auto;flex:0 0 auto}
+    .student-topbar-title{display:none}
+    .mobile-menu .btn{display:inline-flex;align-items:center;gap:.45rem;white-space:nowrap;min-width:44px;padding:.52rem .72rem}
+    .mobile-menu .dropdown-menu{min-width:min(92vw,300px);max-height:min(78dvh,520px);overflow-y:auto;border:1px solid rgba(255,255,255,.16);border-radius:10px;box-shadow:0 18px 38px rgba(26,60,110,.22);background:var(--primary);padding:.35rem}
+    .mobile-menu .dropdown-divider{border-color:rgba(255,255,255,.18);margin:.35rem 0}
+    .mobile-brand{display:flex;align-items:center;gap:.6rem;padding:.5rem .55rem;color:#fff}
+    .mobile-brand img{width:36px;height:36px;object-fit:contain;flex:0 0 36px}
+    .mobile-brand strong{display:block;font-size:.95rem;line-height:1.1}
+    .mobile-brand small{display:block;color:rgba(255,255,255,.78);font-size:.73rem;line-height:1.1}
+    .mobile-menu .dropdown-item{font-weight:800;color:#fff;padding:.72rem .9rem;border-radius:8px;display:flex;align-items:center;gap:.2rem}
+    .mobile-menu .dropdown-item i{color:rgba(255,255,255,.92)}
+    .mobile-menu .dropdown-item.active,.mobile-menu .dropdown-item:active,.mobile-menu .dropdown-item:hover{background:rgba(255,255,255,.12);color:#fff}
+    .topbar-title{font-size:clamp(.9rem,2.4vw,1.05rem)}
 }
+@media(min-width:992px) and (max-width:1199px){
+    .mobile-menu .mobile-menu-label{display:inline}
+    .mobile-menu .dropdown-menu{min-width:min(72vw,320px)}
+}
+/* Keep student sidebar working at the same breakpoints */
+.student-sidebar{display:block}
 @media(max-width:991px){
     .student-sidebar{display:none}
     .topbar>.topbar-start .student-mobile-menu{display:block;width:auto;flex:0 0 auto}
