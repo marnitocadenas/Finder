@@ -1118,6 +1118,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 @media(max-width:991px){
     .student-sidebar{display:none}
     .topbar>.topbar-start .student-mobile-menu{display:block;width:auto;flex:0 0 auto}
+    .student-topbar-title{display:none}
     .student-mobile-menu .btn{display:inline-flex;align-items:center;gap:.45rem;white-space:nowrap;min-width:44px;padding:.52rem .72rem}
     .student-mobile-menu .dropdown-menu{min-width:min(92vw,300px);max-height:min(78dvh,520px);overflow-y:auto;border:1px solid rgba(255,255,255,.16);border-radius:10px;box-shadow:0 18px 38px rgba(26,60,110,.22);background:var(--primary);padding:.35rem}
     .student-mobile-menu .dropdown-divider{border-color:rgba(255,255,255,.18);margin:.35rem 0}
