@@ -1460,17 +1460,53 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 /* ============================================================
 
 /* ============================================================
-   STUDENT PANEL - Robust fix for Apply/Reset buttons on laptop screens (992-1199px)
-   Uses grid-column: 1 / -1 to span the actions row across all columns
-   regardless of how many filter fields are present
+
+/* ============================================================
+   COMPREHENSIVE RESPONSIVE FIXES
+   - Fixes topbar, filter panel, tables, forms, hero, grids
+   - For mobile (<576), tablet (576-991), laptop (992-1199), desktop (>=1200)
    ============================================================ */
-@media (min-width:992px) and (max-width:1199px){
-    .filter-panel{
+
+/* ----- UNIVERSAL FIXES (All screen sizes) ----- */
+
+/* Topbar: Hide "Menu" text label, keep just the icon */
+.mobile-menu .mobile-menu-label,
+.student-mobile-menu .student-mobile-menu-label,
+.mobile-menu-label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0,0,0,0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Topbar: Ensure title doesn't push other elements */
+.topbar-title {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 40vw !important;
+}
+
+/* Topbar: Hide title on laptop and desktop (>=992px) - the hero h1 already shows the title */
+@media (min-width: 992px) {
+    .topbar-title { display: none !important; }
+}
+
+/* ----- LAPTOP SCREEN FIXES (992-1199px) ----- */
+@media (min-width: 992px) and (max-width: 1199px) {
+
+    /* Filter panel: Use auto-fit grid; place actions in a full-width row below inputs */
+    .filter-panel {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
         gap: .6rem !important;
         padding: .85rem !important;
     }
-    .filter-actions{
+    .filter-actions {
         grid-column: 1 / -1 !important;
         display: flex !important;
         flex-direction: row !important;
@@ -1481,7 +1517,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         padding-top: .6rem !important;
         border-top: 1px solid var(--border) !important;
     }
-    .filter-actions .btn{
+    .filter-actions .btn {
         flex: 0 0 auto !important;
         width: auto !important;
         min-width: 110px !important;
@@ -1495,8 +1531,215 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         align-items: center !important;
         justify-content: center !important;
     }
-    .filter-actions .btn i{
-        margin-right: .3rem !important;
-        font-size: .9rem !important;
+    .filter-actions .btn i { margin-right: .3rem !important; }
+
+    /* Student lost table: Allow action buttons to wrap, reduce actions column min-width */
+    .student-lost-table th:nth-child(5),
+    .student-lost-table td:nth-child(5) {
+        min-width: 0 !important;
+        width: auto !important;
+    }
+    .student-lost-actions {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+    .student-lost-actions .btn,
+    .student-lost-actions form {
+        flex: 0 0 auto !important;
+        padding: .25rem .5rem !important;
+        font-size: .76rem !important;
+    }
+
+    /* Form sections: Use single column on laptop to prevent cramping */
+    .lost-form-section,
+    .found-form-section,
+    .claim-form-section,
+    .user-form-section,
+    .category-form-section {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* Detail grids: Stack to single column on laptop */
+    .lost-detail-grid,
+    .found-detail-grid,
+    .claim-detail-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Profile grid: Stack on laptop */
+    .profile-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .profile-side {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Module stats and stat grids: 2 columns on laptop */
+    .module-stats,
+    .user-stat-grid,
+    .staff-performance-grid,
+    .notification-stat-grid,
+    .claim-stat-grid,
+    .browse-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    /* Two-column admin settings form: 1 column on laptop */
+    .settings-form,
+    .admin-search-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Bulk toolbar: stack */
+    .bulk-toolbar {
+        align-items: stretch !important;
+        flex-direction: column !important;
+    }
+    .bulk-toolbar .form-select,
+    .bulk-toolbar .form-control,
+    .bulk-toolbar .btn {
+        max-width: none !important;
+        width: 100% !important;
+    }
+
+    /* Staff found table actions: reduce min-width */
+    .staff-found-table td.text-end {
+        min-width: 175px !important;
+    }
+
+    /* Admin found table actions: keep but compact */
+    .found-table.excel-found-table td.text-end {
+        min-width: 165px !important;
+    }
+    .found-table.excel-found-table td.text-end .btn {
+        padding: .24rem .5rem !important;
+        font-size: .78rem !important;
+    }
+
+    /* Hero section: ensure proper wrap behavior */
+    .student-hero,
+    .browse-hero,
+    .claims-hero,
+    .lost-hero,
+    .matches-hero,
+    .overview-hero,
+    .admin-search-hero,
+    .settings-hero,
+    .profile-hero,
+    .staff-hero,
+    .staff-activity-hero,
+    .found-hero,
+    .notifications-hero {
+        align-items: flex-start !important;
+        flex-wrap: wrap !important;
+    }
+    .student-hero > div:first-child,
+    .browse-hero > div:first-child,
+    .claims-hero > div:first-child,
+    .lost-hero > div:first-child,
+    .matches-hero > div:first-child,
+    .overview-hero > div:first-child,
+    .admin-search-hero > div:first-child,
+    .settings-hero > div:first-child,
+    .profile-hero > div:first-child,
+    .staff-hero > div:first-child,
+    .found-hero > div:first-child,
+    .notifications-hero > div:first-child {
+        flex: 1 1 100% !important;
+        min-width: 0;
+    }
+    .student-hero-actions,
+    .overview-hero-actions,
+    .browse-hero > .btn,
+    .claims-hero > .btn,
+    .lost-hero > .btn,
+    .matches-hero > .btn,
+    .admin-search-hero > .btn,
+    .settings-hero > .btn,
+    .profile-hero > .btn,
+    .staff-hero > .btn,
+    .found-hero > .btn,
+    .notifications-hero > .btn {
+        flex: 0 0 auto !important;
+        margin-top: .5rem !important;
+    }
+
+    /* Table wraps: ensure horizontal scroll on laptop too */
+    .lost-table-wrap,
+    .claims-table-wrap,
+    .found-table-wrap,
+    .users-table-wrap,
+    .logs-table-wrap,
+    .staff-found-table-wrap,
+    .student-lost-table-wrap {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    .lost-table,
+    .claims-table,
+    .found-table,
+    .users-table,
+    .logs-table,
+    .staff-found-table,
+    .student-lost-table {
+        min-width: 760px !important;
+    }
+    .student-lost-table {
+        min-width: 680px !important;
+    }
+
+    /* Container padding: ensure breathing room on laptop */
+    .content-wrap {
+        padding: 1.25rem !important;
+    }
+
+    /* Topbar: compact */
+    .topbar {
+        padding: .8rem 1.25rem !important;
+    }
+}
+
+/* ----- TABLET (576-991px) ----- */
+@media (min-width: 576px) and (max-width: 991px) {
+
+    /* Browse and notification stat grids: 3 columns on tablet */
+    .browse-stat-grid,
+    .notification-stat-grid,
+    .claim-stat-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+
+    /* User and staff stat grids: 2 columns */
+    .user-stat-grid,
+    .staff-performance-grid,
+    .module-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* ----- SMALL SCREEN FIXES (max-width: 575px) ----- */
+@media (max-width: 575px) {
+
+    /* Filter panel: full-width single column on small mobile */
+    .filter-panel {
+        grid-template-columns: 1fr !important;
+        gap: .75rem !important;
+    }
+    .filter-actions {
+        grid-column: 1 !important;
+        flex-direction: column !important;
+        gap: .5rem !important;
+    }
+    .filter-actions .btn {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* Tables: smaller action buttons */
+    .student-lost-actions .btn,
+    .student-lost-actions form {
+        padding: .2rem .4rem !important;
+        font-size: .7rem !important;
     }
 }
