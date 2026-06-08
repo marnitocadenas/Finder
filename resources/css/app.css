@@ -1116,12 +1116,12 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 
 /* Generic mobile menu for all roles */
 .mobile-menu{display:none}
-.mobile-menu .mobile-menu-label{display:none}
+.mobile-menu .mobile-menu-label{display:none!important;width:0;height:0;overflow:hidden;position:absolute;clip:rect(0,0,0,0);white-space:nowrap}
 .desktop-sidebar{display:block}
 @media(max-width:1199px){
     .desktop-sidebar{display:none}
     .topbar>.topbar-start .mobile-menu{display:block;width:auto;flex:0 0 auto}
-    .mobile-menu .btn{display:inline-flex;align-items:center;gap:.45rem;white-space:nowrap;min-width:44px;padding:.52rem .72rem}
+    .mobile-menu .btn{display:inline-flex;align-items:center;justify-content:center;gap:0;white-space:nowrap;min-width:44px;width:44px;height:40px;padding:0}
     .mobile-menu .dropdown-menu{min-width:min(92vw,300px);max-height:min(78dvh,520px);overflow-y:auto;border:1px solid rgba(255,255,255,.16);border-radius:10px;box-shadow:0 18px 38px rgba(26,60,110,.22);background:var(--primary);padding:.35rem}
     .mobile-menu .dropdown-divider{border-color:rgba(255,255,255,.18);margin:.35rem 0}
     .mobile-brand{display:flex;align-items:center;gap:.6rem;padding:.5rem .55rem;color:#fff}
@@ -1131,11 +1131,13 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .mobile-menu .dropdown-item{font-weight:800;color:#fff;padding:.72rem .9rem;border-radius:8px;display:flex;align-items:center;gap:.2rem}
     .mobile-menu .dropdown-item i{color:rgba(255,255,255,.92)}
     .mobile-menu .dropdown-item.active,.mobile-menu .dropdown-item:active,.mobile-menu .dropdown-item:hover{background:rgba(255,255,255,.12);color:#fff}
-    .topbar-title{font-size:clamp(.9rem,2.4vw,1.05rem)}
 }
 @media(min-width:992px) and (max-width:1199px){
-    .mobile-menu .mobile-menu-label{display:inline}
     .mobile-menu .dropdown-menu{min-width:min(72vw,320px)}
+}
+/* Hide topbar title on screens where the sidebar is visible so the layout is clean on laptop/desktop */
+@media(min-width:992px){
+    .topbar-title{display:none!important}
 }
 /* Keep student sidebar working at the same breakpoints */
 .student-sidebar{display:block}
@@ -1431,5 +1433,70 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 
 /* Module stats – auto-fit */
 .module-stats {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;}
+
+/* ============================================================
+   STUDENT PANEL - Hide navigation sidebar ONLY on laptop screen sizes (992-1199px)
+   Desktop (>=1200px), mobile and tablet (<992px) remain unchanged.
+   ============================================================ */
+@media (min-width:992px) and (max-width:1199px){
+    .student-sidebar{display:none!important}
+    .topbar>.topbar-start .mobile-menu{display:block!important;width:auto;flex:0 0 auto}
+    .mobile-menu .btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:0!important;white-space:nowrap!important;min-width:44px!important;width:44px!important;height:40px!important;padding:0!important}
+    .mobile-menu .dropdown-menu{min-width:min(92vw,300px)!important;max-height:min(78dvh,520px)!important;overflow-y:auto!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:10px!important;box-shadow:0 18px 38px rgba(26,60,110,.22)!important;background:var(--primary)!important;padding:.35rem!important}
+    .mobile-menu .dropdown-divider{border-color:rgba(255,255,255,.18)!important;margin:.35rem 0!important}
+    .mobile-brand{display:flex!important;align-items:center!important;gap:.6rem!important;padding:.5rem .55rem!important;color:#fff!important}
+    .mobile-brand img{width:36px!important;height:36px!important;object-fit:contain!important;flex:0 0 36px!important}
+    .mobile-brand strong{display:block!important;font-size:.95rem!important;line-height:1.1!important}
+    .mobile-brand small{display:block!important;color:rgba(255,255,255,.78)!important;font-size:.73rem!important;line-height:1.1!important}
+    .mobile-menu .dropdown-item{font-weight:800!important;color:#fff!important;padding:.72rem .9rem!important;border-radius:8px!important;display:flex!important;align-items:center!important;gap:.2rem!important}
+    .mobile-menu .dropdown-item i{color:rgba(255,255,255,.92)!important}
+    .mobile-menu .dropdown-item.active,.mobile-menu .dropdown-item:active,.mobile-menu .dropdown-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
+    .app-shell{align-items:stretch!important}
+}
+
+/* ============================================================
+
+/* ============================================================
+
+/* ============================================================
+   STUDENT PANEL - Robust fix for Apply/Reset buttons on laptop screens (992-1199px)
+   Uses grid-column: 1 / -1 to span the actions row across all columns
+   regardless of how many filter fields are present
+   ============================================================ */
+@media (min-width:992px) and (max-width:1199px){
+    .filter-panel{
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+        gap: .6rem !important;
+        padding: .85rem !important;
+    }
+    .filter-actions{
+        grid-column: 1 / -1 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        gap: .5rem !important;
+        margin-top: .5rem !important;
+        padding-top: .6rem !important;
+        border-top: 1px solid var(--border) !important;
+    }
+    .filter-actions .btn{
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: 110px !important;
+        height: 40px !important;
+        padding: .45rem 1.1rem !important;
+        font-size: .88rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
+        white-space: nowrap !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .filter-actions .btn i{
+        margin-right: .3rem !important;
+        font-size: .9rem !important;
+    }
 }
