@@ -93,8 +93,8 @@
                 <tbody>
                     @forelse($items as $item)
                         <tr>
-                            @if($role === 'admin')<td><input type="checkbox" name="ids[]" value="{{ $item->id }}" form="found-bulk-form"></td>@endif
-                            <td>
+                            @if($role === 'admin')<td data-label="Select"><input type="checkbox" name="ids[]" value="{{ $item->id }}" form="found-bulk-form"></td>@endif
+                            <td data-label="Item">
                                 <div class="found-item-cell">
                                     @if($item->image)
                                         <img class="found-thumb" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
@@ -107,20 +107,20 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ $item->staff->name ?? auth()->user()->name }}</td>
-                            <td>
+                            <td data-label="Staff">{{ $item->staff->name ?? auth()->user()->name }}</td>
+                            <td data-label="Category">
                                 <span class="found-category">
                                     <i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>{{ $item->category->name ?? '-' }}
                                 </span>
                             </td>
-                            <td>{{ optional($item->date_found)->format('M d, Y') }}</td>
-                            <td>
+                            <td data-label="Date Found">{{ optional($item->date_found)->format('M d, Y') }}</td>
+                            <td data-label="Status">
                                 <x-status :status="$item->status" />
                                 @if($item->trashed())
                                     <span class="badge bg-dark ms-1">Deleted</span>
                                 @endif
                             </td>
-                            <td class="text-end">
+                            <td data-label="Actions" class="text-end">
                                 @if($item->trashed() && $role === 'admin')
                                     <form method="POST" action="{{ route('admin.found-items.restore', $item->id) }}" class="d-inline">
                                         @csrf @method('PUT')

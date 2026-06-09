@@ -1119,42 +1119,65 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 .mobile-menu .mobile-menu-label{display:none!important;width:0;height:0;overflow:hidden;position:absolute;clip:rect(0,0,0,0);white-space:nowrap}
 .desktop-sidebar{display:block}
 @media(max-width:1199px){
-    .desktop-sidebar{display:none}
     .topbar>.topbar-start .mobile-menu{display:block;width:auto;flex:0 0 auto}
     .mobile-menu .btn{display:inline-flex;align-items:center;justify-content:center;gap:0;white-space:nowrap;min-width:44px;width:44px;height:40px;padding:0}
-    .mobile-menu .dropdown-menu{min-width:min(92vw,300px);max-height:min(78dvh,520px);overflow-y:auto;border:1px solid rgba(255,255,255,.16);border-radius:10px;box-shadow:0 18px 38px rgba(26,60,110,.22);background:var(--primary);padding:.35rem}
-    .mobile-menu .dropdown-divider{border-color:rgba(255,255,255,.18);margin:.35rem 0}
-    .mobile-brand{display:flex;align-items:center;gap:.6rem;padding:.5rem .55rem;color:#fff}
-    .mobile-brand img{width:36px;height:36px;object-fit:contain;flex:0 0 36px}
-    .mobile-brand strong{display:block;font-size:.95rem;line-height:1.1}
-    .mobile-brand small{display:block;color:rgba(255,255,255,.78);font-size:.73rem;line-height:1.1}
-    .mobile-menu .dropdown-item{font-weight:800;color:#fff;padding:.72rem .9rem;border-radius:8px;display:flex;align-items:center;gap:.2rem}
-    .mobile-menu .dropdown-item i{color:rgba(255,255,255,.92)}
-    .mobile-menu .dropdown-item.active,.mobile-menu .dropdown-item:active,.mobile-menu .dropdown-item:hover{background:rgba(255,255,255,.12);color:#fff}
-}
-@media(min-width:992px) and (max-width:1199px){
-    .mobile-menu .dropdown-menu{min-width:min(72vw,320px)}
 }
 /* Hide topbar title on screens where the sidebar is visible so the layout is clean on laptop/desktop */
 @media(min-width:992px){
     .topbar-title{display:none!important}
 }
-/* Keep student sidebar working at the same breakpoints */
-.student-sidebar{display:block}
-@media(max-width:991px){
-    .student-sidebar{display:none}
-    .topbar>.topbar-start .student-mobile-menu{display:block;width:auto;flex:0 0 auto}
-    .student-mobile-menu .btn{display:inline-flex;align-items:center;gap:.45rem;white-space:nowrap;min-width:44px;padding:.52rem .72rem}
-    .student-mobile-menu .dropdown-menu{min-width:min(92vw,300px);max-height:min(78dvh,520px);overflow-y:auto;border:1px solid rgba(255,255,255,.16);border-radius:10px;box-shadow:0 18px 38px rgba(26,60,110,.22);background:var(--primary);padding:.35rem}
-    .student-mobile-menu .dropdown-divider{border-color:rgba(255,255,255,.18);margin:.35rem 0}
-    .student-mobile-brand{display:flex;align-items:center;gap:.6rem;padding:.5rem .55rem;color:#fff}
-    .student-mobile-brand img{width:36px;height:36px;object-fit:contain;flex:0 0 36px}
-    .student-mobile-brand strong{display:block;font-size:.95rem;line-height:1.1}
-    .student-mobile-brand small{display:block;color:rgba(255,255,255,.78);font-size:.73rem;line-height:1.1}
-    .student-mobile-menu .dropdown-item{font-weight:800;color:#fff;padding:.72rem .9rem;border-radius:8px;display:flex;align-items:center;gap:.2rem}
-    .student-mobile-menu .dropdown-item i{color:rgba(255,255,255,.92)}
-    .student-mobile-menu .dropdown-item.active,.student-mobile-menu .dropdown-item:active,.student-mobile-menu .dropdown-item:hover{background:rgba(255,255,255,.12);color:#fff}
-    .topbar-title{font-size:clamp(.9rem,2.4vw,1.05rem)}
+
+/* All roles: sidebar becomes off-canvas overlay when viewport is too narrow for sidebar+content */
+@media(max-width:1399.98px){
+    .sidebar{
+        position:fixed!important;
+        top:0!important;
+        left:-300px!important;
+        width:280px!important;
+        height:100dvh!important;
+        z-index:1050!important;
+        transition:left .3s ease!important;
+        display:block!important;
+        box-shadow:none!important;
+        padding:1rem!important;
+        overflow-y:auto!important;
+        border-radius:0!important
+    }
+    .sidebar.sidebar-open{
+        left:0!important;
+        box-shadow:4px 0 30px rgba(0,0,0,.18)!important
+    }
+    .sidebar-backdrop{
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        z-index:1049;
+        opacity:0;
+        visibility:hidden;
+        transition:opacity .3s ease,visibility .3s ease;
+        pointer-events:none
+    }
+    .sidebar-backdrop.show{
+        opacity:1;
+        visibility:visible;
+        pointer-events:auto
+    }
+    .topbar>.topbar-start>.mobile-menu{
+        display:block!important;
+        width:auto;
+        flex:0 0 auto
+    }
+    .topbar>.topbar-start>.mobile-menu .btn{
+        display:inline-flex!important;
+        align-items:center;
+        justify-content:center;
+        gap:0;
+        white-space:nowrap;
+        min-width:44px;
+        width:44px;
+        height:40px;
+        padding:0
+    }
 }
 @media(min-width:768px) and (max-width:991px){
     .student-mobile-menu .student-mobile-menu-label{display:inline}
@@ -1434,32 +1457,6 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 /* Module stats – auto-fit */
 .module-stats {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;}
-
-/* ============================================================
-   STUDENT PANEL - Hide navigation sidebar ONLY on laptop screen sizes (992-1199px)
-   Desktop (>=1200px), mobile and tablet (<992px) remain unchanged.
-   ============================================================ */
-@media (min-width:992px) and (max-width:1199px){
-    .student-sidebar{display:none!important}
-    .topbar>.topbar-start .mobile-menu{display:block!important;width:auto;flex:0 0 auto}
-    .mobile-menu .btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:0!important;white-space:nowrap!important;min-width:44px!important;width:44px!important;height:40px!important;padding:0!important}
-    .mobile-menu .dropdown-menu{min-width:min(92vw,300px)!important;max-height:min(78dvh,520px)!important;overflow-y:auto!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:10px!important;box-shadow:0 18px 38px rgba(26,60,110,.22)!important;background:var(--primary)!important;padding:.35rem!important}
-    .mobile-menu .dropdown-divider{border-color:rgba(255,255,255,.18)!important;margin:.35rem 0!important}
-    .mobile-brand{display:flex!important;align-items:center!important;gap:.6rem!important;padding:.5rem .55rem!important;color:#fff!important}
-    .mobile-brand img{width:36px!important;height:36px!important;object-fit:contain!important;flex:0 0 36px!important}
-    .mobile-brand strong{display:block!important;font-size:.95rem!important;line-height:1.1!important}
-    .mobile-brand small{display:block!important;color:rgba(255,255,255,.78)!important;font-size:.73rem!important;line-height:1.1!important}
-    .mobile-menu .dropdown-item{font-weight:800!important;color:#fff!important;padding:.72rem .9rem!important;border-radius:8px!important;display:flex!important;align-items:center!important;gap:.2rem!important}
-    .mobile-menu .dropdown-item i{color:rgba(255,255,255,.92)!important}
-    .mobile-menu .dropdown-item.active,.mobile-menu .dropdown-item:active,.mobile-menu .dropdown-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
-    .app-shell{align-items:stretch!important}
-}
-
-/* ============================================================
-
-/* ============================================================
-
-/* ============================================================
 
 /* ============================================================
    COMPREHENSIVE RESPONSIVE FIXES
@@ -1743,3 +1740,134 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         font-size: .7rem !important;
     }
 }
+
+
+/* ============================================================
+   RESPONSIVE CARD LAYOUT (triggered by JS overflow detection)
+   ============================================================ */
+
+/* Generic card layout for any table that overflows its wrapper */
+/* Force all table wrappers to be constrained by their container so JS overflow detection works */
+[class*="-table-wrap"] {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+}
+
+/* Allow grid-item panel containers to shrink below intrinsic content width
+   (CSS Grid default min-width:auto prevents shrinking below the widest content,
+   which would be the 980px table — this makes overflow detection impossible) */
+.logs-panel,
+.users-panel,
+.lost-panel,
+.found-panel,
+.claims-panel {
+    min-width: 0 !important;
+}
+
+[class*="-table-wrap"].table-cards-mode > table,
+[class*="-table-wrap"].table-cards-mode > table > thead,
+[class*="-table-wrap"].table-cards-mode > table > tbody,
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr {
+    display: block !important;
+    width: 100% !important;
+}
+[class*="-table-wrap"].table-cards-mode > table {
+    min-width: 0 !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > thead {
+    position: absolute !important; width: 1px !important; height: 1px !important;
+    padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+    clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr {
+    border: 1px solid #D1D5DB !important; border-radius: 8px !important;
+    margin-bottom: 0.75rem !important; padding: 0.85rem !important;
+    background: #fff !important; box-shadow: 0 4px 12px rgba(26, 60, 110, 0.08) !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr:nth-child(even) td {
+    background: transparent !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td {
+    display: flex !important; align-items: center !important; gap: 0.6rem !important;
+    width: 100% !important; padding: 0.5rem 0 !important; text-align: left !important;
+    border: none !important; background: transparent !important; vertical-align: middle !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td:not(:last-child) {
+    border-bottom: 1px solid #E5E9F0 !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td[data-label]::before {
+    content: attr(data-label) !important; font-weight: 800 !important; font-size: 0.72rem !important;
+    text-transform: uppercase !important; color: #6B7694 !important;
+    min-width: 90px !important; flex: 0 0 auto !important; letter-spacing: 0.03em !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td[data-label="Select"] {
+    display: flex !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td[data-label="Select"]::before {
+    display: none !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td[data-label="Select"] input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td[data-label="Actions"],
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td[data-label="Action"] {
+    flex-direction: column !important; align-items: stretch !important; gap: 0.5rem !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td[data-label="Actions"]::before,
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr > td[data-label="Action"]::before {
+    align-self: flex-start !important;
+}
+[class*="-table-wrap"].table-cards-mode > table > tbody > tr:hover td {
+    background: transparent !important;
+}
+
+/* Student lost table: action buttons grid */
+[class*="-table-wrap"].table-cards-mode .student-lost-table tbody td .lost-item-cell {
+    flex: 1 !important; justify-content: flex-start !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-lost-table tbody td .lost-item-cell > div {
+    text-align: left !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-lost-table tbody td[data-label="Status"] .badge {
+    margin-inline: 0 !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-lost-table .student-lost-actions {
+    display: grid !important; grid-template-columns: 1fr 1fr !important;
+    gap: 0.4rem !important; width: 100% !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-lost-table .student-lost-actions .btn,
+[class*="-table-wrap"].table-cards-mode .student-lost-table .student-lost-actions a {
+    width: 100% !important; padding: 0.35rem 0.5rem !important; font-size: 0.78rem !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-lost-table .student-lost-actions form {
+    display: contents !important;
+}
+
+/* Student claims table: action button, status, claim id, found item refinements */
+[class*="-table-wrap"].table-cards-mode .student-claims-table tbody td[data-label="Action"] .btn {
+    width: 100% !important; display: flex !important; align-items: center !important;
+    justify-content: center !important; padding: 0.5rem 1rem !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-claims-table tbody td[data-label="Status"] .badge {
+    margin-inline: 0 !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-claims-table tbody td[data-label="Claim"] .claim-id {
+    flex-direction: row !important; align-items: center !important; gap: 0.5rem !important;
+    justify-content: flex-start !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-claims-table tbody td[data-label="Claim"] .claim-id span {
+    font-size: 0.95rem !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-claims-table tbody td[data-label="Claim"] .claim-id small {
+    font-size: 0.78rem !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-claims-table tbody td[data-label="Found Item"] .claim-item {
+    justify-content: flex-start !important; flex: 1 !important;
+}
+[class*="-table-wrap"].table-cards-mode .student-claims-table tbody td[data-label="Found Item"] .claim-item > div {
+    text-align: left !important;
+}
+

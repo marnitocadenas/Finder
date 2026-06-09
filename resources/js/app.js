@@ -125,3 +125,56 @@ document.addEventListener('submit',(event)=>{
         button.disabled=true;
     }
 });
+
+// Responsive sidebar toggle (off-canvas hamburger menu)
+(function(){
+    const sidebar=document.querySelector('.sidebar');
+    const toggle=document.querySelector('#sidebarToggle');
+    const backdrop=document.querySelector('#sidebarBackdrop');
+    if(!sidebar||!toggle)return;
+    function openSidebar(){
+        sidebar.classList.add('sidebar-open');
+        if(backdrop)backdrop.classList.add('show');
+        document.body.style.overflow='hidden';
+    }
+    function closeSidebar(){
+        sidebar.classList.remove('sidebar-open');
+        if(backdrop)backdrop.classList.remove('show');
+        document.body.style.overflow='';
+    }
+    toggle.addEventListener('click',function(e){
+        e.preventDefault();
+        if(sidebar.classList.contains('sidebar-open')){
+            closeSidebar();
+        }else{
+            openSidebar();
+        }
+    });
+    if(backdrop){
+        backdrop.addEventListener('click',closeSidebar);
+    }
+    document.addEventListener('keydown',function(e){
+        if(e.key==='Escape'&&sidebar.classList.contains('sidebar-open')){
+            closeSidebar();
+        }
+    });
+})();
+
+// Responsive table cards mode via overflow detection
+(function(){
+    if(!document.querySelector('[class*="-table-wrap"]'))return;
+    function checkTableOverflow(){
+        document.querySelectorAll('[class*="-table-wrap"]').forEach(function(wrapper){
+            var table=wrapper.querySelector(':scope>table');
+            if(!table)return;
+            var wasCards=wrapper.classList.contains('table-cards-mode');
+            if(wasCards)wrapper.classList.remove('table-cards-mode');
+            if(table.scrollWidth>wrapper.clientWidth+1)wrapper.classList.add('table-cards-mode');
+        });
+    }
+    checkTableOverflow();
+    if(window.ResizeObserver){
+        var ro=new ResizeObserver(function(){checkTableOverflow();});
+        document.querySelectorAll('[class*="-table-wrap"]').forEach(function(w){ro.observe(w);});
+    }
+})();

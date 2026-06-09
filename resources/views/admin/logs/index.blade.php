@@ -50,7 +50,7 @@
                 <tbody>
                     @forelse($logs as $log)
                         <tr>
-                            <td>
+                            <td data-label="User">
                                 <div class="log-user">
                                     <span>{{ strtoupper(substr($log->user->name ?? 'System', 0, 1)) }}</span>
                                     <div>
@@ -59,13 +59,13 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Action">
                                 <div class="log-action">
                                     <i class="fa-solid fa-clock-rotate-left"></i>
                                     <span>{{ $log->action }}</span>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Target">
                                 <span class="log-target">
                                     {{ class_basename($log->target_type) ?: 'Record' }}
                                     @if($log->target_id)
@@ -73,11 +73,11 @@
                                     @endif
                                 </span>
                             </td>
-                            <td><span class="log-ip">{{ $log->ip_address ?: '-' }}</span></td>
-                            <td>
+                            <td data-label="IP Address"><span class="log-ip">{{ $log->ip_address ?: '-' }}</span></td>
+                            <td data-label="Date">
                                 <strong>{{ $log->created_at->format('M d, Y') }}</strong>
                             </td>
-                            <td>
+                            <td data-label="Time">
                                 <div class="log-time">
                                     <span>{{ $log->created_at->format('h:i A') }}</span>
                                 </div>

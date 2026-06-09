@@ -85,8 +85,8 @@
                     @forelse($users as $user)
                         @php($roleTone = ['admin' => 'primary', 'staff' => 'warning text-dark', 'student' => 'success'][$user->role] ?? 'secondary')
                         <tr>
-                            <td><input type="checkbox" name="ids[]" value="{{ $user->id }}" form="users-bulk-form" @disabled($user->id === auth()->id())></td>
-                            <td>
+                            <td data-label="Select"><input type="checkbox" name="ids[]" value="{{ $user->id }}" form="users-bulk-form" @disabled($user->id === auth()->id())></td>
+                            <td data-label="User">
                                 <div class="user-identity">
                                     <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                                     <div>
@@ -95,16 +95,16 @@
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="badge bg-{{ $roleTone }}">{{ Illuminate\Support\Str::title($user->role) }}</span></td>
-                            <td class="mono">{{ $user->student_id ?: '-' }}</td>
-                            <td>
+                            <td data-label="Role"><span class="badge bg-{{ $roleTone }}">{{ Illuminate\Support\Str::title($user->role) }}</span></td>
+                            <td data-label="Student ID" class="mono">{{ $user->student_id ?: '-' }}</td>
+                            <td data-label="Status">
                                 @if($user->trashed())
                                     <span class="badge bg-dark">Deleted</span>
                                 @else
                                     <span class="badge bg-success">Active</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Actions">
                                 @if($user->trashed())
                                     <form class="d-inline" method="POST" action="{{ route('admin.users.restore', $user->id) }}">
                                         @csrf @method('PUT')

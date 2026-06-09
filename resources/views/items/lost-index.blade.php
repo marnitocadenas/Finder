@@ -88,8 +88,8 @@
                 <tbody>
                     @forelse($items as $item)
                         <tr>
-                            @if($role === 'admin')<td><input type="checkbox" name="ids[]" value="{{ $item->id }}" form="lost-bulk-form"></td>@endif
-                            <td>
+                            @if($role === 'admin')<td data-label="Select"><input type="checkbox" name="ids[]" value="{{ $item->id }}" form="lost-bulk-form"></td>@endif
+                            <td data-label="Item">
                                 <div class="lost-item-cell">
                                     @if($item->image)
                                         <img class="lost-thumb" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}">
@@ -103,21 +103,21 @@
                                 </div>
                             </td>
                             @if($role !== 'student')
-                                <td>{{ $item->user->name ?? auth()->user()->name }}</td>
+                                <td data-label="Student">{{ $item->user->name ?? auth()->user()->name }}</td>
                             @endif
-                            <td>
+                            <td data-label="Category">
                                 <span class="lost-category">
                                     <i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>{{ $item->category->name ?? '-' }}
                                 </span>
                             </td>
-                            <td>{{ optional($item->date_lost)->format('M d, Y') }}</td>
-                            <td>
+                            <td data-label="Date Lost">{{ optional($item->date_lost)->format('M d, Y') }}</td>
+                            <td data-label="Status">
                                 <x-status :status="$item->status" />
                                 @if($item->trashed())
                                     <span class="badge bg-dark ms-1">Deleted</span>
                                 @endif
                             </td>
-                            <td class="{{ $role === 'student' ? 'student-lost-actions-cell' : '' }}">
+                            <td data-label="Actions" class="{{ $role === 'student' ? 'student-lost-actions-cell' : '' }}">
                                 @if($role === 'staff')
                                     <a class="btn btn-sm btn-outline-primary" href="{{ route('staff.lost-reports.show', $item) }}">
                                         <i class="fa-solid fa-eye me-1"></i>View
