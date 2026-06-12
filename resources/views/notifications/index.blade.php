@@ -8,9 +8,9 @@
             <h1>Notifications</h1>
             <p>Review claim updates, match alerts, and system messages related to your lost and found activity.</p>
         </div>
-        <form method="POST" action="{{ route('notifications.readAll') }}">
+        <form method="POST" action="{{ route('notifications.readAll') }}" id="mark-all-read-form">
             @csrf
-            <button class="btn btn-light">
+            <button class="btn btn-light" type="submit">
                 <i class="fa-solid fa-check-double me-1"></i>Mark All Read
             </button>
         </form>
@@ -46,7 +46,7 @@
                     ];
                     $meta = $typeMap[$notification->type] ?? ['icon' => 'fa-bell', 'tone' => 'warning'];
                 @endphp
-                <a class="notification-item {{ $notification->is_read ? '' : 'is-unread' }}" href="{{ $notification->link ?: '#' }}">
+                <a class="notification-item {{ $notification->is_read ? '' : 'is-unread' }}" href="{{ $notification->link ?: '#' }}" data-notification-id="{{ $notification->id }}">
                     <span class="notification-icon notification-icon-{{ $meta['tone'] }}">
                         <i class="fa-solid {{ $meta['icon'] }}"></i>
                     </span>
@@ -54,7 +54,9 @@
                         <div>
                             <strong>{{ $notification->title }}</strong>
                             @unless($notification->is_read)
-                                <em>Unread</em>
+                                <em data-notification-status>Unread</em>
+                            @else
+                                <em data-notification-status class="text-success">Read</em>
                             @endunless
                         </div>
                         <p>{{ $notification->message }}</p>

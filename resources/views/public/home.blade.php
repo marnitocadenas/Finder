@@ -17,9 +17,9 @@
             </span>
         </a>
         <div class="landing-nav-actions">
-            <a href="#recent-found" class="btn btn-outline-light" data-smooth-scroll>Browse Found</a>
-            <a href="{{ route('login') }}" class="btn btn-outline-light">Login</a>
-            <a href="{{ route('register') }}" class="btn btn-warning">Register as Student</a>
+            <a href="#recent-found" class="btn btn-outline-light" data-smooth-scroll><i class="fa-solid fa-magnifying-glass me-2 nav-btn-icon"></i>Browse Found</a>
+            <a href="{{ route('login') }}" class="btn btn-outline-light"><i class="fa-solid fa-right-to-bracket me-2 nav-btn-icon"></i>Login</a>
+            <a href="{{ route('register') }}" class="btn btn-warning"><i class="fa-solid fa-user-plus me-2 nav-btn-icon"></i>Register as Student</a>
         </div>
     </nav>
 

@@ -11,6 +11,9 @@ class NotificationController extends Controller
 {
     public function index(Request $request): View
     {
+        // Auto-mark all notifications as read when the user views the notifications page
+        $request->user()->notifications()->where('is_read', false)->update(['is_read' => true]);
+
         $query = $request->user()->notifications();
         $notificationStats = [
             ['label' => 'All Alerts', 'value' => (clone $query)->count(), 'icon' => 'fa-bell', 'tone' => 'primary'],
@@ -24,9 +27,16 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function markAllRead(Request $request): RedirectResponse
+    public function markAllRead(Request $request): RedirectResponse|JsonResponse
     {
         $request->user()->notifications()->update(['is_read' => true]);
+
+        if ($request->expectsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'count' => 0,
+            ]);
+        }
 
         return back()->with('success', 'Notifications marked as read.');
     }
@@ -34,5 +44,16 @@ class NotificationController extends Controller
     public function count(Request $request): JsonResponse
     {
         return response()->json(['count' => $request->user()->notifications()->where('is_read', false)->count()]);
+    }
+
+    public function markRead(Request $request, $id): JsonResponse
+    {
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->update(['is_read' => true]);
+
+        return response()->json([
+            'success' => true,
+            'count' => $request->user()->notifications()->where('is_read', false)->count(),
+        ]);
     }
 }

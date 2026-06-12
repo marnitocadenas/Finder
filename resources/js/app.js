@@ -1,8 +1,110 @@
 import './bootstrap';
 import '../css/app.css';
 setTimeout(()=>document.querySelectorAll('.auto-dismiss').forEach((el)=>el.remove()),4000);
-async function refreshNotificationCount(){const badge=document.querySelector('[data-notification-count]');if(!badge)return;try{const response=await fetch('/notifications/count',{headers:{'X-Requested-With':'XMLHttpRequest'}});const data=await response.json();badge.textContent=data.count;badge.classList.toggle('d-none',data.count<1);}catch(e){}}
-setInterval(refreshNotificationCount,30000);refreshNotificationCount();
+
+// --- Notification auto-mark-as-read system ---
+async function refreshNotificationCount(){
+    const badge=document.querySelector('[data-notification-count]');
+    if(!badge)return;
+    try{
+        const response=await fetch('/notifications/count',{headers:{'X-Requested-With':'XMLHttpRequest'}});
+        const data=await response.json();
+        badge.textContent=data.count;
+        badge.classList.toggle('d-none',data.count<1);
+    }catch(e){}
+}
+
+function updateNotificationStatCards(unreadCount){
+    const statCards=document.querySelectorAll('.notification-stat-card');
+    if(statCards.length<3)return;
+    const allAlertsCard=statCards[0];
+    const unreadCard=statCards[1];
+    const readCard=statCards[2];
+    const total=parseInt(allAlertsCard.querySelector('strong')?.textContent)||0;
+    const newUnread=Math.max(0,unreadCount);
+    const newRead=Math.max(0,total-newUnread);
+    const unreadVal=allAlertsCard.querySelector('strong');
+    const readVal=readCard.querySelector('strong');
+    const unreadStrong=unreadCard.querySelector('strong');
+    if(unreadStrong)unreadStrong.textContent=newUnread;
+    if(readVal)readVal.textContent=newRead;
+}
+
+function markNotificationItemAsRead(item){
+    item.classList.remove('is-unread');
+    const statusEl=item.querySelector('[data-notification-status]');
+    if(statusEl){
+        statusEl.textContent='Read';
+        statusEl.classList.add('text-success');
+    }
+}
+
+// Auto-mark all visible unread notifications as read when the notifications page loads
+(function(){
+    const notifPage=document.querySelector('.notifications-module');
+    if(!notifPage)return;
+    const unreadItems=notifPage.querySelectorAll('.notification-item.is-unread');
+    if(unreadItems.length===0)return;
+    const ids=Array.from(unreadItems).map(el=>el.dataset.notificationId).filter(Boolean);
+    if(ids.length===0)return;
+    Promise.all(ids.map(id=>
+        fetch('/notifications/'+id+'/mark-read',{
+            method:'POST',
+            headers:{'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content,'X-Requested-With':'XMLHttpRequest'}
+        }).then(r=>r.json()).catch(()=>null)
+    )).then(results=>{
+        const lastResult=results.filter(Boolean).pop();
+        if(lastResult){
+            unreadItems.forEach(markNotificationItemAsRead);
+            refreshNotificationCount();
+            updateNotificationStatCards(lastResult.count);
+        }
+    });
+})();
+
+// Mark individual notification as read when clicked (works on all pages)
+document.addEventListener('click',(event)=>{
+    const item=event.target.closest('.notification-item[data-notification-id]');
+    if(!item||!item.classList.contains('is-unread'))return;
+    const id=item.dataset.notificationId;
+    if(!id)return;
+    const csrfMeta=document.querySelector('meta[name="csrf-token"]');
+    if(!csrfMeta)return;
+    fetch('/notifications/'+id+'/mark-read',{
+        method:'POST',
+        headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'}
+    }).then(r=>r.json()).then(data=>{
+        if(data.success){
+            markNotificationItemAsRead(item);
+            refreshNotificationCount();
+            updateNotificationStatCards(data.count);
+        }
+    }).catch(()=>{});
+});
+setInterval(refreshNotificationCount,30000);
+refreshNotificationCount();
+
+// Handle "Mark All Read" form via AJAX on the notifications page
+(function(){
+    const form=document.getElementById('mark-all-read-form');
+    if(!form)return;
+    form.addEventListener('submit',function(e){
+        e.preventDefault();
+        const csrfMeta=document.querySelector('meta[name="csrf-token"]');
+        if(!csrfMeta)return;
+        fetch(form.action,{
+            method:'POST',
+            headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'},
+            body:new FormData(form)
+        }).then(r=>r.json()).then(data=>{
+            if(data.success){
+                document.querySelectorAll('.notification-item.is-unread').forEach(markNotificationItemAsRead);
+                refreshNotificationCount();
+                updateNotificationStatCards(0);
+            }
+        }).catch(()=>{});
+    });
+})();
 document.addEventListener('change',(event)=>{
     if(!event.target.matches('[data-check-all]'))return;
     const table=event.target.closest('table');
@@ -214,3 +316,65 @@ document.addEventListener('submit',(event)=>{
         document.querySelectorAll('[class*="-table-wrap"]').forEach(function(w){ro.observe(w);});
     }
 })();
+
+// Asynchronous search handler for the landing page
+async function performAsyncSearch(url) {
+    try {
+        const response = await fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        if (!response.ok) throw new Error('Search failed');
+
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Update search wrap (inputs, chips, clear button)
+        const currentSearchWrap = document.querySelector('.landing-search-wrap');
+        const newSearchWrap = doc.querySelector('.landing-search-wrap');
+        if (currentSearchWrap && newSearchWrap) {
+            currentSearchWrap.innerHTML = newSearchWrap.innerHTML;
+        }
+
+        // Update search results
+        const currentResults = document.getElementById('recent-found');
+        const newResults = doc.getElementById('recent-found');
+        if (currentResults && newResults) {
+            currentResults.innerHTML = newResults.innerHTML;
+        }
+
+        // Update the URL in the address bar
+        window.history.pushState(null, '', url);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Intercept search form submit
+document.addEventListener('submit', async (event) => {
+    const form = event.target;
+    if (!form.classList.contains('landing-search')) return;
+
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData).toString();
+    const action = form.getAttribute('action') || window.location.pathname;
+    const url = `${action}?${params}`;
+
+    await performAsyncSearch(url);
+});
+
+// Intercept category chips and clear button clicks
+document.addEventListener('click', async (event) => {
+    const chipLink = event.target.closest('.landing-category-chips a');
+    const clearLink = event.target.closest('.landing-search a[href]');
+
+    const link = chipLink || clearLink;
+    if (!link) return;
+
+    event.preventDefault();
+    const url = link.getAttribute('href');
+    await performAsyncSearch(url);
+});
+
