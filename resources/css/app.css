@@ -699,25 +699,42 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     white-space:nowrap;
 }
 
-/* Fix: compact filter action buttons on laptop screens (992px - 1199px) for the Claims module only */
-@media (min-width: 992px) and (max-width: 1199px) {
+/* Fix: compact filter action buttons on laptop screens (992px - 1399px) for the Claims module only */
+@media (min-width: 992px) and (max-width: 1399px) {
+    .claims-module .filter-panel {
+        grid-template-columns: minmax(150px, 0.8fr) repeat(3, minmax(90px, 1fr)) max-content !important;
+        gap: .5rem !important;
+        padding: 1rem !important;
+    }
     .claims-module .filter-actions {
-        gap: .45rem;
-        align-items: center;
+        grid-column: auto !important;
+        display: flex !important;
+        gap: .4rem !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        border-top: none !important;
     }
     .claims-module .filter-actions .btn {
-        padding: .35rem .65rem;
-        line-height: 1;
-        min-height: 36px;
-        height: auto;
-        white-space: nowrap;
-        display: inline-flex;
-        align-items: center;
-        gap: .4rem;
-        font-size: .95rem;
+        padding: .25rem .5rem !important;
+        line-height: 1.2 !important;
+        min-height: 32px !important;
+        height: 32px !important;
+        white-space: nowrap !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: .3rem !important;
+        font-size: .8rem !important;
+        min-width: max-content !important;
+        width: auto !important;
     }
-    .claims-module .filter-actions .btn i { margin-right: .4rem !important; }
+    .claims-module .filter-actions .btn i { margin-right: .25rem !important; }
 }
+
+
+
+
 
 /* Admin Found Items: center header row and Staff–Actions body cells */
 .found-table.excel-found-table:not(.staff-found-table) thead th{

@@ -45,7 +45,9 @@
         <button class="btn btn-primary">
             <i class="fa-solid fa-filter me-1"></i>Apply
         </button>
-        <a class="btn btn-light" href="{{ url()->current() }}">Reset</a>
+        <a class="btn btn-light" href="{{ url()->current() }}">
+            <i class="fa-solid fa-arrows-rotate me-1"></i>Reset
+        </a>
     </div>
 </form>
 @php

@@ -1,0 +1,26 @@
+/* Mobile-specific tab styling - applies only to small screens */
+@media (max-width: 768px) {
+    .claim-status-tabs {
+        display: flex;
+        width: 100%;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+    
+    .claim-status-tab {
+        flex: 1; /* Equal width distribution */
+        text-align: center;
+        padding: 0.5rem 0;
+        border: none;
+        border-radius: 4px 4px 0 0;
+        margin: 0 2px;
+        min-width: 0; /* Prevents minimum width from causing overflow */
+    }
+    
+    .claim-status-tab:hover,
+    .claim-status-tab.active {
+        background-color: #f0f0f0;
+        color: #000;
+        border-bottom: 2px solid #007bff;
+    }
+}
