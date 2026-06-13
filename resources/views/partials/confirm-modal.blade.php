@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('[data-confirm-submit]').forEach((trigger) => {
         trigger.addEventListener('click', () => {
-            form = trigger.closest('form');
+            form = trigger.closest('form') || (trigger.form ? trigger.form : (trigger.getAttribute('form') ? document.getElementById(trigger.getAttribute('form')) : null));
             if (form && trigger.name) {
                 form.querySelectorAll('input[data-confirm-value]').forEach((input) => input.remove());
                 const input = document.createElement('input');

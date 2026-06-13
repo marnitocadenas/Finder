@@ -62,7 +62,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('found-items', AdminFoundItemController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
     Route::put('found-items/{id}/restore', [AdminFoundItemController::class, 'restore'])->name('found-items.restore');
     Route::post('found-items/bulk', [AdminFoundItemController::class, 'bulk'])->name('found-items.bulk');
-    Route::resource('claims', AdminClaimController::class)->only(['index', 'show', 'update']);
+    Route::resource('claims', AdminClaimController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::put('claims/{claim}/release', [AdminClaimController::class, 'release'])->name('claims.release');
     Route::post('claims/bulk', [AdminClaimController::class, 'bulk'])->name('claims.bulk');
     Route::get('/logs', [ActivityLogController::class, 'index'])->name('logs');
@@ -75,7 +75,7 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     Route::get('/activity', [StaffActivityController::class, 'index'])->name('activity');
     Route::resource('found-items', StaffFoundItemController::class);
     Route::put('found-items/{foundItem}/status', [StaffFoundItemController::class, 'status'])->name('found-items.status');
-    Route::resource('claims', StaffClaimController::class)->only(['index', 'show', 'update']);
+    Route::resource('claims', StaffClaimController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::put('claims/{claim}/release', [StaffClaimController::class, 'release'])->name('claims.release');
     Route::post('claims/{claim}/request-info', [StaffClaimController::class, 'requestInfo'])->name('claims.request-info');
     Route::get('/lost-reports', [LostReportController::class, 'index'])->name('lost-reports.index');
@@ -90,7 +90,7 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::resource('lost-items', StudentLostItemController::class);
     Route::put('lost-items/{lostItem}/status', [StudentLostItemController::class, 'status'])->name('lost-items.status');
     Route::get('/browse', [BrowseController::class, 'index'])->name('browse');
-    Route::resource('claims', StudentClaimController::class)->only(['index', 'create', 'store', 'show']);
+    Route::resource('claims', StudentClaimController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
@@ -100,4 +100,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.readAll');
     Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
     Route::post('/notifications/{id}/mark-read', [NotificationController::class, 'markRead'])->name('notifications.markRead');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::post('/notifications/bulk-delete', [NotificationController::class, 'bulkDestroy'])->name('notifications.bulkDelete');
 });

@@ -6,11 +6,24 @@
         <div>
             <span class="module-eyebrow">Claim receipt</span>
             <h1>Claim #{{ $claim->id }}</h1>
-            <p>{{ $claim->foundItem->title }} &bull; Submitted {{ $claim->created_at->format('M d, Y') }}</p>
+            <p>{{ $claim->foundItem?->title ?? 'Deleted item' }} &bull; Submitted {{ $claim->created_at->format('M d, Y') }}</p>
         </div>
-        <button onclick="window.print()" class="btn btn-light no-print">
-            <i class="fa-solid fa-print me-1"></i>Print Receipt
-        </button>
+        <div class="d-flex gap-2 flex-wrap no-print">
+            <a href="{{ route($role.'.claims.index') }}" class="btn btn-light">
+                <i class="fa-solid fa-arrow-left me-1"></i>Back
+            </a>
+            <button onclick="window.print()" class="btn btn-light">
+                <i class="fa-solid fa-print me-1"></i>Print Receipt
+            </button>
+            @if($role !== 'student' || in_array($claim->status, ['pending', 'rejected']))
+            <form method="POST" action="{{ route($role.'.claims.destroy', $claim) }}" class="d-inline">
+                @csrf @method('DELETE')
+                <button type="button" class="btn btn-outline-danger" data-confirm-submit data-confirm-title="Delete claim" data-confirm-message="Are you sure you want to permanently delete this claim record? This action cannot be undone." data-confirm-button="Delete" data-confirm-class="btn-danger">
+                    <i class="fa-solid fa-trash me-1"></i>Delete
+                </button>
+            </form>
+            @endif
+        </div>
     </div>
 
     <div class="claim-detail-grid">
@@ -24,9 +37,9 @@
             </div>
 
             <dl class="claim-detail-list">
-                <div><dt>Student</dt><dd>{{ $claim->student->name }}</dd></div>
-                <div><dt>Found Item</dt><dd>{{ $claim->foundItem->title }}</dd></div>
-                <div><dt>Category</dt><dd>{{ $claim->foundItem->category->name ?? '-' }}</dd></div>
+                <div><dt>Student</dt><dd>{{ $claim->student->name ?? 'Unknown' }}</dd></div>
+                <div><dt>Found Item</dt><dd>{{ $claim->foundItem?->title ?? 'Item no longer available' }}</dd></div>
+                <div><dt>Category</dt><dd>{{ $claim->foundItem?->category?->name ?? '-' }}</dd></div>
                 <div><dt>Description</dt><dd>{{ $claim->claim_description }}</dd></div>
                 <div><dt>Review Note</dt><dd>{{ $claim->review_note ?? '-' }}</dd></div>
                 <div><dt>Pickup Instruction</dt><dd>{{ $claim->pickup_instruction ?? '-' }}</dd></div>
@@ -86,7 +99,7 @@
             </div>
         </section>
 
-        @php($sameEvidenceImage = $claim->foundItem->image && $claim->proof_image && $claim->foundItem->image === $claim->proof_image)
+        @php($sameEvidenceImage = $claim->foundItem?->image && $claim->proof_image && $claim->foundItem->image === $claim->proof_image)
         <aside class="claim-proof-card">
             <div class="claim-proof-header">
                 <span class="module-eyebrow">Proof</span>
@@ -99,11 +112,11 @@
                         <img src="{{ asset('storage/'.$claim->proof_image) }}" alt="Found item and claim proof">
                     </button>
                 </div>
-            @elseif($claim->foundItem->image)
+            @elseif($claim->foundItem?->image)
                 <div class="claim-proof-compare">
                     <strong>Found item photo</strong>
                     <button type="button" class="image-preview-button" data-image-preview="{{ asset('storage/'.$claim->foundItem->image) }}">
-                        <img src="{{ asset('storage/'.$claim->foundItem->image) }}" alt="{{ $claim->foundItem->title }}">
+                        <img src="{{ asset('storage/'.$claim->foundItem->image) }}" alt="{{ $claim->foundItem->title ?? 'Found item' }}">
                     </button>
                 </div>
             @endif

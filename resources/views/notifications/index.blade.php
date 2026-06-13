@@ -8,7 +8,7 @@
             <h1>Notifications</h1>
             <p>Review claim updates, match alerts, and system messages related to your lost and found activity.</p>
         </div>
-        <form method="POST" action="{{ route('notifications.readAll') }}" id="mark-all-read-form">
+        <form method="POST" action="{{ route('notifications.readAll') }}" id="mark-all-read-form" data-ajax>
             @csrf
             <button class="btn btn-light" type="submit">
                 <i class="fa-solid fa-check-double me-1"></i>Mark All Read
@@ -30,11 +30,20 @@
 
     <section class="notifications-panel">
         <div class="notifications-panel-header">
-            <div>
-                <span class="module-eyebrow">Inbox</span>
-                <h2>Recent Alerts</h2>
+            <div class="d-flex align-items-center gap-2">
+                <input type="checkbox" id="notification-select-all" class="form-check-input" data-notification-select-all>
+                <label for="notification-select-all" class="form-check-label fw-bold" style="cursor:pointer;font-size:.85rem;">Select All</label>
             </div>
-            <span class="notification-result-count">{{ $notifications->total() }} messages</span>
+            <div class="d-flex align-items-center gap-2">
+                <form method="POST" action="{{ route('notifications.bulkDelete') }}" id="notification-bulk-delete-form" class="d-none" data-ajax>
+                    @csrf
+                    <input type="hidden" name="ids" id="notification-bulk-ids">
+                </form>
+                <button type="button" id="notification-bulk-delete-btn" class="btn btn-sm btn-outline-danger d-none" data-confirm-submit data-confirm-title="Delete selected" data-confirm-message="Are you sure you want to delete the selected notifications? This action cannot be undone." data-confirm-button="Delete" data-confirm-class="btn-danger" form="notification-bulk-delete-form">
+                    <i class="fa-solid fa-trash me-1"></i><span id="notification-bulk-count">0</span> selected
+                </button>
+                <span class="notification-result-count">{{ $notifications->total() }} messages</span>
+            </div>
         </div>
 
         <div class="notification-list">
@@ -46,23 +55,31 @@
                     ];
                     $meta = $typeMap[$notification->type] ?? ['icon' => 'fa-bell', 'tone' => 'warning'];
                 @endphp
-                <a class="notification-item {{ $notification->is_read ? '' : 'is-unread' }}" href="{{ $notification->link ?: '#' }}" data-notification-id="{{ $notification->id }}">
-                    <span class="notification-icon notification-icon-{{ $meta['tone'] }}">
-                        <i class="fa-solid {{ $meta['icon'] }}"></i>
-                    </span>
-                    <div class="notification-content">
-                        <div>
-                            <strong>{{ $notification->title }}</strong>
-                            @unless($notification->is_read)
-                                <em data-notification-status>Unread</em>
-                            @else
-                                <em data-notification-status class="text-success">Read</em>
-                            @endunless
-                        </div>
-                        <p>{{ $notification->message }}</p>
+                <div class="notification-card {{ $notification->is_read ? '' : 'is-unread' }}" data-notification-id="{{ $notification->id }}">
+                    <div class="notification-card-check">
+                        <input type="checkbox" class="form-check-input notification-checkbox" value="{{ $notification->id }}" data-notification-checkbox>
                     </div>
-                    <time>{{ $notification->created_at->diffForHumans() }}</time>
-                </a>
+                    <a class="notification-card-body" href="{{ $notification->link ?: '#' }}">
+                        <span class="notification-icon notification-icon-{{ $meta['tone'] }}">
+                            <i class="fa-solid {{ $meta['icon'] }}"></i>
+                        </span>
+                        <div class="notification-content">
+                            <div class="notification-title-row">
+                                <strong>{{ $notification->title }}</strong>
+                                @unless($notification->is_read)
+                                    <em data-notification-status>Unread</em>
+                                @else
+                                    <em data-notification-status class="text-success">Read</em>
+                                @endunless
+                                <time>{{ $notification->created_at->diffForHumans() }}</time>
+                            </div>
+                            <p>{{ $notification->message }}</p>
+                        </div>
+                    </a>
+                    <button type="button" class="notification-card-delete" data-notification-delete="{{ $notification->id }}" title="Delete notification">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
             @empty
                 <div class="notifications-empty">
                     <i class="fa-solid fa-bell"></i>
@@ -76,4 +93,188 @@
         </div>
     </section>
 </div>
+@include('partials.confirm-modal')
 @endsection
+
+@push('styles')
+<style>
+/* Notification card - each row is a flex container */
+.notification-card {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    transition: box-shadow .18s ease, border-color .18s ease;
+    overflow: hidden;
+}
+.notification-card:hover {
+    box-shadow: 0 6px 18px rgba(26,60,110,.1);
+    border-color: #BFD0E9;
+}
+.notification-card.is-unread {
+    background: #F8FBFF;
+    border-color: #BFD0E9;
+}
+
+/* Checkbox column */
+.notification-card-check {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    padding: .85rem .65rem .85rem .85rem;
+    border-right: 1px solid var(--border);
+    background: #FAFBFE;
+}
+.notification-card-check .form-check-input {
+    width: 1.15rem;
+    height: 1.15rem;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Main clickable body - icon + content */
+.notification-card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: .85rem;
+    padding: .95rem 1rem;
+    text-decoration: none;
+    color: var(--text-dark);
+}
+.notification-card-body:hover {
+    color: var(--text-dark);
+}
+
+/* Icon */
+.notification-card-body .notification-icon {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    margin-top: .1rem;
+}
+
+/* Content area */
+.notification-card-body .notification-content {
+    flex: 1;
+    min-width: 0;
+}
+.notification-title-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-bottom: .2rem;
+}
+.notification-title-row strong {
+    font-size: .95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+}
+.notification-title-row time {
+    color: var(--text-muted);
+    font-size: .78rem;
+    font-weight: 700;
+    white-space: nowrap;
+    margin-left: auto;
+}
+.notification-card-body .notification-content p {
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+    font-size: .88rem;
+}
+
+/* Delete column */
+.notification-card-delete {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    border: none;
+    background: transparent;
+    color: var(--danger);
+    cursor: pointer;
+    opacity: .35;
+    transition: opacity .15s ease, background .15s ease;
+    border-left: 1px solid var(--border);
+}
+.notification-card-delete:hover {
+    opacity: 1;
+    background: #FDECEC;
+}
+.notification-card:hover .notification-card-delete {
+    opacity: .7;
+}
+
+/* Status badges - reuse existing styles */
+.notification-card-body em[data-notification-status] {
+    font-style: normal;
+    background: #FFF7DF;
+    border: 1px solid #F4D47C;
+    border-radius: 999px;
+    color: #7A5400;
+    font-size: .72rem;
+    font-weight: 800;
+    padding: .15rem .5rem;
+    white-space: nowrap;
+}
+.notification-card-body em[data-notification-status].text-success {
+    background: #EAF7F1;
+    border-color: #BFE5D4;
+    color: #216B4F;
+}
+
+/* Mobile responsive */
+@media(max-width:767px) {
+    .notification-card-body {
+        padding: .75rem;
+        gap: .65rem;
+    }
+    .notification-card-body .notification-icon {
+        flex: 0 0 36px;
+        width: 36px;
+        height: 36px;
+        font-size: .9rem;
+    }
+    .notification-title-row strong {
+        max-width: 160px;
+    }
+    .notification-card-check {
+        padding: .65rem .5rem;
+    }
+    .notification-card-delete {
+        width: 40px;
+    }
+    .notifications-panel-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: .5rem;
+    }
+}
+@media(max-width:480px) {
+    .notification-title-row {
+        gap: .35rem;
+    }
+    .notification-title-row strong {
+        max-width: 120px;
+        font-size: .88rem;
+    }
+    .notification-title-row time {
+        font-size: .72rem;
+    }
+    .notification-card-body .notification-content p {
+        font-size: .82rem;
+    }
+}
+</style>
+@endpush

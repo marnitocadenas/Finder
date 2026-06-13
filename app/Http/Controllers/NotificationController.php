@@ -11,9 +11,6 @@ class NotificationController extends Controller
 {
     public function index(Request $request): View
     {
-        // Auto-mark all notifications as read when the user views the notifications page
-        $request->user()->notifications()->where('is_read', false)->update(['is_read' => true]);
-
         $query = $request->user()->notifications();
         $notificationStats = [
             ['label' => 'All Alerts', 'value' => (clone $query)->count(), 'icon' => 'fa-bell', 'tone' => 'primary'],
@@ -55,5 +52,38 @@ class NotificationController extends Controller
             'success' => true,
             'count' => $request->user()->notifications()->where('is_read', false)->count(),
         ]);
+    }
+
+    public function destroy(Request $request, $id): JsonResponse|RedirectResponse
+    {
+        $request->user()->notifications()->where('id', $id)->delete();
+
+        if ($request->expectsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'count' => $request->user()->notifications()->where('is_read', false)->count(),
+            ]);
+        }
+
+        return back()->with('success', 'Notification deleted.');
+    }
+
+    public function bulkDestroy(Request $request): JsonResponse|RedirectResponse
+    {
+        $rawIds = $request->input('ids', '');
+        $ids = is_array($rawIds) ? $rawIds : array_filter(explode(',', $rawIds));
+        if (!empty($ids)) {
+            $request->user()->notifications()->whereIn('id', $ids)->delete();
+        }
+
+        if ($request->expectsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'count' => $request->user()->notifications()->where('is_read', false)->count(),
+                'deleted' => count($ids),
+            ]);
+        }
+
+        return back()->with('success', count($ids).' notification(s) deleted.');
     }
 }

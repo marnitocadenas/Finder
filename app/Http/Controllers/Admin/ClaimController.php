@@ -86,6 +86,15 @@ class ClaimController extends Controller
         return back()->with('success', 'Claim marked as released.');
     }
 
+    public function destroy(Request $request, Claim $claim): RedirectResponse
+    {
+        $claim->delete();
+
+        $this->logAction($request, 'Deleted claim #'.$claim->id, $claim);
+
+        return redirect()->route($request->user()->role.'.claims.index')->with('success', 'Claim deleted successfully.');
+    }
+
     public function bulk(Request $request): RedirectResponse
     {
         $data = $request->validate([

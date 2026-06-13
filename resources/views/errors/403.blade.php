@@ -1,3 +1,27 @@
 @extends('layouts.app')
-@section('title','403')
-@section('content')<div class=\
+@section('title', 'Access Denied')
+@section('content')
+<div class="d-flex flex-column align-items-center justify-content-center text-center" style="min-height:60vh;padding:2rem;">
+    <div style="width:80px;height:80px;border-radius:16px;background:#FDECEC;display:grid;place-items:center;margin-bottom:1.5rem;">
+        <i class="fa-solid fa-lock" style="font-size:2.2rem;color:var(--danger);"></i>
+    </div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:.5rem;">Access Denied</h1>
+    <p style="color:var(--text-muted);max-width:420px;margin-bottom:1.5rem;">
+        You do not have permission to access this resource.
+    </p>
+    <div class="d-flex gap-2 flex-wrap justify-content-center">
+        <a href="javascript:history.back()" class="btn btn-outline-primary">
+            <i class="fa-solid fa-arrow-left me-1"></i>Go Back
+        </a>
+        @if(auth()->check())
+        <a href="{{ route(auth()->user()->role . '.dashboard') }}" class="btn btn-primary">
+            <i class="fa-solid fa-gauge me-1"></i>Dashboard
+        </a>
+        @else
+        <a href="{{ route('home') }}" class="btn btn-primary">
+            <i class="fa-solid fa-house me-1"></i>Home
+        </a>
+        @endif
+    </div>
+</div>
+@endsection

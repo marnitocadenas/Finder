@@ -14,20 +14,19 @@ async function refreshNotificationCount(){
     }catch(e){}
 }
 
-function updateNotificationStatCards(unreadCount){
+function updateNotificationStatCards(){
     const statCards=document.querySelectorAll('.notification-stat-card');
     if(statCards.length<3)return;
-    const allAlertsCard=statCards[0];
-    const unreadCard=statCards[1];
-    const readCard=statCards[2];
-    const total=parseInt(allAlertsCard.querySelector('strong')?.textContent)||0;
-    const newUnread=Math.max(0,unreadCount);
-    const newRead=Math.max(0,total-newUnread);
-    const unreadVal=allAlertsCard.querySelector('strong');
-    const readVal=readCard.querySelector('strong');
-    const unreadStrong=unreadCard.querySelector('strong');
-    if(unreadStrong)unreadStrong.textContent=newUnread;
-    if(readVal)readVal.textContent=newRead;
+    const visibleCards=document.querySelectorAll('.notification-card[data-notification-id]');
+    const total=visibleCards.length;
+    const unread=visibleCards.length-document.querySelectorAll('.notification-card[data-notification-id]:not(.is-unread)').length;
+    const read=total-unread;
+    const allStrong=statCards[0].querySelector('strong');
+    const unreadStrong=statCards[1].querySelector('strong');
+    const readStrong=statCards[2].querySelector('strong');
+    if(allStrong)allStrong.textContent=total;
+    if(unreadStrong)unreadStrong.textContent=unread;
+    if(readStrong)readStrong.textContent=read;
 }
 
 function markNotificationItemAsRead(item){
@@ -39,47 +38,30 @@ function markNotificationItemAsRead(item){
     }
 }
 
-// Auto-mark all visible unread notifications as read when the notifications page loads
-(function(){
-    const notifPage=document.querySelector('.notifications-module');
-    if(!notifPage)return;
-    const unreadItems=notifPage.querySelectorAll('.notification-item.is-unread');
-    if(unreadItems.length===0)return;
-    const ids=Array.from(unreadItems).map(el=>el.dataset.notificationId).filter(Boolean);
-    if(ids.length===0)return;
-    Promise.all(ids.map(id=>
-        fetch('/notifications/'+id+'/mark-read',{
-            method:'POST',
-            headers:{'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content,'X-Requested-With':'XMLHttpRequest'}
-        }).then(r=>r.json()).catch(()=>null)
-    )).then(results=>{
-        const lastResult=results.filter(Boolean).pop();
-        if(lastResult){
-            unreadItems.forEach(markNotificationItemAsRead);
-            refreshNotificationCount();
-            updateNotificationStatCards(lastResult.count);
-        }
-    });
-})();
-
 // Mark individual notification as read when clicked (works on all pages)
 document.addEventListener('click',(event)=>{
-    const item=event.target.closest('.notification-item[data-notification-id]');
-    if(!item||!item.classList.contains('is-unread'))return;
-    const id=item.dataset.notificationId;
-    if(!id)return;
-    const csrfMeta=document.querySelector('meta[name="csrf-token"]');
-    if(!csrfMeta)return;
-    fetch('/notifications/'+id+'/mark-read',{
-        method:'POST',
-        headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'}
-    }).then(r=>r.json()).then(data=>{
-        if(data.success){
-            markNotificationItemAsRead(item);
-            refreshNotificationCount();
-            updateNotificationStatCards(data.count);
-        }
-    }).catch(()=>{});
+    const item=event.target.closest('.notification-card[data-notification-id]');
+    if(!item)return;
+    const link=event.target.closest('.notification-card-body');
+    if(!link)return;
+    if(item.classList.contains('is-unread')){
+        const id=item.dataset.notificationId;
+        if(!id)return;
+        const csrfMeta=document.querySelector('meta[name="csrf-token"]');
+        if(!csrfMeta)return;
+        fetch('/notifications/'+id+'/mark-read',{
+            method:'POST',
+            headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'}
+        }).then(r=>r.json()).then(data=>{
+            if(data.success){
+                item.classList.remove('is-unread');
+                const statusEl=item.querySelector('[data-notification-status]');
+                if(statusEl){statusEl.textContent='Read';statusEl.classList.add('text-success');}
+                refreshNotificationCount();
+                updateNotificationStatCards();
+            }
+        }).catch(()=>{});
+    }
 });
 setInterval(refreshNotificationCount,30000);
 refreshNotificationCount();
@@ -88,8 +70,111 @@ refreshNotificationCount();
 (function(){
     const form=document.getElementById('mark-all-read-form');
     if(!form)return;
+    const btn=form.querySelector('button[type="submit"]');
     form.addEventListener('submit',function(e){
         e.preventDefault();
+        const csrfMeta=document.querySelector('meta[name="csrf-token"]');
+        if(!csrfMeta)return;
+        const originalHTML=btn?btn.innerHTML:'';
+        if(btn){btn.innerHTML='<i class="fa-solid fa-circle-notch fa-spin me-1"></i>Working';btn.disabled=true;}
+        fetch(form.action,{
+            method:'POST',
+            headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'},
+            body:new FormData(form)
+        }).then(r=>r.json()).then(data=>{
+            if(data.success){
+                document.querySelectorAll('.notification-card.is-unread').forEach(row=>{
+                    row.classList.remove('is-unread');
+                    const statusEl=row.querySelector('[data-notification-status]');
+                    if(statusEl){statusEl.textContent='Read';statusEl.classList.add('text-success');}
+                });
+                refreshNotificationCount();
+                updateNotificationStatCards();
+            }
+        }).catch(()=>{}).finally(()=>{
+            if(btn){btn.innerHTML=originalHTML;btn.disabled=false;}
+        });
+    });
+})();
+
+// --- Notification delete system (individual + bulk) ---
+function getNotificationCheckboxes(){return Array.from(document.querySelectorAll('[data-notification-checkbox]'));}
+function updateBulkDeleteUI(){
+    const checked=getNotificationCheckboxes().filter(cb=>cb.checked);
+    const btn=document.getElementById('notification-bulk-delete-btn');
+    const countEl=document.getElementById('notification-bulk-count');
+    const selectAll=document.getElementById('notification-select-all');
+    if(!btn)return;
+    const total=getNotificationCheckboxes().length;
+    if(countEl)countEl.textContent=checked.length;
+    btn.classList.toggle('d-none',checked.length===0);
+    if(selectAll)selectAll.checked=total>0&&checked.length===total;
+}
+
+// Select All checkbox
+(function(){
+    const selectAll=document.querySelector('[data-notification-select-all]');
+    if(!selectAll)return;
+    selectAll.addEventListener('change',function(){
+        getNotificationCheckboxes().forEach(cb=>{cb.checked=selectAll.checked;});
+        updateBulkDeleteUI();
+    });
+})();
+
+// Individual checkbox change
+(function(){
+    document.addEventListener('change',function(e){
+        if(!e.target.matches('[data-notification-checkbox]'))return;
+        updateBulkDeleteUI();
+    });
+})();
+
+// Individual delete button
+document.addEventListener('click',function(e){
+    const btn=e.target.closest('[data-notification-delete]');
+    if(!btn)return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id=btn.dataset.notificationDelete;
+    if(!id)return;
+    const csrfMeta=document.querySelector('meta[name="csrf-token"]');
+    if(!csrfMeta)return;
+    if(!confirm('Delete this notification?'))return;
+    fetch('/notifications/'+id,{
+        method:'DELETE',
+        headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'}
+    }).then(r=>r.json()).then(data=>{
+        if(data.success){
+            const row=btn.closest('.notification-card');
+            if(row)row.remove();
+            refreshNotificationCount();
+            updateNotificationStatCards();
+            updateBulkDeleteUI();
+        }
+    }).catch(()=>{});
+});
+
+// Bulk delete: populate IDs before the confirm modal triggers form submit
+(function(){
+    const btn=document.getElementById('notification-bulk-delete-btn');
+    if(!btn)return;
+    btn.addEventListener('click',function(){
+        const ids=getNotificationCheckboxes().filter(cb=>cb.checked).map(cb=>cb.value);
+        const idsField=document.getElementById('notification-bulk-ids');
+        if(idsField)idsField.value=ids.join(',');
+    });
+})();
+
+// Bulk delete: also handle AJAX for in-page removal after form submit
+(function(){
+    const form=document.getElementById('notification-bulk-delete-form');
+    if(!form)return;
+    form.addEventListener('submit',function(e){
+        e.preventDefault();
+        const ids=getNotificationCheckboxes().filter(cb=>cb.checked).map(cb=>cb.value);
+        if(ids.length===0)return;
+        const idsField=document.getElementById('notification-bulk-ids');
+        if(idsField)idsField.value=ids.join(',');
         const csrfMeta=document.querySelector('meta[name="csrf-token"]');
         if(!csrfMeta)return;
         fetch(form.action,{
@@ -98,9 +183,13 @@ refreshNotificationCount();
             body:new FormData(form)
         }).then(r=>r.json()).then(data=>{
             if(data.success){
-                document.querySelectorAll('.notification-item.is-unread').forEach(markNotificationItemAsRead);
+                ids.forEach(id=>{
+                    const row=document.querySelector('.notification-card[data-notification-id="'+id+'"]');
+                    if(row)row.remove();
+                });
                 refreshNotificationCount();
-                updateNotificationStatCards(0);
+                updateNotificationStatCards();
+                updateBulkDeleteUI();
             }
         }).catch(()=>{});
     });
@@ -219,6 +308,7 @@ document.addEventListener('click',(event)=>{
     new bootstrap.Modal(modalEl).show();
 });
 document.addEventListener('submit',(event)=>{
+    if(event.target.hasAttribute('data-ajax'))return;
     const button=event.target.querySelector('button[type="submit"]:not([disabled]), button:not([type]):not([disabled])');
     if(button){
         const label=button.dataset.loadingText||'Working';
