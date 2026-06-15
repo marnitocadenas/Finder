@@ -177,7 +177,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 260px;
+    flex: 1;
+    min-width: 0;
 }
 .notification-title-row time {
     color: var(--text-muted);
@@ -236,24 +237,65 @@
 
 /* Mobile responsive */
 @media(max-width:767px) {
+    .notification-card {
+        flex-wrap: nowrap;
+    }
     .notification-card-body {
-        padding: .75rem;
-        gap: .65rem;
+        padding: .75rem .65rem;
+        gap: .55rem;
     }
     .notification-card-body .notification-icon {
-        flex: 0 0 36px;
-        width: 36px;
-        height: 36px;
-        font-size: .9rem;
+        flex: 0 0 34px;
+        width: 34px;
+        height: 34px;
+        font-size: .85rem;
+    }
+    .notification-title-row {
+        gap: .4rem;
+        flex-wrap: wrap;
+        align-items: baseline;
     }
     .notification-title-row strong {
-        max-width: 160px;
+        font-size: .9rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: none;
+        line-height: 1.3;
+    }
+    .notification-title-row time {
+        font-size: .72rem;
+        flex: 0 0 auto;
+        margin-left: 0;
+        order: 3;
+        width: 100%;
+        margin-top: .15rem;
+    }
+    .notification-card-body em[data-notification-status] {
+        flex: 0 0 auto;
+        order: 2;
+        font-size: .68rem;
+        padding: .12rem .45rem;
+    }
+    .notification-card-body .notification-content p {
+        font-size: .82rem;
+        line-height: 1.45;
+        margin-top: .2rem;
     }
     .notification-card-check {
-        padding: .65rem .5rem;
+        padding: .6rem .45rem;
+    }
+    .notification-card-check .form-check-input {
+        width: 1rem;
+        height: 1rem;
     }
     .notification-card-delete {
-        width: 40px;
+        width: 38px;
+    }
+    .notification-card-delete i {
+        font-size: .85rem;
     }
     .notifications-panel-header {
         flex-direction: column;
@@ -262,18 +304,30 @@
     }
 }
 @media(max-width:480px) {
-    .notification-title-row {
-        gap: .35rem;
+    .notification-card-body {
+        padding: .65rem .55rem;
+        gap: .5rem;
+    }
+    .notification-card-body .notification-icon {
+        flex: 0 0 30px;
+        width: 30px;
+        height: 30px;
+        font-size: .78rem;
     }
     .notification-title-row strong {
-        max-width: 120px;
-        font-size: .88rem;
+        font-size: .86rem;
     }
     .notification-title-row time {
-        font-size: .72rem;
+        font-size: .68rem;
     }
     .notification-card-body .notification-content p {
-        font-size: .82rem;
+        font-size: .78rem;
+    }
+    .notification-card-check {
+        padding: .5rem .35rem;
+    }
+    .notification-card-delete {
+        width: 34px;
     }
 }
 </style>

@@ -71,7 +71,8 @@ class NotificationController extends Controller
     public function bulkDestroy(Request $request): JsonResponse|RedirectResponse
     {
         $rawIds = $request->input('ids', '');
-        $ids = is_array($rawIds) ? $rawIds : array_filter(explode(',', $rawIds));
+        $ids = is_array($rawIds) ? $rawIds : explode(',', $rawIds);
+        $ids = array_filter(array_map('intval', $ids), fn($id) => $id > 0);
         if (!empty($ids)) {
             $request->user()->notifications()->whereIn('id', $ids)->delete();
         }

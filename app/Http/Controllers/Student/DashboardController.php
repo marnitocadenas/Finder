@@ -15,14 +15,26 @@ class DashboardController extends Controller
     public function index(Request $request): View
     {
         $studentId = $request->user()->id;
-        $lostReports = LostItem::where('user_id', $studentId)->count();
-        $openLostReports = LostItem::where('user_id', $studentId)->where('status', 'lost')->count();
-        $claims = Claim::where('student_id', $studentId)->count();
-        $pendingClaims = Claim::where('student_id', $studentId)->where('status', 'pending')->count();
-        $approvedClaims = Claim::where('student_id', $studentId)->where('status', 'approved')->count();
+
+        // Combine lost report counts into a single query
+        $lostStats = LostItem::where('user_id', $studentId)
+            ->selectRaw("COUNT(*) as total, SUM(status='lost') as open")
+            ->first();
+        $lostReports = $lostStats->total ?? 0;
+        $openLostReports = (int) ($lostStats->open ?? 0);
+
+        // Combine claim counts into a single query
+        $claimStats = Claim::where('student_id', $studentId)
+            ->selectRaw("COUNT(*) as total, SUM(status='pending') as pending, SUM(status='approved') as approved")
+            ->first();
+        $claims = $claimStats->total ?? 0;
+        $pendingClaims = (int) ($claimStats->pending ?? 0);
+        $approvedClaims = (int) ($claimStats->approved ?? 0);
+
         $availableFoundItems = FoundItem::where('status', 'unclaimed')->count();
         $unreadNotifications = $request->user()->notifications()->where('is_read', false)->count();
         $watchedItems = WatchedFoundItem::where('user_id', $studentId)->count();
+
         $possibleMatches = LostItem::where('user_id', $studentId)
             ->where('status', 'lost')
             ->whereExists(function ($query) {
@@ -33,6 +45,7 @@ class DashboardController extends Controller
                     ->whereNull('found_items.deleted_at');
             })
             ->count();
+
         $readyForPickup = Claim::where('student_id', $studentId)
             ->where('status', 'approved')
             ->whereNull('released_at')

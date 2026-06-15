@@ -47,13 +47,13 @@ class ClaimController extends Controller
         $claim->update($data + ['reviewed_by' => $request->user()->id, 'reviewed_at' => now()]);
 
         if ($data['status'] === 'approved') {
-            $claim->foundItem->update(['status' => 'claimed']);
+            $claim->foundItem?->update(['status' => 'claimed']);
         }
 
         TmcNotification::create([
             'user_id' => $claim->student_id,
             'title' => 'Claim '.$data['status'],
-            'message' => 'Your claim for '.$claim->foundItem->title.' was '.$data['status'].'.',
+            'message' => 'Your claim for '.($claim->foundItem?->title ?? 'an item').' was '.$data['status'].'.',
             'type' => 'claim_update',
             'link' => route('student.claims.show', $claim),
         ]);
@@ -71,12 +71,12 @@ class ClaimController extends Controller
             'released_by' => $request->user()->id,
             'released_at' => now(),
         ]);
-        $claim->foundItem->update(['status' => 'turned_over']);
+        $claim->foundItem?->update(['status' => 'turned_over']);
 
         TmcNotification::create([
             'user_id' => $claim->student_id,
             'title' => 'Item released',
-            'message' => 'Your claimed item '.$claim->foundItem->title.' has been marked as released.',
+            'message' => 'Your claimed item '.($claim->foundItem?->title ?? 'an item').' has been marked as released.',
             'type' => 'claim_update',
             'link' => route('student.claims.show', $claim),
         ]);

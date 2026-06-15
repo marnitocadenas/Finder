@@ -24,10 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const message = document.getElementById('confirmActionMessage');
     const button = document.getElementById('confirmActionButton');
     let form = null;
+    let notificationDeleteId = null;
 
     document.querySelectorAll('[data-confirm-submit]').forEach((trigger) => {
         trigger.addEventListener('click', () => {
             form = trigger.closest('form') || (trigger.form ? trigger.form : (trigger.getAttribute('form') ? document.getElementById(trigger.getAttribute('form')) : null));
+            notificationDeleteId = trigger.dataset.notificationDelete || null;
             if (form && trigger.name) {
                 form.querySelectorAll('input[data-confirm-value]').forEach((input) => input.remove());
                 const input = document.createElement('input');
@@ -46,7 +48,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     button.addEventListener('click', () => {
-        if (form) form.submit();
+        if (notificationDeleteId) {
+            // Perform AJAX notification delete
+            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfMeta) return;
+            const id = notificationDeleteId;
+            notificationDeleteId = null;
+            fetch('/notifications/' + id, {
+                method: 'DELETE',
+                headers: { 'X-CSRF-TOKEN': csrfMeta.content, 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(r => r.json()).then(data => {
+                if (data.success) {
+                    const row = document.querySelector('.notification-card[data-notification-id="' + id + '"]');
+                    if (row) row.remove();
+                    if (typeof refreshNotificationCount === 'function') refreshNotificationCount();
+                    if (typeof updateNotificationStatCards === 'function') updateNotificationStatCards();
+                    if (typeof updateBulkDeleteUI === 'function') updateBulkDeleteUI();
+                }
+            }).catch(() => {});
+            modal.hide();
+        } else if (form) {
+            form.submit();
+        }
     });
 });
 </script>

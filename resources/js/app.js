@@ -38,17 +38,25 @@ function markNotificationItemAsRead(item){
     }
 }
 
-// Mark individual notification as read when clicked (works on all pages)
+// Mark individual notification as read and navigate without adding history entry
+// This ensures the browser back button returns to the Notifications inbox
 document.addEventListener('click',(event)=>{
     const item=event.target.closest('.notification-card[data-notification-id]');
     if(!item)return;
     const link=event.target.closest('.notification-card-body');
     if(!link)return;
-    if(item.classList.contains('is-unread')){
-        const id=item.dataset.notificationId;
-        if(!id)return;
-        const csrfMeta=document.querySelector('meta[name="csrf-token"]');
-        if(!csrfMeta)return;
+
+    const href=link.getAttribute('href');
+    if(!href||href==='#')return;
+
+    // Prevent normal navigation
+    event.preventDefault();
+
+    const id=item.dataset.notificationId;
+    const csrfMeta=document.querySelector('meta[name="csrf-token"]');
+
+    // Mark as read via AJAX (fire-and-forget)
+    if(id&&csrfMeta&&item.classList.contains('is-unread')){
         fetch('/notifications/'+id+'/mark-read',{
             method:'POST',
             headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'}
@@ -62,6 +70,23 @@ document.addEventListener('click',(event)=>{
             }
         }).catch(()=>{});
     }
+
+    // Load the target page and replace the current history entry (notifications page)
+    // so that the browser back button skips the inbox and returns to the previous module
+    fetch(href,{credentials:'same-origin'}).then(r=>{
+        if(!r.ok)throw new Error('Navigation failed');
+        return r.text();
+    }).then(html=>{
+        // Replace current history entry instead of pushing a new one
+        window.history.replaceState(null,'',href);
+        // Render the fetched page
+        document.open();
+        document.write(html);
+        document.close();
+    }).catch(()=>{
+        // Fallback: normal navigation if fetch fails
+        window.location.href=href;
+    });
 });
 setInterval(refreshNotificationCount,30000);
 refreshNotificationCount();
@@ -129,30 +154,7 @@ function updateBulkDeleteUI(){
     });
 })();
 
-// Individual delete button
-document.addEventListener('click',function(e){
-    const btn=e.target.closest('[data-notification-delete]');
-    if(!btn)return;
-    e.preventDefault();
-    e.stopPropagation();
-    const id=btn.dataset.notificationDelete;
-    if(!id)return;
-    const csrfMeta=document.querySelector('meta[name="csrf-token"]');
-    if(!csrfMeta)return;
-    if(!confirm('Delete this notification?'))return;
-    fetch('/notifications/'+id,{
-        method:'DELETE',
-        headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'}
-    }).then(r=>r.json()).then(data=>{
-        if(data.success){
-            const row=btn.closest('.notification-card');
-            if(row)row.remove();
-            refreshNotificationCount();
-            updateNotificationStatCards();
-            updateBulkDeleteUI();
-        }
-    }).catch(()=>{});
-});
+// Individual delete button (handled by confirm modal via data-confirm-submit)
 
 // Bulk delete: populate IDs before the confirm modal triggers form submit
 (function(){

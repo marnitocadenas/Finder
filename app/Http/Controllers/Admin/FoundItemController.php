@@ -22,11 +22,18 @@ class FoundItemController extends Controller
             ->when($request->deleted === 'trashed', fn($q) => $q->onlyTrashed())
             ->when($request->deleted === 'all', fn($q) => $q->withTrashed());
 
+        $counts = FoundItem::selectRaw("
+            COUNT(*) as total,
+            SUM(status='unclaimed') as unclaimed,
+            SUM(status='claimed') as claimed,
+            SUM(status='turned_over') as turned_over
+        ")->first();
+
         $foundStats = [
-            ['label' => 'Active Items', 'value' => FoundItem::count(), 'icon' => 'fa-box-open', 'tone' => 'primary'],
-            ['label' => 'Unclaimed', 'value' => FoundItem::where('status', 'unclaimed')->count(), 'icon' => 'fa-inbox', 'tone' => 'warning'],
-            ['label' => 'Claimed', 'value' => FoundItem::where('status', 'claimed')->count(), 'icon' => 'fa-circle-check', 'tone' => 'success'],
-            ['label' => 'Turned Over', 'value' => FoundItem::where('status', 'turned_over')->count(), 'icon' => 'fa-building-columns', 'tone' => 'danger'],
+            ['label' => 'Active Items', 'value' => $counts->total ?? 0, 'icon' => 'fa-box-open', 'tone' => 'primary'],
+            ['label' => 'Unclaimed', 'value' => (int) ($counts->unclaimed ?? 0), 'icon' => 'fa-inbox', 'tone' => 'warning'],
+            ['label' => 'Claimed', 'value' => (int) ($counts->claimed ?? 0), 'icon' => 'fa-circle-check', 'tone' => 'success'],
+            ['label' => 'Turned Over', 'value' => (int) ($counts->turned_over ?? 0), 'icon' => 'fa-building-columns', 'tone' => 'danger'],
         ];
 
         return view('items.found-index', [

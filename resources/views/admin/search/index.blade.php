@@ -26,6 +26,9 @@
                     <div class="empty-state compact"><p>No users found.</p></div>
                 @endforelse
             </div>
+            @if($users->count() >= 8)
+                <a href="{{ route('admin.users.index', ['q' => $term]) }}" class="search-view-all"><i class="fa-solid fa-arrow-right me-1"></i>View all users</a>
+            @endif
         </section>
 
         <section class="module-card">
@@ -37,6 +40,9 @@
                     <div class="empty-state compact"><p>No lost reports found.</p></div>
                 @endforelse
             </div>
+            @if($lostItems->count() >= 8)
+                <a href="{{ route('admin.lost-items.index', ['q' => $term]) }}" class="search-view-all"><i class="fa-solid fa-arrow-right me-1"></i>View all lost items</a>
+            @endif
         </section>
 
         <section class="module-card">
@@ -48,18 +54,46 @@
                     <div class="empty-state compact"><p>No found items found.</p></div>
                 @endforelse
             </div>
+            @if($foundItems->count() >= 8)
+                <a href="{{ route('admin.found-items.index', ['q' => $term]) }}" class="search-view-all"><i class="fa-solid fa-arrow-right me-1"></i>View all found items</a>
+            @endif
         </section>
 
         <section class="module-card">
             <div class="module-card-header"><div><span class="module-eyebrow">Requests</span><h2>Claims</h2></div><span class="overview-rate">{{ $claims->count() }}</span></div>
             <div class="search-result-list">
                 @forelse($claims as $claim)
-                    <a href="{{ route('admin.claims.show', $claim) }}"><i class="fa-solid fa-file-signature"></i><span><strong>Claim #{{ $claim->id }} - {{ $claim->foundItem->title ?? 'Item' }}</strong><small>{{ $claim->student->name ?? 'Student' }}</small></span></a>
+                    <a href="{{ route('admin.claims.show', $claim) }}"><i class="fa-solid fa-file-signature"></i><span><strong>Claim #{{ $claim->id }} - {{ $claim->foundItem?->title ?? 'Item' }}</strong><small>{{ $claim->student->name ?? 'Student' }}</small></span></a>
                 @empty
                     <div class="empty-state compact"><p>No claims found.</p></div>
                 @endforelse
             </div>
+            @if($claims->count() >= 8)
+                <a href="{{ route('admin.claims.index', ['q' => $term]) }}" class="search-view-all"><i class="fa-solid fa-arrow-right me-1"></i>View all claims</a>
+            @endif
         </section>
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+.search-view-all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    padding: .65rem;
+    border-top: 1px solid var(--border);
+    color: var(--primary);
+    text-decoration: none;
+    font-size: .85rem;
+    font-weight: 700;
+    transition: background .15s ease;
+}
+.search-view-all:hover {
+    background: #F2F6FC;
+    color: var(--primary);
+}
+</style>
+@endpush

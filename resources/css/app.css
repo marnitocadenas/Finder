@@ -454,6 +454,99 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         text-align:center!important;
     }
 }
+
+/* Mobile-only: Fix claim detail page content overflow (max-width: 767px) */
+@media (max-width: 767px) {
+    .claim-detail-module {
+        min-width: 0 !important;
+        overflow-x: hidden !important;
+    }
+    .claim-detail-grid {
+        grid-template-columns: 1fr !important;
+        min-width: 0 !important;
+        gap: 0.85rem !important;
+    }
+    .claim-detail-card,
+    .claim-proof-card {
+        min-width: 0 !important;
+        overflow: hidden !important;
+        padding: 0.85rem !important;
+    }
+    .claim-detail-heading {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+    }
+    .claim-detail-list {
+        min-width: 0 !important;
+    }
+    .claim-detail-list div {
+        grid-template-columns: 1fr !important;
+        gap: 0.25rem !important;
+    }
+    .claim-detail-list dd {
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
+    }
+    .claim-timeline {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem !important;
+    }
+    .claim-proof-card img {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 280px !important;
+        object-fit: contain !important;
+    }
+    .claim-proof-compare {
+        min-width: 0 !important;
+    }
+    .claim-proof-compare img {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 260px !important;
+    }
+    .claim-proof-empty {
+        height: 160px !important;
+    }
+    /* Claim receipt hero buttons: equal width, single row */
+    .claims-hero > .d-flex {
+        flex-wrap: nowrap !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+    }
+    .claims-hero > .d-flex > .btn,
+    .claims-hero > .d-flex > form {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+    }
+    .claims-hero > .d-flex > .btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        padding: 0.65rem 0.5rem !important;
+        font-size: 0.88rem !important;
+        min-height: 44px !important;
+    }
+    .claims-hero > .d-flex > form {
+        display: flex !important;
+    }
+    .claims-hero > .d-flex > form > .btn {
+        flex: 1 1 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
+        font-size: 0.88rem !important;
+        min-height: 44px !important;
+        padding: 0.65rem 0.5rem !important;
+    }
+}
+
 @media(min-width:992px){
     .student-lost-table{
         table-layout:auto;
