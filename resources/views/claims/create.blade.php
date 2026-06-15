@@ -8,7 +8,7 @@
             <h1>File a Claim</h1>
             <p>Choose the found item, connect it to your lost report if available, and explain why it belongs to you.</p>
         </div>
-        <a href="{{ route('student.claims.index') }}" class="btn btn-light">
+        <a href="{{ route($claimRoute.'.index') }}" class="btn btn-light">
             <i class="fa-solid fa-arrow-left me-1"></i>Back
         </a>
     </div>
@@ -17,11 +17,11 @@
         <div class="alert alert-warning student-duplicate-alert">
             <i class="fa-solid fa-triangle-exclamation me-1"></i>
             You already have a pending claim for this found item.
-            <a href="{{ route('student.claims.show', $existingClaim) }}">Open existing claim</a>
+            <a href="{{ route($claimRoute.'.show', $existingClaim) }}">Open existing claim</a>
         </div>
     @endif
 
-    <form method="POST" action="{{ route('student.claims.store') }}" enctype="multipart/form-data" class="claim-form-card">
+    <form method="POST" action="{{ route($claimRoute.'.store') }}" enctype="multipart/form-data" class="claim-form-card">
         @csrf
         <div class="claim-form-section">
             <div>
@@ -78,7 +78,7 @@
             <button class="btn btn-primary" @disabled($existingClaim)>
                 <i class="fa-solid fa-paper-plane me-1"></i>Submit Claim
             </button>
-            <a href="{{ route('student.claims.index') }}" class="btn btn-outline-secondary">Cancel</a>
+            <a href="{{ route($claimRoute.'.index') }}" class="btn btn-outline-secondary">Cancel</a>
         </div>
     </form>
 </div>

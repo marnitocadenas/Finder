@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $role === 'staff' ? 'My Found Items' : 'Found Items Management')
+@section('title', $role === 'student' ? 'My Found Reports' : ($role === 'staff' ? 'My Found Items' : 'Found Items Management'))
 @section('content')
 <div class="found-module">
     @if($role === 'admin')
@@ -9,9 +9,14 @@
                 <h1>Found Items</h1>
                 <p>Track recovered belongings, claim status, and turned-over records across the campus inventory.</p>
             </div>
-            <a href="{{ route('admin.reports') }}" class="btn btn-warning">
-                <i class="fa-solid fa-chart-column me-1"></i>Open Reports
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.found-items.create') }}" class="btn btn-primary">
+                    <i class="fa-solid fa-plus me-1"></i>Post Found
+                </a>
+                <a href="{{ route('admin.reports') }}" class="btn btn-warning">
+                    <i class="fa-solid fa-chart-column me-1"></i>Open Reports
+                </a>
+            </div>
         </div>
 
         <div class="found-stat-grid">
@@ -28,12 +33,12 @@
     @else
         <div class="found-hero">
             <div>
-                <span class="module-eyebrow">Staff inventory</span>
-                <h1>My Found Items</h1>
-                <p>Post recovered belongings, update claim status, and keep item records ready for students.</p>
+                <span class="module-eyebrow">{{ $role === 'student' ? 'Student reports' : 'Staff inventory' }}</span>
+                <h1>{{ $role === 'student' ? 'My Found Reports' : 'My Found Items' }}</h1>
+                <p>{{ $role === 'student' ? 'Track found items you reported and keep details updated.' : 'Post recovered belongings, update claim status, and keep item records ready for students.' }}</p>
             </div>
-            <a href="{{ route('staff.found-items.create') }}" class="btn btn-warning">
-                <i class="fa-solid fa-plus me-1"></i>Post Found Item
+            <a href="{{ route($role.'.found-items.create') }}" class="btn btn-warning">
+                <i class="fa-solid fa-plus me-1"></i>{{ $role === 'student' ? 'Report Found Item' : 'Post Found Item' }}
             </a>
         </div>
     @endif
@@ -83,7 +88,7 @@
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Item</th>
-                        <th>Staff</th>
+                        @if(!($personalView ?? false))<th>Reported By</th>@endif
                         <th>Category</th>
                         <th>Date Found</th>
                         <th>Status</th>
@@ -107,7 +112,9 @@
                                     </div>
                                 </div>
                             </td>
-                            <td data-label="Staff">{{ $item->staff->name ?? auth()->user()->name }}</td>
+                            @if(!($personalView ?? false))
+                            <td data-label="Reported By">{{ $item->staff->name ?? ($item->guest_name ? $item->guest_name.' (Guest)' : auth()->user()->name) }}</td>
+                            @endif
                             <td data-label="Category">
                                 <span class="found-category">
                                     <i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>{{ $item->category->name ?? '-' }}
@@ -129,7 +136,7 @@
                                         </button>
                                     </form>
                                 @else
-                                    <a class="btn btn-sm btn-outline-primary" href="{{ $role === 'staff' ? route('staff.found-items.edit', $item) : route('admin.found-items.edit', $item) }}">
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ $role === 'student' ? route('student.found-items.edit', $item) : ($role === 'staff' ? route('staff.found-items.edit', $item) : route('admin.found-items.edit', $item)) }}">
                                         <i class="fa-solid fa-pen-to-square me-1"></i>View/Edit
                                     </a>
                                     @if($role === 'staff')
@@ -148,7 +155,7 @@
                                             </button>
                                         </form>
                                     @endif
-                                    <form method="POST" action="{{ $role === 'staff' ? route('staff.found-items.destroy', $item) : route('admin.found-items.destroy', $item) }}" class="d-inline">
+                                    <form method="POST" action="{{ $role === 'student' ? route('student.found-items.destroy', $item) : ($role === 'staff' ? route('staff.found-items.destroy', $item) : route('admin.found-items.destroy', $item)) }}" class="d-inline">
                                         @csrf @method('DELETE')
                                         <button type="button" class="btn btn-sm btn-outline-danger" data-confirm-submit data-confirm-title="Delete found item" data-confirm-message="Move this found item to deleted records?" data-confirm-button="Delete">
                                             <i class="fa-solid fa-trash-can me-1"></i>Delete
@@ -159,7 +166,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ $role === 'admin' ? 7 : 6 }}">
+                            <td colspan="{{ $role === 'admin' ? 7 : (($personalView ?? false) ? 5 : 6) }}">
                                 <div class="found-empty">
                                     <i class="fa-solid fa-box-open"></i>
                                     <p>No found items found.</p>

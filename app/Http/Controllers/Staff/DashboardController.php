@@ -32,11 +32,15 @@ class DashboardController extends Controller
             })
             ->count();
 
+        $myLostReports = LostItem::where('user_id', $request->user()->id)->count();
+        $myOpenLostReports = LostItem::where('user_id', $request->user()->id)->where('status', 'lost')->count();
+        $myClaimsFiled = Claim::where('student_id', $request->user()->id)->count();
+
         $stats = [
             ['label' => 'Items Posted', 'value' => $itemsPosted, 'icon' => 'fa-box-open', 'color' => 'primary'],
             ['label' => 'Pending Claims', 'value' => $pendingClaims, 'icon' => 'fa-clock', 'color' => 'warning'],
-            ['label' => 'Approved Claims', 'value' => $approvedClaims, 'icon' => 'fa-circle-check', 'color' => 'success'],
-            ['label' => 'Unclaimed Items', 'value' => $unclaimedItems, 'icon' => 'fa-inbox', 'color' => 'danger'],
+            ['label' => 'My Lost Reports', 'value' => $myLostReports, 'icon' => 'fa-magnifying-glass', 'color' => 'danger'],
+            ['label' => 'My Claims Filed', 'value' => $myClaimsFiled, 'icon' => 'fa-file-signature', 'color' => 'success'],
         ];
 
         $workQueue = [
@@ -46,6 +50,13 @@ class DashboardController extends Controller
                 'icon' => 'fa-hourglass-half',
                 'tone' => 'warning',
                 'route' => route('staff.claims.index', ['status' => 'pending']),
+            ],
+            [
+                'label' => 'My open lost reports',
+                'value' => $myOpenLostReports,
+                'icon' => 'fa-magnifying-glass',
+                'tone' => 'danger',
+                'route' => route('staff.lost-items.index', ['status' => 'lost']),
             ],
             [
                 'label' => 'Unclaimed found items',

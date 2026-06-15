@@ -8,7 +8,7 @@
             <h1>{{ $item->title }}</h1>
             <p>{{ $item->location_found }} &bull; {{ optional($item->date_found)->format('M d, Y') }}</p>
         </div>
-        <a href="{{ ($role ?? 'admin') === 'staff' ? route('staff.found-items.index') : route('admin.found-items.index') }}" class="btn btn-light">
+        <a href="{{ ($role ?? 'admin') === 'student' ? route('student.found-items.index') : (($role ?? 'admin') === 'staff' ? route('staff.found-items.index') : route('admin.found-items.index')) }}" class="btn btn-light">
             <i class="fa-solid fa-arrow-left me-1"></i>Back
         </a>
     </div>
@@ -24,7 +24,8 @@
             </div>
             <p class="found-description">{{ $item->description }}</p>
             <dl class="found-detail-list">
-                <div><dt>Staff</dt><dd>{{ $item->staff->name }}</dd></div>
+                <div><dt>Reporter</dt><dd>{{ $item->staff->name ?? ($item->guest_name ? $item->guest_name.' (Public report)' : 'Unknown') }}</dd></div>
+                @if($item->guest_contact)<div><dt>Contact</dt><dd>{{ $item->guest_contact }}</dd></div>@endif
                 <div><dt>Category</dt><dd>{{ $item->category->name }}</dd></div>
                 <div><dt>Date Found</dt><dd>{{ optional($item->date_found)->format('M d, Y') }}</dd></div>
                 <div><dt>Location</dt><dd>{{ $item->location_found }}</dd></div>

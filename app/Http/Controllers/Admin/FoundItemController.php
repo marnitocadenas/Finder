@@ -44,6 +44,45 @@ class FoundItemController extends Controller
         ]);
     }
 
+    public function create(): View
+    {
+        return view('items.found-form', [
+            'item' => new FoundItem(),
+            'categories' => Category::orderBy('name')->get(),
+            'staffUsers' => User::where('role', 'staff')->orderBy('name')->get(),
+            'action' => route('admin.found-items.store'),
+            'method' => 'POST',
+            'role' => 'admin',
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:150',
+            'category_id' => 'required|exists:categories,id',
+            'description' => 'required|string|max:1000',
+            'date_found' => 'required|date|before_or_equal:today',
+            'location_found' => 'required|string|max:255',
+            'status' => ['required', Rule::in(['unclaimed', 'claimed', 'turned_over'])],
+            'staff_id' => 'nullable|exists:users,id',
+            'guest_name' => 'nullable|string|max:255',
+            'guest_contact' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('found-items', 'public');
+        } else {
+            unset($data['image']);
+        }
+
+        $foundItem = FoundItem::create($data);
+        $this->logAction($request, 'Created found item '.$foundItem->title, $foundItem);
+
+        return redirect()->route('admin.found-items.index')->with('success', 'Found item posted.');
+    }
+
     public function show(FoundItem $foundItem): View
     {
         return view('items.found-show', ['item' => $foundItem->load(['staff', 'category']), 'role' => 'admin']);
@@ -70,7 +109,7 @@ class FoundItemController extends Controller
             'date_found' => 'required|date|before_or_equal:today',
             'location_found' => 'required|string|max:255',
             'status' => ['required', Rule::in(['unclaimed', 'claimed', 'turned_over'])],
-            'staff_id' => 'required|exists:users,id',
+            'staff_id' => 'nullable|exists:users,id',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 

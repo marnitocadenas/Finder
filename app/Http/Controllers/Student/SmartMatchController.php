@@ -40,7 +40,11 @@ class SmartMatchController extends Controller
             return ['lost' => $lost, 'candidates' => $candidates];
         })->filter(fn($group) => $group['candidates']->isNotEmpty())->values();
 
-        return view('student.matches.index', compact('matches'));
+        return view('student.matches.index', [
+            'matches' => $matches,
+            'role' => 'student',
+            'claimRoute' => 'student.claims',
+        ]);
     }
 
     private function score(LostItem $lost, FoundItem $found): int

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class FoundItem extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['staff_id','title','description','category_id','date_found','location_found','image','status'];
+    protected $fillable = ['staff_id','guest_name','guest_contact','title','description','category_id','date_found','location_found','image','status'];
     protected $casts = ['date_found'=>'date'];
     public function staff(): BelongsTo { return $this->belongsTo(User::class, 'staff_id'); }
     public function category(): BelongsTo { return $this->belongsTo(Category::class); }

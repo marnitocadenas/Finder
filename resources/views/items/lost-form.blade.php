@@ -8,20 +8,48 @@
             <h1>{{ $item->exists ? 'Edit Lost Report' : 'Report Lost Item' }}</h1>
             <p>{{ $item->exists ? 'Update the item details, status, and supporting photo.' : 'Submit clear details so staff can match your report with found items.' }}</p>
         </div>
-        <a href="{{ $role === 'student' ? route('student.lost-items.index') : route('admin.lost-items.index') }}" class="btn btn-light">
+        <a href="{{ in_array($role, ['student', 'staff']) ? route($role.'.lost-items.index') : route('admin.lost-items.index') }}" class="btn btn-light">
             <i class="fa-solid fa-arrow-left me-1"></i>Back
         </a>
     </div>
 
-    <form method="POST" action="{{ $action }}" enctype="multipart/form-data" class="lost-form-card {{ $role === 'student' ? 'student-lost-wizard' : '' }}">
+    <form method="POST" action="{{ $action }}" enctype="multipart/form-data" class="lost-form-card {{ in_array($role, ['student', 'staff']) ? 'student-lost-wizard' : '' }}">
         @csrf
         @if($method !== 'POST')
             @method($method)
         @endif
 
+        @if($role === 'admin')
         <div class="lost-form-section">
             <div>
-                @if($role === 'student')<span class="intake-step">Step 1</span>@endif
+                <h2>Reported By</h2>
+                <p>Assign this report to a student account, or record it as a guest/walk-in report.</p>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="user_id">Student (optional)</label>
+                    <select id="user_id" class="form-select" name="user_id">
+                        <option value="">-- No student (guest report) --</option>
+                        @foreach($students ?? [] as $student)
+                            <option value="{{ $student->id }}" @selected(old('user_id', $item->user_id)==$student->id)>{{ $student->name }} ({{ $student->email }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="guest_name">Guest Name</label>
+                    <input id="guest_name" class="form-control" name="guest_name" value="{{ old('guest_name', $item->guest_name) }}" placeholder="Name if not a registered student">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="guest_contact">Guest Contact</label>
+                    <input id="guest_contact" class="form-control" name="guest_contact" value="{{ old('guest_contact', $item->guest_contact) }}" placeholder="Email or phone number">
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <div class="lost-form-section">
+            <div>
+                @if(in_array($role, ['student', 'staff']))<span class="intake-step">Step 1</span>@endif
                 <h2>Item Details</h2>
                 <p>Use a specific title, category, and description to improve matching.</p>
             </div>
@@ -47,7 +75,7 @@
 
         <div class="lost-form-section">
             <div>
-                @if($role === 'student')<span class="intake-step">Step 2</span>@endif
+                @if(in_array($role, ['student', 'staff']))<span class="intake-step">Step 2</span>@endif
                 <h2>Loss Information</h2>
                 <p>Dates and locations help staff compare the report against found item logs.</p>
             </div>
@@ -91,12 +119,12 @@
             <button class="btn btn-primary">
                 <i class="fa-solid fa-floppy-disk me-1"></i>Save Report
             </button>
-            @if($role === 'student')
-                <a href="{{ route('student.matches') }}" class="btn btn-outline-primary">
+            @if(in_array($role, ['student', 'staff']))
+                <a href="{{ route($role.'.matches') }}" class="btn btn-outline-primary">
                     <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Review Matches
                 </a>
             @endif
-            <a href="{{ $role === 'student' ? route('student.lost-items.index') : route('admin.lost-items.index') }}" class="btn btn-outline-secondary">Cancel</a>
+            <a href="{{ in_array($role, ['student', 'staff']) ? route($role.'.lost-items.index') : route('admin.lost-items.index') }}" class="btn btn-outline-secondary">Cancel</a>
         </div>
     </form>
 </div>

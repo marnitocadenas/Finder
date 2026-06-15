@@ -24,7 +24,8 @@
             </div>
             <p class="lost-description">{{ $item->description }}</p>
             <dl class="lost-detail-list">
-                <div><dt>Student</dt><dd>{{ $item->user->name }}</dd></div>
+                <div><dt>Reporter</dt><dd>{{ $item->user->name ?? ($item->guest_name ? $item->guest_name.' (Public report)' : 'Unknown') }}</dd></div>
+                @if($item->guest_contact)<div><dt>Contact</dt><dd>{{ $item->guest_contact }}</dd></div>@endif
                 <div><dt>Category</dt><dd>{{ $item->category->name }}</dd></div>
                 <div><dt>Date Lost</dt><dd>{{ optional($item->date_lost)->format('M d, Y') }}</dd></div>
                 <div><dt>Location</dt><dd>{{ $item->location_lost }}</dd></div>

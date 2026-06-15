@@ -49,7 +49,7 @@
                 <div><dt>Released At</dt><dd>{{ optional($claim->released_at)->format('M d, Y h:i A') ?? '-' }}</dd></div>
             </dl>
 
-            @if(in_array($role, ['admin','staff']) && $claim->status === 'pending')
+            @if(in_array($role, ['admin','staff']) && $claim->status === 'pending' && $claim->student_id !== auth()->id())
                 <form method="POST" action="{{ $role === 'staff' ? route('staff.claims.update', $claim) : route('admin.claims.update', $claim) }}" class="claim-review-form no-print">
                     @csrf @method('PUT')
                     <label class="form-label" for="review-note">Review note</label>
@@ -83,7 +83,7 @@
                 @endif
             @endif
 
-            @if(in_array($role, ['admin','staff']) && $claim->status === 'approved' && !$claim->released_at)
+            @if(in_array($role, ['admin','staff']) && $claim->status === 'approved' && !$claim->released_at && $claim->student_id !== auth()->id())
                 <form method="POST" action="{{ $role === 'staff' ? route('staff.claims.release', $claim) : route('admin.claims.release', $claim) }}" class="claim-release-form no-print">
                     @csrf @method('PUT')
                     <button type="button" class="btn btn-primary" data-confirm-submit data-confirm-title="Release item" data-confirm-message="Mark this approved claim as released to the student?" data-confirm-button="Release" data-confirm-class="btn-primary">

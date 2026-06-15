@@ -19,13 +19,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Staff\ClaimController as StaffClaimController;
 use App\Http\Controllers\Staff\ActivityController as StaffActivityController;
+use App\Http\Controllers\Staff\BrowseController as StaffBrowseController;
 use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
 use App\Http\Controllers\Staff\FoundItemController as StaffFoundItemController;
 use App\Http\Controllers\Staff\LostReportController;
 use App\Http\Controllers\Staff\SmartMatchController as StaffSmartMatchController;
+use App\Http\Controllers\Staff\WatchlistController as StaffWatchlistController;
 use App\Http\Controllers\Student\BrowseController;
 use App\Http\Controllers\Student\ClaimController as StudentClaimController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\FoundItemController as StudentFoundItemController;
 use App\Http\Controllers\Student\LostItemController as StudentLostItemController;
 use App\Http\Controllers\Student\SmartMatchController as StudentSmartMatchController;
 use App\Http\Controllers\Student\WatchlistController;
@@ -33,6 +36,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/found-items/{foundItem}', [PublicController::class, 'foundItem'])->name('public.found-items.show');
+Route::get('/report-lost', [PublicController::class, 'reportLostForm'])->name('public.report-lost.create');
+Route::post('/report-lost', [PublicController::class, 'reportLost'])->name('public.report-lost.store');
+Route::get('/report-found', [PublicController::class, 'reportFoundForm'])->name('public.report-found.create');
+Route::post('/report-found', [PublicController::class, 'reportFound'])->name('public.report-found.store');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -56,10 +63,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
     Route::post('users/bulk', [UserController::class, 'bulk'])->name('users.bulk');
     Route::resource('categories', CategoryController::class)->except('show');
-    Route::resource('lost-items', AdminLostItemController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+    Route::resource('lost-items', AdminLostItemController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
     Route::put('lost-items/{id}/restore', [AdminLostItemController::class, 'restore'])->name('lost-items.restore');
     Route::post('lost-items/bulk', [AdminLostItemController::class, 'bulk'])->name('lost-items.bulk');
-    Route::resource('found-items', AdminFoundItemController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+    Route::resource('found-items', AdminFoundItemController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
     Route::put('found-items/{id}/restore', [AdminFoundItemController::class, 'restore'])->name('found-items.restore');
     Route::post('found-items/bulk', [AdminFoundItemController::class, 'bulk'])->name('found-items.bulk');
     Route::resource('claims', AdminClaimController::class)->only(['index', 'show', 'update', 'destroy']);
@@ -80,6 +87,16 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     Route::post('claims/{claim}/request-info', [StaffClaimController::class, 'requestInfo'])->name('claims.request-info');
     Route::get('/lost-reports', [LostReportController::class, 'index'])->name('lost-reports.index');
     Route::get('/lost-reports/{lostReport}', [LostReportController::class, 'show'])->name('lost-reports.show');
+
+    // Staff personal lost-and-found features
+    Route::resource('lost-items', StudentLostItemController::class);
+    Route::put('lost-items/{lostItem}/status', [StudentLostItemController::class, 'status'])->name('lost-items.status');
+    Route::get('/browse', [StaffBrowseController::class, 'index'])->name('browse');
+    Route::resource('my-claims', StudentClaimController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
+    Route::get('/my-matches', [StaffSmartMatchController::class, 'personalMatches'])->name('my-matches');
+    Route::get('/watchlist', [StaffWatchlistController::class, 'index'])->name('watchlist');
+    Route::post('/watchlist/{foundItem}', [StaffWatchlistController::class, 'store'])->name('watchlist.store');
+    Route::delete('/watchlist/{foundItem}', [StaffWatchlistController::class, 'destroy'])->name('watchlist.destroy');
 });
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
     Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
@@ -89,6 +106,7 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::delete('/watchlist/{foundItem}', [WatchlistController::class, 'destroy'])->name('watchlist.destroy');
     Route::resource('lost-items', StudentLostItemController::class);
     Route::put('lost-items/{lostItem}/status', [StudentLostItemController::class, 'status'])->name('lost-items.status');
+    Route::resource('found-items', StudentFoundItemController::class);
     Route::get('/browse', [BrowseController::class, 'index'])->name('browse');
     Route::resource('claims', StudentClaimController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
 });

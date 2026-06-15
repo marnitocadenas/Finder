@@ -1,15 +1,15 @@
 @extends('layouts.app')
-@section('title', $role === 'student' ? 'My Claims' : 'Claims Management')
+@section('title', in_array($role, ['student', 'staff']) && isset($claimRoute) ? 'My Claims' : 'Claims Management')
 @section('content')
 <div class="claims-module">
     <div class="claims-hero">
         <div>
-            <span class="module-eyebrow">{{ $role === 'student' ? 'Claim tracking' : ($role === 'staff' ? 'Review queue' : 'Admin review') }}</span>
-            <h1>{{ $role === 'student' ? 'My Claims' : 'Claims' }}</h1>
-            <p>{{ $role === 'student' ? 'Track claim requests and review decisions for found items you submitted.' : 'Review ownership requests, inspect proof details, and keep item claim outcomes updated.' }}</p>
+            <span class="module-eyebrow">{{ $role === 'student' ? 'Claim tracking' : ($role === 'staff' && isset($claimRoute) ? 'My claims' : ($role === 'staff' ? 'Review queue' : 'Admin review')) }}</span>
+            <h1>{{ in_array($role, ['student', 'staff']) && isset($claimRoute) ? 'My Claims' : 'Claims' }}</h1>
+            <p>{{ in_array($role, ['student', 'staff']) && isset($claimRoute) ? 'Track claim requests and review decisions for found items you submitted.' : 'Review ownership requests, inspect proof details, and keep item claim outcomes updated.' }}</p>
         </div>
-        @if($role === 'student')
-            <a href="{{ route('student.claims.create') }}" class="btn btn-warning">
+        @if(in_array($role, ['student', 'staff']) && isset($claimRoute))
+            <a href="{{ route($claimRoute.'.create') }}" class="btn btn-warning">
                 <i class="fa-solid fa-plus me-1"></i>File a Claim
             </a>
         @elseif($role === 'admin')
@@ -68,7 +68,7 @@
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Claim</th>
-                        @if($role !== 'student')<th>Student</th>@endif
+                        @if($role !== 'student' && !(isset($claimRoute) && $role === 'staff'))<th>Student</th>@endif
                         <th>Found Item</th>
                         <th>Status</th>
                         <th>Reviewed</th>
@@ -85,7 +85,7 @@
                                     <small>{{ $claim->created_at->format('M d, Y') }}</small>
                                 </div>
                             </td>
-                            @if($role !== 'student')
+                            @if($role !== 'student' && !(isset($claimRoute) && $role === 'staff'))
                                 <td data-label="Student">
                                     <div class="claim-person">
                                         <span>{{ strtoupper(substr($claim->student->name ?? auth()->user()->name, 0, 1)) }}</span>
@@ -108,14 +108,19 @@
                             <td data-label="Status"><x-status :status="$claim->status" /></td>
                             <td data-label="Reviewed">{{ optional($claim->reviewed_at)->format('M d, Y') ?? '-' }}</td>
                             <td data-label="Action" class="text-end">
-                                <a class="btn btn-sm btn-outline-primary" href="{{ $role==='student' ? route('student.claims.show',$claim) : ($role==='staff' ? route('staff.claims.show',$claim) : route('admin.claims.show',$claim)) }}">
+                                @php
+                                    $showRoute = isset($claimRoute)
+                                        ? route($claimRoute.'.show', $claim)
+                                        : ($role === 'staff' ? route('staff.claims.show', $claim) : ($role === 'admin' ? route('admin.claims.show', $claim) : route('student.claims.show', $claim)));
+                                @endphp
+                                <a class="btn btn-sm btn-outline-primary" href="{{ $showRoute }}">
                                     <i class="fa-solid fa-eye me-1"></i>Open
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ $role === 'admin' ? 7 : ($role === 'student' ? 5 : 6) }}">
+                            <td colspan="{{ $role === 'admin' ? 7 : (in_array($role, ['student', 'staff']) && isset($claimRoute) ? 5 : 6) }}">
                                 <div class="claims-empty">
                                     <i class="fa-solid fa-file-circle-question"></i>
                                     <p>No claims found.</p>

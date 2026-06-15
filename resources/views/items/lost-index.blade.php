@@ -9,9 +9,14 @@
                 <h1>Lost Items</h1>
                 <p>Review lost reports, monitor recovery status, and manage deleted records from one workspace.</p>
             </div>
-            <a href="{{ route('admin.reports') }}" class="btn btn-warning">
-                <i class="fa-solid fa-chart-column me-1"></i>Open Reports
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.lost-items.create') }}" class="btn btn-primary">
+                    <i class="fa-solid fa-plus me-1"></i>Report Lost
+                </a>
+                <a href="{{ route('admin.reports') }}" class="btn btn-warning">
+                    <i class="fa-solid fa-chart-column me-1"></i>Open Reports
+                </a>
+            </div>
         </div>
 
         <div class="lost-stat-grid">
@@ -28,15 +33,13 @@
     @else
         <div class="lost-hero">
             <div>
-                <span class="module-eyebrow">{{ $role === 'student' ? 'Student reports' : 'Staff review' }}</span>
-                <h1>{{ $role === 'student' ? 'My Lost Reports' : 'Lost Reports' }}</h1>
-                <p>{{ $role === 'student' ? 'Track your submitted reports and keep details updated while the item is missing.' : 'Browse student lost reports and help match them with found items.' }}</p>
+                <span class="module-eyebrow">{{ $role === 'student' ? 'Student reports' : 'My reports' }}</span>
+                <h1>My Lost Reports</h1>
+                <p>Track your submitted reports and keep details updated while the item is missing.</p>
             </div>
-            @if($role === 'student')
-                <a href="{{ route('student.lost-items.create') }}" class="btn btn-warning">
-                    <i class="fa-solid fa-plus me-1"></i>Report Lost Item
-                </a>
-            @endif
+            <a href="{{ route($role.'.lost-items.create') }}" class="btn btn-warning">
+                <i class="fa-solid fa-plus me-1"></i>Report Lost Item
+            </a>
         </div>
     @endif
 
@@ -78,7 +81,7 @@
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Item</th>
-                        @if($role !== 'student')<th>Student</th>@endif
+                        @if(!($personalView ?? false) && $role !== 'student')<th>Student</th>@endif
                         <th>Category</th>
                         <th>Date Lost</th>
                         <th>Status</th>
@@ -102,8 +105,8 @@
                                     </div>
                                 </div>
                             </td>
-                            @if($role !== 'student')
-                                <td data-label="Student">{{ $item->user->name ?? auth()->user()->name }}</td>
+                            @if(!($personalView ?? false) && $role !== 'student')
+                                <td data-label="Student">{{ $item->user->name ?? ($item->guest_name ? $item->guest_name.' (Guest)' : 'Unknown') }}</td>
                             @endif
                             <td data-label="Category">
                                 <span class="lost-category">
@@ -117,8 +120,8 @@
                                     <span class="badge bg-dark ms-1">Deleted</span>
                                 @endif
                             </td>
-                            <td data-label="Actions" class="{{ $role === 'student' ? 'student-lost-actions-cell' : '' }}">
-                                @if($role === 'staff')
+                            <td data-label="Actions" class="{{ in_array($role, ['student', 'staff']) && ($personalView ?? false) ? 'student-lost-actions-cell' : '' }}">
+                                @if($role === 'staff' && !($personalView ?? false))
                                     <a class="btn btn-sm btn-outline-primary" href="{{ route('staff.lost-reports.show', $item) }}">
                                         <i class="fa-solid fa-eye me-1"></i>View
                                     </a>
@@ -130,42 +133,42 @@
                                         </button>
                                     </form>
                                 @else
-                                    @if($role === 'student')<div class="student-lost-actions">@endif
-                                    <a class="btn btn-sm btn-outline-primary" href="{{ $role === 'student' ? route('student.lost-items.edit', $item) : route('admin.lost-items.edit', $item) }}">
+                                    @if(in_array($role, ['student', 'staff']))<div class="student-lost-actions">@endif
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ in_array($role, ['student', 'staff']) ? route($role.'.lost-items.edit', $item) : route('admin.lost-items.edit', $item) }}">
                                         <i class="fa-solid fa-pen-to-square me-1"></i>View/Edit
                                     </a>
-                                    @if($role === 'student')
-                                        <form method="POST" action="{{ route('student.lost-items.status', $item) }}" class="d-inline">
+                                    @if(in_array($role, ['student', 'staff']))
+                                        <form method="POST" action="{{ route($role.'.lost-items.status', $item) }}" class="d-inline">
                                             @csrf @method('PUT')
                                             <input type="hidden" name="status" value="{{ $item->status === 'lost' ? 'found' : 'lost' }}">
                                             <button class="btn btn-sm btn-outline-success">
                                                 <i class="fa-solid fa-arrows-rotate me-1"></i>{{ $item->status === 'lost' ? 'Mark Found' : 'Reopen' }}
                                             </button>
                                         </form>
-                                        <form method="POST" action="{{ route('student.lost-items.status', $item) }}" class="d-inline">
+                                        <form method="POST" action="{{ route($role.'.lost-items.status', $item) }}" class="d-inline">
                                             @csrf @method('PUT')
                                             <input type="hidden" name="status" value="closed">
                                             <button class="btn btn-sm btn-outline-secondary">
                                                 <i class="fa-solid fa-folder-closed me-1"></i>Close
                                             </button>
                                         </form>
-                                        <a class="btn btn-sm btn-outline-warning" href="{{ route('student.matches') }}">
+                                        <a class="btn btn-sm btn-outline-warning" href="{{ route($role.'.matches') }}">
                                             <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Matches
                                         </a>
                                     @endif
-                                    <form method="POST" action="{{ $role === 'student' ? route('student.lost-items.destroy', $item) : route('admin.lost-items.destroy', $item) }}" class="d-inline">
+                                    <form method="POST" action="{{ in_array($role, ['student', 'staff']) ? route($role.'.lost-items.destroy', $item) : route('admin.lost-items.destroy', $item) }}" class="d-inline">
                                         @csrf @method('DELETE')
                                         <button type="button" class="btn btn-sm btn-outline-danger" data-confirm-submit data-confirm-title="Delete lost report" data-confirm-message="Move this lost report to deleted records?" data-confirm-button="Delete">
                                             <i class="fa-solid fa-trash-can me-1"></i>Delete
                                         </button>
                                     </form>
-                                    @if($role === 'student')</div>@endif
+                                    @if(in_array($role, ['student', 'staff']))</div>@endif
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ $role === 'admin' ? 7 : ($role === 'student' ? 5 : 6) }}">
+                            <td colspan="{{ $role === 'admin' ? 7 : (($personalView ?? false) ? 5 : ($role === 'student' ? 5 : 6)) }}">
                                 <div class="lost-empty">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                     <p>No lost reports found.</p>

@@ -4,11 +4,11 @@
 <div class="browse-module">
     <div class="browse-hero">
         <div>
-            <span class="module-eyebrow">Student search</span>
+            <span class="module-eyebrow">{{ ($role ?? 'student') === 'staff' ? 'Staff search' : 'Student search' }}</span>
             <h1>Browse Found Items</h1>
             <p>Search verified found items posted by staff and file a claim when you recognize your belongings.</p>
         </div>
-        <a href="{{ route('student.claims.index') }}" class="btn btn-light">
+        <a href="{{ route(($claimRoute ?? 'student.claims').'.index') }}" class="btn btn-light">
             <i class="fa-solid fa-file-signature me-1"></i>My Claims
         </a>
     </div>
@@ -86,15 +86,15 @@
                             data-student-preview-location="{{ $item->location_found }}"
                             data-student-preview-description="{{ $item->description }}"
                             data-student-preview-image="{{ $item->image ? asset('storage/'.$item->image) : '' }}"
-                            data-student-preview-claim="{{ route('student.claims.create', ['found_item_id' => $item->id]) }}">
+                            data-student-preview-claim="{{ route(($claimRoute ?? 'student.claims').'.create', ['found_item_id' => $item->id]) }}">
                             <i class="fa-solid fa-eye me-1"></i>Preview
                         </button>
                         @if(in_array($item->id, $existingClaimFoundIds ?? []))
-                            <a href="{{ route('student.claims.index', ['q' => $item->title]) }}" class="btn btn-light">
+                            <a href="{{ route(($claimRoute ?? 'student.claims').'.index', ['q' => $item->title]) }}" class="btn btn-light">
                                 <i class="fa-solid fa-clock me-1"></i>Pending Claim
                             </a>
                         @elseif($item->status === 'unclaimed')
-                            <a href="{{ route('student.claims.create', ['found_item_id' => $item->id]) }}" class="btn btn-primary">
+                            <a href="{{ route(($claimRoute ?? 'student.claims').'.create', ['found_item_id' => $item->id]) }}" class="btn btn-primary">
                                 <i class="fa-solid fa-file-signature me-1"></i>File Claim
                             </a>
                         @else
@@ -103,12 +103,12 @@
                             </span>
                         @endif
                         @if(in_array($item->id, $watchedIds ?? []))
-                            <form method="POST" action="{{ route('student.watchlist.destroy', $item) }}">
+                            <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.destroy', $item) }}">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-outline-secondary"><i class="fa-solid fa-bookmark-slash me-1"></i>Unsave</button>
                             </form>
                         @else
-                            <form method="POST" action="{{ route('student.watchlist.store', $item) }}">
+                            <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.store', $item) }}">
                                 @csrf
                                 <button class="btn btn-outline-secondary"><i class="fa-solid fa-bookmark me-1"></i>Save</button>
                             </form>

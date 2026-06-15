@@ -60,7 +60,7 @@
                 <div><dt>Category</dt><dd>{{ $item->category->name ?? 'General' }}</dd></div>
                 <div><dt>Date Found</dt><dd>{{ optional($item->date_found)->format('M d, Y') ?? 'Date pending' }}</dd></div>
                 <div><dt>Location</dt><dd>{{ $item->location_found }}</dd></div>
-                <div><dt>Posted By</dt><dd>{{ $item->staff->name ?? 'Authorized staff' }}</dd></div>
+                <div><dt>Posted By</dt><dd>{{ $item->staff->name ?? ($item->guest_name ? $item->guest_name.' (Guest)' : 'Authorized staff') }}</dd></div>
             </dl>
 
             <div class="public-detail-actions">
@@ -71,7 +71,7 @@
                 @else
                     <span class="btn btn-light disabled"><i class="fa-solid fa-lock me-1"></i>Claim unavailable</span>
                 @endif
-                <a href="{{ $isStudent ? route('student.lost-items.create') : route('login') }}" class="btn btn-outline-primary">
+                <a href="{{ $isStudent ? route('student.lost-items.create') : route('public.report-lost.create') }}" class="btn btn-outline-primary">
                     <i class="fa-solid fa-plus me-1"></i>Report Lost Item
                 </a>
             </div>

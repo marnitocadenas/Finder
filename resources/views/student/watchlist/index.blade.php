@@ -8,7 +8,7 @@
             <h1>Saved Items</h1>
             <p>Keep track of found items you want to review before filing a claim.</p>
         </div>
-        <a href="{{ route('student.browse') }}" class="btn btn-light">
+        <a href="{{ route(($role ?? 'student').'.browse') }}" class="btn btn-light">
             <i class="fa-solid fa-box-open me-1"></i>Browse Found
         </a>
     </div>
@@ -46,9 +46,9 @@
                     </div>
                     <div class="browse-card-footer student-card-actions">
                         @if($item->status === 'unclaimed')
-                            <a href="{{ route('student.claims.create', ['found_item_id' => $item->id]) }}" class="btn btn-primary"><i class="fa-solid fa-file-signature me-1"></i>File Claim</a>
+                            <a href="{{ route(($claimRoute ?? 'student.claims').'.create', ['found_item_id' => $item->id]) }}" class="btn btn-primary"><i class="fa-solid fa-file-signature me-1"></i>File Claim</a>
                         @endif
-                        <form method="POST" action="{{ route('student.watchlist.destroy', $item) }}">
+                        <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.destroy', $item) }}">
                             @csrf @method('DELETE')
                             <button class="btn btn-outline-secondary"><i class="fa-solid fa-bookmark-slash me-1"></i>Remove</button>
                         </form>
@@ -58,7 +58,7 @@
                 <div class="browse-empty student-empty-action">
                     <i class="fa-solid fa-bookmark"></i>
                     <p>No saved found items yet.</p>
-                    <a href="{{ route('student.browse') }}" class="btn btn-primary">Browse Found Items</a>
+                    <a href="{{ route(($role ?? 'student').'.browse') }}" class="btn btn-primary">Browse Found Items</a>
                 </div>
             @endforelse
         </div>

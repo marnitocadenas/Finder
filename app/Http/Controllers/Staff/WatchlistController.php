@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Student;
+namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Models\FoundItem;
@@ -19,8 +19,8 @@ class WatchlistController extends Controller
             ->paginate(12);
 
         return view('student.watchlist.index', [
-            'role' => 'student',
-            'claimRoute' => 'student.claims',
+            'role' => 'staff',
+            'claimRoute' => 'staff.my-claims',
             'watched' => $watched,
         ]);
     }

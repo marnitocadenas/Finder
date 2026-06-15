@@ -1,6 +1,7 @@
 @php
     $isStudent = auth()->check() && auth()->user()->role === 'student';
-    $reportUrl = $isStudent ? route('student.lost-items.create') : route('login');
+    $reportUrl = $isStudent ? route('student.lost-items.create') : route('public.report-lost.create');
+    $reportFoundUrl = $isStudent ? route('staff.found-items.create') : route('public.report-found.create');
     $browseUrl = $isStudent ? route('student.browse') : '#recent-found';
 @endphp
 
@@ -18,8 +19,13 @@
         </a>
         <div class="landing-nav-actions">
             <a href="#recent-found" class="btn btn-outline-light" data-smooth-scroll><i class="fa-solid fa-magnifying-glass me-2 nav-btn-icon"></i>Browse Found</a>
-            <a href="{{ route('login') }}" class="btn btn-outline-light"><i class="fa-solid fa-right-to-bracket me-2 nav-btn-icon"></i>Login</a>
-            <a href="{{ route('register') }}" class="btn btn-warning"><i class="fa-solid fa-user-plus me-2 nav-btn-icon"></i>Register as Student</a>
+            <a href="{{ route('public.report-found.create') }}" class="btn btn-outline-light"><i class="fa-solid fa-box-open me-2 nav-btn-icon"></i>Report Found</a>
+            @guest
+                <a href="{{ route('login') }}" class="btn btn-outline-light"><i class="fa-solid fa-right-to-bracket me-2 nav-btn-icon"></i>Login</a>
+                <a href="{{ route('register') }}" class="btn btn-warning"><i class="fa-solid fa-user-plus me-2 nav-btn-icon"></i>Register as Student</a>
+            @else
+                <a href="{{ route($isStudent ? 'student.dashboard' : 'staff.dashboard') }}" class="btn btn-warning"><i class="fa-solid fa-gauge-high me-2 nav-btn-icon"></i>Dashboard</a>
+            @endguest
         </div>
     </nav>
 
@@ -31,6 +37,9 @@
             <div class="landing-hero-actions">
                 <a href="{{ $reportUrl }}" class="btn btn-warning btn-lg">
                     <i class="fa-solid fa-plus me-2"></i>Report Lost Item
+                </a>
+                <a href="{{ $reportFoundUrl }}" class="btn btn-outline-light btn-lg">
+                    <i class="fa-solid fa-box-open me-2"></i>Report Found Item
                 </a>
                 <a href="{{ $browseUrl }}" class="btn btn-outline-light btn-lg" @unless($isStudent) data-smooth-scroll @endunless>
                     <i class="fa-solid fa-magnifying-glass me-2"></i>Browse Found
@@ -135,6 +144,11 @@
             <a href="{{ $isStudent ? route('student.browse') : route('login') }}" class="btn btn-outline-primary">
                 <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>{{ $isStudent ? 'Open Student Browse' : 'Login to Claim' }}
             </a>
+            @guest
+                <a href="{{ route('public.report-found.create') }}" class="btn btn-warning">
+                    <i class="fa-solid fa-box-open me-2"></i>Report Found Item
+                </a>
+            @endguest
         </div>
 
         <div class="row g-3">
@@ -221,6 +235,9 @@
         <div class="landing-final-actions">
             <a href="{{ $reportUrl }}" class="btn btn-warning btn-lg">
                 <i class="fa-solid fa-plus me-1"></i>Report Lost Item
+            </a>
+            <a href="{{ $reportFoundUrl }}" class="btn btn-outline-light btn-lg">
+                <i class="fa-solid fa-box-open me-1"></i>Report Found Item
             </a>
             <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg">
                 <i class="fa-solid fa-user-plus me-1"></i>Register as Student

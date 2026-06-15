@@ -40,6 +40,7 @@ class ClaimController extends BaseClaimController
     public function update(Request $request, Claim $claim): RedirectResponse
     {
         abort_if($claim->foundItem?->staff_id !== $request->user()->id, 403);
+        abort_if($claim->student_id === $request->user()->id, 403, 'You cannot review your own claims.');
 
         return parent::update($request, $claim);
     }
@@ -47,6 +48,7 @@ class ClaimController extends BaseClaimController
     public function release(Request $request, Claim $claim): RedirectResponse
     {
         abort_if($claim->foundItem?->staff_id !== $request->user()->id, 403);
+        abort_if($claim->student_id === $request->user()->id, 403, 'You cannot review your own claims.');
 
         return parent::release($request, $claim);
     }
@@ -61,6 +63,7 @@ class ClaimController extends BaseClaimController
     public function requestInfo(Request $request, Claim $claim): RedirectResponse
     {
         abort_if($claim->foundItem?->staff_id !== $request->user()->id, 403);
+        abort_if($claim->student_id === $request->user()->id, 403, 'You cannot review your own claims.');
 
         $data = $request->validate(['message' => 'required|string|max:1000']);
 

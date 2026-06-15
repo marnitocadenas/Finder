@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Student;
+namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -26,8 +26,8 @@ class BrowseController extends Controller
             ->when($request->sort === 'oldest', fn($q) => $q->oldest(), fn($q) => $q->latest());
 
         return view('student.browse.index', [
-            'role' => 'student',
-            'claimRoute' => 'student.claims',
+            'role' => 'staff',
+            'claimRoute' => 'staff.my-claims',
             'items' => $query->paginate(12)->withQueryString(),
             'categories' => Category::orderBy('name')->get(),
             'browseStats' => $browseStats,

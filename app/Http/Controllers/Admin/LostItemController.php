@@ -6,6 +6,7 @@ use App\Http\Controllers\Concerns\LogsActivity;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\LostItem;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -34,6 +35,45 @@ class LostItemController extends Controller
             'categories' => Category::orderBy('name')->get(),
             'lostStats' => $lostStats,
         ]);
+    }
+
+    public function create(): View
+    {
+        return view('items.lost-form', [
+            'item' => new LostItem(),
+            'categories' => Category::orderBy('name')->get(),
+            'students' => User::where('role', 'student')->orderBy('name')->get(),
+            'action' => route('admin.lost-items.store'),
+            'method' => 'POST',
+            'role' => 'admin',
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:150',
+            'category_id' => 'required|exists:categories,id',
+            'description' => 'required|string|max:1000',
+            'date_lost' => 'required|date|before_or_equal:today',
+            'location_lost' => 'required|string|max:255',
+            'status' => ['required', Rule::in(['lost', 'found', 'closed'])],
+            'user_id' => 'nullable|exists:users,id',
+            'guest_name' => 'nullable|string|max:255',
+            'guest_contact' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('lost-items', 'public');
+        } else {
+            unset($data['image']);
+        }
+
+        $lostItem = LostItem::create($data);
+        $this->logAction($request, 'Created lost item '.$lostItem->title, $lostItem);
+
+        return redirect()->route('admin.lost-items.index')->with('success', 'Lost report created.');
     }
 
     public function show(LostItem $lostItem): View
