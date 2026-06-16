@@ -1335,6 +1335,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .landing-brand strong{font-size:1.1rem}
     .landing-brand small{font-size:.78rem}
     .landing-nav-actions,.landing-hero-actions{display:grid;width:100%}
+    .landing-nav-actions{grid-template-columns:repeat(2,1fr)}
     .landing-nav-actions .btn,.landing-hero-actions .btn{width:100%;min-width:0}
     .landing-hero-inner{padding-top:1.25rem;padding-bottom:3rem}
     .landing-hero-board{padding:.85rem}
@@ -2255,27 +2256,40 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     text-align: left !important;
 }
 
-/* Fix: display landing navigation actions in a single horizontal row on mobile screens */
+/* Fix: display landing navigation actions in a 2x2 grid on mobile screens */
 @media (max-width: 575px) {
     .landing-nav-actions {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        justify-content: center !important;
-        align-items: center !important;
-        gap: 0.35rem !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.4rem !important;
         width: 100% !important;
-        flex: 1 1 100% !important;
     }
     .landing-nav-actions .btn {
-        width: 0 !important;
+        width: 100% !important;
         min-width: 0 !important;
-        flex: 1 1 0% !important;
         white-space: nowrap !important;
-        font-size: 0.72rem !important;
-        padding: 0.35rem 0.5rem !important;
-        height: 32px !important;
-        min-height: 32px !important;
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.5rem !important;
+        height: 36px !important;
+        min-height: 36px !important;
+        gap: 0.2rem !important;
+        justify-content: center !important;
+        display: inline-flex !important;
+        align-items: center !important;
+    }
+    .landing-nav-actions .btn .me-2,
+    .landing-nav-actions .btn .nav-btn-icon {
+        margin-right: 0.15rem !important;
+    }
+    .landing-hero-actions .btn,
+    .landing-final-actions .btn {
+        gap: 0.25rem !important;
+    }
+    .landing-hero-actions .btn .me-2,
+    .landing-final-actions .btn .me-2,
+    .landing-hero-actions .btn .me-1,
+    .landing-final-actions .btn .me-1 {
+        margin-right: 0.2rem !important;
     }
 }
 
