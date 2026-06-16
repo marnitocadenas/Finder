@@ -86,6 +86,7 @@
                             data-student-preview-location="{{ $item->location_found }}"
                             data-student-preview-description="{{ $item->description }}"
                             data-student-preview-image="{{ $item->image ? asset('storage/'.$item->image) : '' }}"
+                            data-student-preview-status="{{ $item->status }}"
                             data-student-preview-claim="{{ route(($claimRoute ?? 'student.claims').'.create', ['found_item_id' => $item->id]) }}">
                             <i class="fa-solid fa-eye me-1"></i>Preview
                         </button>
@@ -103,12 +104,12 @@
                             </span>
                         @endif
                         @if(in_array($item->id, $watchedIds ?? []))
-                            <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.destroy', $item) }}">
+                            <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.destroy', $item) }}" data-watchlist-toggle data-ajax>
                                 @csrf @method('DELETE')
                                 <button class="btn btn-outline-secondary"><i class="fa-solid fa-bookmark-slash me-1"></i>Unsave</button>
                             </form>
                         @else
-                            <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.store', $item) }}">
+                            <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.store', $item) }}" data-watchlist-toggle data-ajax>
                                 @csrf
                                 <button class="btn btn-outline-secondary"><i class="fa-solid fa-bookmark me-1"></i>Save</button>
                             </form>
@@ -145,7 +146,9 @@
                             <div><dt>Location</dt><dd data-student-preview-modal-location></dd></div>
                             <div><dt>Description</dt><dd data-student-preview-modal-description></dd></div>
                         </dl>
-                        <a data-student-preview-modal-claim class="btn btn-primary" href="#"><i class="fa-solid fa-file-signature me-1"></i>File Claim</a>
+                        <div data-student-preview-modal-claim-wrap>
+                            <a data-student-preview-modal-claim class="btn btn-primary" href="#"><i class="fa-solid fa-file-signature me-1"></i>File Claim</a>
+                        </div>
                     </div>
                 </div>
             </div>

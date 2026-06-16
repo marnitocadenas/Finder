@@ -303,6 +303,10 @@ document.addEventListener('click',(event)=>{
     modalEl.querySelector('[data-student-preview-modal-location]').textContent=trigger.dataset.studentPreviewLocation||'-';
     modalEl.querySelector('[data-student-preview-modal-description]').textContent=trigger.dataset.studentPreviewDescription||'-';
     modalEl.querySelector('[data-student-preview-modal-claim]').href=trigger.dataset.studentPreviewClaim||'#';
+    const claimWrap=modalEl.querySelector('[data-student-preview-modal-claim-wrap]');
+    if(claimWrap){
+        claimWrap.style.display=(trigger.dataset.studentPreviewStatus==='unclaimed')?'':'none';
+    }
     if(image&&imageWrap){
         image.src=trigger.dataset.studentPreviewImage||'';
         imageWrap.classList.toggle('is-empty',!trigger.dataset.studentPreviewImage);
@@ -320,10 +324,63 @@ document.addEventListener('submit',(event)=>{
     }
 });
 
-// Mobile-only: keep fixed topbar offset in sync with its real height
+// Watchlist toggle (Save/Unsave) via AJAX – no page reload
+document.addEventListener('submit',(event)=>{
+    const form=event.target;
+    if(!form.hasAttribute('data-watchlist-toggle'))return;
+    event.preventDefault();
+    const btn=form.querySelector('button');
+    if(!btn||btn.disabled)return;
+    btn.disabled=true;
+    const csrf=document.querySelector('meta[name="csrf-token"]').content;
+    fetch(form.action,{
+        method:'POST',
+        headers:{'X-CSRF-TOKEN':csrf,'X-Requested-With':'XMLHttpRequest','Accept':'application/json'},
+        body:new FormData(form)
+    }).then(r=>r.json()).then(data=>{
+        if(!data.success){btn.disabled=false;return;}
+        if(data.action==='saved'){
+            form.method='POST';
+            const m=form.querySelector('input[name="_method"]');if(m)m.remove();
+            btn.innerHTML='<i class="fa-solid fa-bookmark-slash me-1"></i>Unsave';
+        }else{
+            const card=form.closest('.browse-card');
+            if(card){
+                card.remove();
+                const counter=document.querySelector('.browse-result-count');
+                if(counter){
+                    const n=parseInt(counter.textContent)||0;
+                    counter.textContent=Math.max(0,n-1)+' results';
+                }
+                if(!document.querySelector('.browse-card')){
+                    document.querySelector('.browse-grid').innerHTML='<div class="browse-empty"><i class="fa-solid fa-bookmark"></i><p>No saved found items yet.</p></div>';
+                }
+                return;
+            }
+            form.method='POST';
+            let m=form.querySelector('input[name="_method"]');
+            if(!m){m=document.createElement('input');m.type='hidden';m.name='_method';form.appendChild(m);}
+            m.value='POST';
+            btn.innerHTML='<i class="fa-solid fa-bookmark me-1"></i>Save';
+        }
+        btn.disabled=false;
+        showToast(data.action==='saved'?'Saved to watchlist.':'Removed from watchlist.');
+    }).catch(()=>{btn.disabled=false;});
+});
+function showToast(msg){
+    let c=document.getElementById('ajax-toast-container');
+    if(!c){c=document.createElement('div');c.id='ajax-toast-container';c.className='position-fixed top-0 end-0 p-3';c.style.zIndex='1080';document.body.appendChild(c);}
+    const t=document.createElement('div');
+    t.className='alert alert-success soft-card auto-dismiss mb-2';
+    t.innerHTML='<i class="fa-solid fa-circle-info me-2"></i>'+msg;
+    c.appendChild(t);
+    setTimeout(()=>t.remove(),4000);
+}
+
+// Mobile + Tablet: keep fixed topbar offset in sync with its real height
 (function(){
     function syncTopbarHeight(){
-        if(window.innerWidth>767){
+        if(window.innerWidth>991){
             document.documentElement.style.removeProperty('--mobile-topbar-h');
             return;
         }

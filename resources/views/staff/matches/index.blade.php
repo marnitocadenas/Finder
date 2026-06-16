@@ -40,6 +40,12 @@
                                 </div>
                             </div>
                             <a href="{{ route('staff.lost-reports.show', $candidate['lost']) }}" class="btn btn-sm btn-outline-primary">Inspect</a>
+                            <form method="POST" action="{{ route('dismiss.match') }}" class="d-inline">
+                                @csrf
+                                <input type="hidden" name="found_item_id" value="{{ $group['found']->id }}">
+                                <input type="hidden" name="lost_item_id" value="{{ $candidate['lost']->id }}">
+                                <button class="btn btn-sm btn-outline-secondary" title="Dismiss this match"><i class="fa-solid fa-xmark"></i></button>
+                            </form>
                         </div>
                     @endforeach
                 </div>

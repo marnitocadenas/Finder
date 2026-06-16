@@ -81,6 +81,8 @@ class ClaimController extends Controller
             'lost_item_id' => 'nullable|exists:lost_items,id',
             'claim_description' => 'required|string|min:30|max:1000',
             'proof_image' => $proofRule . '|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'found_item_id.exists' => 'This item is no longer available for claiming. It may have already been claimed or turned over.',
         ]);
 
         $duplicate = Claim::where('student_id', $request->user()->id)

@@ -48,7 +48,7 @@
                         @if($item->status === 'unclaimed')
                             <a href="{{ route(($claimRoute ?? 'student.claims').'.create', ['found_item_id' => $item->id]) }}" class="btn btn-primary"><i class="fa-solid fa-file-signature me-1"></i>File Claim</a>
                         @endif
-                        <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.destroy', $item) }}">
+                        <form method="POST" action="{{ route(($role ?? 'student').'.watchlist.destroy', $item) }}" data-watchlist-toggle data-ajax>
                             @csrf @method('DELETE')
                             <button class="btn btn-outline-secondary"><i class="fa-solid fa-bookmark-slash me-1"></i>Remove</button>
                         </form>

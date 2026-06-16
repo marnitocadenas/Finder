@@ -279,19 +279,24 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .app-shell,.main-pane{height:auto;min-height:100dvh;overflow:visible}
     .content-wrap{overflow:visible}
     .topbar{
-        position:sticky!important;
+        position:fixed!important;
         top:0;
-        z-index:60!important;
+        left:0;
+        right:0;
+        z-index:1040!important;
         background:#fff;
         border-bottom:1px solid var(--border);
-        box-shadow:0 10px 20px rgba(26,60,110,.10);
+        box-shadow:0 2px 12px rgba(26,60,110,.12);
+    }
+    .main-pane{
+        padding-top:var(--mobile-topbar-h,60px);
     }
     .topbar .dropdown-menu{position:absolute}
     .sidebar{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:.35rem;align-items:start;height:auto;max-height:none;padding:.85rem}
     .sidebar{overflow:visible;overscroll-behavior:auto;scrollbar-gutter:auto}
     .sidebar>.d-flex{grid-column:1/-1;margin-bottom:.5rem!important}
     .sidebar a{margin:0;padding:.65rem .75rem}
-    .topbar{position:sticky!important;top:0;z-index:60!important;align-items:center!important;gap:.75rem;flex-wrap:nowrap!important;padding:.8rem 1rem}
+    .topbar{position:fixed!important;top:0;left:0;right:0;z-index:1040!important;align-items:center!important;gap:.75rem;flex-wrap:nowrap!important;padding:.8rem 1rem}
     .topbar-start{flex:1 1 auto;min-width:0}
     .topbar-title{display:none}
     .topbar-actions{flex:0 0 auto;width:auto;justify-content:flex-end;gap:.75rem!important;flex-wrap:nowrap}
@@ -1424,21 +1429,6 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .topbar-profile-name{display:none}
     .student-mobile-menu .dropdown-menu{min-width:min(88vw,280px)}
     .browse-card-media img{height:150px}
-}
-
-/* Mobile-only: fix topbar to viewport so it never scrolls away */
-@media(max-width:767px){
-    .topbar{
-        position:fixed!important;
-        top:0;
-        left:0;
-        right:0;
-        z-index:1040!important;
-        box-shadow:0 2px 12px rgba(26,60,110,.12);
-    }
-    .main-pane{
-        padding-top:var(--mobile-topbar-h,60px);
-    }
 }
 
 /* Keep Browse Found cards stable even with very large images. */

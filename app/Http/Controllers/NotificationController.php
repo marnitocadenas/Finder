@@ -87,4 +87,20 @@ class NotificationController extends Controller
 
         return back()->with('success', count($ids).' notification(s) deleted.');
     }
+
+    public function dismissMatch(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'lost_item_id'  => 'nullable|exists:lost_items,id',
+            'found_item_id' => 'nullable|exists:found_items,id',
+        ]);
+
+        \App\Models\DismissedMatch::firstOrCreate([
+            'user_id'       => $request->user()->id,
+            'lost_item_id'  => $data['lost_item_id'] ?? null,
+            'found_item_id' => $data['found_item_id'] ?? null,
+        ]);
+
+        return back()->with('success', 'Match dismissed.');
+    }
 }

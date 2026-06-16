@@ -45,6 +45,12 @@
                                     @csrf
                                     <button class="btn btn-sm btn-outline-secondary" title="Save item"><i class="fa-solid fa-bookmark"></i></button>
                                 </form>
+                                <form method="POST" action="{{ route('dismiss.match') }}" class="d-inline">
+                                    @csrf
+                                    <input type="hidden" name="lost_item_id" value="{{ $group['lost']->id }}">
+                                    <input type="hidden" name="found_item_id" value="{{ $candidate['found']->id }}">
+                                    <button class="btn btn-sm btn-outline-secondary" title="Dismiss this match"><i class="fa-solid fa-xmark"></i></button>
+                                </form>
                             </div>
                         </div>
                     @endforeach
