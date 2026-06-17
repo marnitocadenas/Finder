@@ -113,7 +113,7 @@
                                 </div>
                             </td>
                             @if(!($personalView ?? false))
-                            <td data-label="Reported By">{{ $item->staff->name ?? ($item->guest_name ? $item->guest_name.' (Guest)' : auth()->user()->name) }}</td>
+                            <td data-label="Reported By">{{ $item->staff->name ?? auth()->user()->name }}</td>
                             @endif
                             <td data-label="Category">
                                 <span class="found-category">

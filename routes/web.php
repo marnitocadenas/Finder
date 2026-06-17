@@ -36,10 +36,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/found-items/{foundItem}', [PublicController::class, 'foundItem'])->name('public.found-items.show');
-Route::get('/report-lost', [PublicController::class, 'reportLostForm'])->name('public.report-lost.create');
-Route::post('/report-lost', [PublicController::class, 'reportLost'])->name('public.report-lost.store');
-Route::get('/report-found', [PublicController::class, 'reportFoundForm'])->name('public.report-found.create');
-Route::post('/report-found', [PublicController::class, 'reportFound'])->name('public.report-found.store');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);

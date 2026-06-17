@@ -59,8 +59,6 @@ class LostItemController extends Controller
             'location_lost' => 'required|string|max:255',
             'status' => ['required', Rule::in(['lost', 'found', 'closed'])],
             'user_id' => 'nullable|exists:users,id',
-            'guest_name' => 'nullable|string|max:255',
-            'guest_contact' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 

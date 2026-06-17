@@ -23,25 +23,17 @@
         <div class="found-form-section">
             <div>
                 <h2>Reported By</h2>
-                <p>Assign this found item to a staff account, or record it as a guest/walk-in report.</p>
+                <p>Assign this found item to a staff account.</p>
             </div>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label" for="staff_id">Staff (optional)</label>
+                    <label class="form-label" for="staff_id">Staff</label>
                     <select id="staff_id" class="form-select" name="staff_id">
-                        <option value="">-- No staff (guest report) --</option>
+                        <option value="">-- No staff assigned --</option>
                         @foreach($staffUsers ?? [] as $staff)
                             <option value="{{ $staff->id }}" @selected(old('staff_id', $item->staff_id)==$staff->id)>{{ $staff->name }} ({{ $staff->email }})</option>
                         @endforeach
                     </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="guest_name">Guest Name</label>
-                    <input id="guest_name" class="form-control" name="guest_name" value="{{ old('guest_name', $item->guest_name) }}" placeholder="Name if not a registered staff">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="guest_contact">Guest Contact</label>
-                    <input id="guest_contact" class="form-control" name="guest_contact" value="{{ old('guest_contact', $item->guest_contact) }}" placeholder="Email or phone number">
                 </div>
             </div>
         </div>

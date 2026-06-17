@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class LostItem extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['user_id','guest_name','guest_contact','title','description','category_id','date_lost','location_lost','image','status'];
+    protected $fillable = ['user_id','title','description','category_id','date_lost','location_lost','image','status'];
     protected $casts = ['date_lost'=>'date'];
     public function user(): BelongsTo { return $this->belongsTo(User::class); }
     public function category(): BelongsTo { return $this->belongsTo(Category::class); }

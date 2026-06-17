@@ -66,8 +66,6 @@ class FoundItemController extends Controller
             'location_found' => 'required|string|max:255',
             'status' => ['required', Rule::in(['unclaimed', 'claimed', 'turned_over'])],
             'staff_id' => 'nullable|exists:users,id',
-            'guest_name' => 'nullable|string|max:255',
-            'guest_contact' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 

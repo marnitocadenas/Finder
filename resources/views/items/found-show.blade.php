@@ -24,8 +24,7 @@
             </div>
             <p class="found-description">{{ $item->description }}</p>
             <dl class="found-detail-list">
-                <div><dt>Reporter</dt><dd>{{ $item->staff->name ?? ($item->guest_name ? $item->guest_name.' (Public report)' : 'Unknown') }}</dd></div>
-                @if($item->guest_contact)<div><dt>Contact</dt><dd>{{ $item->guest_contact }}</dd></div>@endif
+                <div><dt>Reporter</dt><dd>{{ $item->staff->name ?? 'Unknown' }}</dd></div>
                 <div><dt>Category</dt><dd>{{ $item->category->name }}</dd></div>
                 <div><dt>Date Found</dt><dd>{{ optional($item->date_found)->format('M d, Y') }}</dd></div>
                 <div><dt>Location</dt><dd>{{ $item->location_found }}</dd></div>

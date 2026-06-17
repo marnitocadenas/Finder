@@ -106,7 +106,7 @@
                                 </div>
                             </td>
                             @if(!($personalView ?? false) && $role !== 'student')
-                                <td data-label="Student">{{ $item->user->name ?? ($item->guest_name ? $item->guest_name.' (Guest)' : 'Unknown') }}</td>
+                                <td data-label="Student">{{ $item->user->name ?? 'Unknown' }}</td>
                             @endif
                             <td data-label="Category">
                                 <span class="lost-category">

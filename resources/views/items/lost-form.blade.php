@@ -23,25 +23,17 @@
         <div class="lost-form-section">
             <div>
                 <h2>Reported By</h2>
-                <p>Assign this report to a student account, or record it as a guest/walk-in report.</p>
+                <p>Assign this report to a student account.</p>
             </div>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label" for="user_id">Student (optional)</label>
+                    <label class="form-label" for="user_id">Student</label>
                     <select id="user_id" class="form-select" name="user_id">
-                        <option value="">-- No student (guest report) --</option>
+                        <option value="">-- No student assigned --</option>
                         @foreach($students ?? [] as $student)
                             <option value="{{ $student->id }}" @selected(old('user_id', $item->user_id)==$student->id)>{{ $student->name }} ({{ $student->email }})</option>
                         @endforeach
                     </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="guest_name">Guest Name</label>
-                    <input id="guest_name" class="form-control" name="guest_name" value="{{ old('guest_name', $item->guest_name) }}" placeholder="Name if not a registered student">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="guest_contact">Guest Contact</label>
-                    <input id="guest_contact" class="form-control" name="guest_contact" value="{{ old('guest_contact', $item->guest_contact) }}" placeholder="Email or phone number">
                 </div>
             </div>
         </div>
