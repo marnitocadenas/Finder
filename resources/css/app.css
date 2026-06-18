@@ -1227,11 +1227,13 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     align-items:center;
     text-align:center;
 }
+.staff-claims-table tbody td:nth-child(3),
 .staff-claims-table tbody td:nth-child(4),
 .staff-claims-table tbody td:nth-child(5),
 .staff-claims-table tbody td:nth-child(6){
     text-align:center!important;
 }
+.staff-claims-table tbody td:nth-child(3) .badge,
 .staff-claims-table tbody td:nth-child(4) .badge{
     margin-inline:auto;
 }
