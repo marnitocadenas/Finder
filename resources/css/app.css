@@ -307,8 +307,9 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .landing-nav-actions .btn{flex:0 0 auto;width:auto;white-space:nowrap;font-size:.82rem;padding:.32rem .55rem;min-height:30px}
     .landing-hero-actions .btn,.landing-final-actions .btn{flex:1 1 160px}
     .landing-browse-btn{flex:0 0 auto}
-    .landing-search{gap:.7rem}
-    .landing-search .btn,.landing-search a.btn{width:100%}
+    .landing-search{gap:.7rem;grid-template-columns:repeat(2,1fr)}
+    .landing-search > div{grid-column:1 / -1}
+    .landing-search .btn,.landing-search a.btn{width:100%;justify-content:center}
     .hero{background-size:cover}
     .student-preview-grid{grid-template-columns:1fr!important}
     .match-actions{display:grid}
@@ -362,6 +363,14 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     }
 }
 @media(max-width:767px){
+    /* Landing hero buttons: equal-width 2-column row on mobile */
+    .landing-hero-actions{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+    }
+    .landing-hero-actions .btn{
+        justify-content:center;
+    }
     /* All student panel hero sections: grid layout for centered buttons */
     .student-hero,
     .browse-hero,
@@ -1435,6 +1444,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .landing-brand small{font-size:.78rem}
     .landing-nav-actions,.landing-hero-actions{display:grid;width:100%}
     .landing-nav-actions{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
+    .landing-hero-actions{grid-template-columns:repeat(2,1fr)}
     .landing-nav-actions .btn,.landing-hero-actions .btn{width:100%;min-width:0}
     .landing-hero-inner{padding-top:1.25rem;padding-bottom:3rem}
     .landing-hero-board{padding:.85rem}
@@ -2389,13 +2399,13 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     }
     .landing-hero-actions .btn,
     .landing-final-actions .btn {
-        gap: 0.25rem !important;
+        gap: 0.1rem !important;
     }
     .landing-hero-actions .btn .me-2,
     .landing-final-actions .btn .me-2,
     .landing-hero-actions .btn .me-1,
     .landing-final-actions .btn .me-1 {
-        margin-right: 0.2rem !important;
+        margin-right: 0 !important;
     }
 }
 
