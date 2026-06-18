@@ -119,6 +119,8 @@ class ForgotPasswordController extends Controller
         ])->save();
 
         DB::table('password_reset_otps')->where('email', $email)->delete();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         $request->session()->forget(['password_reset_email', 'password_reset_verified']);
         event(new PasswordReset($user));
         ActivityLog::create(['user_id' => $user->id, 'action' => 'Reset password', 'target_type' => 'Authentication', 'target_id' => $user->id, 'ip_address' => $request->ip()]);

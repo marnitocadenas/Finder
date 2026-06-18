@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title','Staff Smart Matches')
 @section('content')
-<div class="matches-module">
+<div class="matches-module student-match-module">
     <div class="matches-hero">
         <div>
             <span class="module-eyebrow">Staff assistant</span>
@@ -15,7 +15,7 @@
 
     <div class="matches-list">
         @forelse($matches as $group)
-            <section class="match-card">
+            <section class="match-card match-card-student">
                 <div class="match-lost">
                     <span><i class="fa-solid {{ $group['found']->category->icon ?? 'fa-box-open' }}"></i></span>
                     <div>
@@ -39,21 +39,24 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <a href="{{ route('staff.lost-reports.show', $candidate['lost']) }}" class="btn btn-sm btn-outline-primary">Inspect</a>
-                            <form method="POST" action="{{ route('dismiss.match') }}" class="d-inline">
-                                @csrf
-                                <input type="hidden" name="found_item_id" value="{{ $group['found']->id }}">
-                                <input type="hidden" name="lost_item_id" value="{{ $candidate['lost']->id }}">
-                                <button class="btn btn-sm btn-outline-secondary" title="Dismiss this match"><i class="fa-solid fa-xmark"></i></button>
-                            </form>
+                            <div class="match-actions">
+                                <a href="{{ route('staff.lost-reports.show', $candidate['lost']) }}" class="btn btn-sm btn-outline-primary">Inspect</a>
+                                <form method="POST" action="{{ route('dismiss.match') }}">
+                                    @csrf
+                                    <input type="hidden" name="found_item_id" value="{{ $group['found']->id }}">
+                                    <input type="hidden" name="lost_item_id" value="{{ $candidate['lost']->id }}">
+                                    <button class="btn btn-sm btn-outline-secondary" title="Dismiss this match"><i class="fa-solid fa-xmark"></i></button>
+                                </form>
+                            </div>
                         </div>
                     @endforeach
                 </div>
             </section>
         @empty
-            <div class="empty-state">
+            <div class="empty-state student-empty-action">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
                 <p>No matches for your found items yet.</p>
+                <a href="{{ route('staff.found-items.create') }}" class="btn btn-primary">Post Found Item</a>
             </div>
         @endforelse
     </div>

@@ -229,9 +229,11 @@
             <a href="{{ $reportFoundUrl }}" class="btn btn-outline-light btn-lg">
                 <i class="fa-solid fa-box-open me-1"></i>Report Found Item
             </a>
-            <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg">
-                <i class="fa-solid fa-user-plus me-1"></i>Register as Student
-            </a>
+            @guest
+                <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg">
+                    <i class="fa-solid fa-user-plus me-1"></i>Register as Student
+                </a>
+            @endguest
         </div>
     </div>
 </section>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title','Smart Matches')
 @section('content')
-<div class="matches-module">
+<div class="matches-module student-match-module">
     <div class="matches-hero">
         <div>
             <span class="module-eyebrow">Smart matching</span>
@@ -15,7 +15,7 @@
 
     <div class="matches-list">
         @forelse($matches as $group)
-            <section class="match-card">
+            <section class="match-card match-card-student">
                 <div class="match-lost">
                     <span><i class="fa-solid {{ $group['lost']->category->icon ?? 'fa-magnifying-glass' }}"></i></span>
                     <div>
@@ -32,28 +32,31 @@
                             <div class="match-score">{{ $candidate['score'] }}%</div>
                             <div>
                                 <strong>{{ $candidate['found']->title }}</strong>
-                                <small>{{ $candidate['found']->location_found }} &bull; {{ optional($candidate['found']->date_found)->format('M d, Y') }}</small>
+                                <small>{{ $candidate['found']->staff->name ?? 'Staff' }} &bull; {{ $candidate['found']->location_found }} &bull; {{ optional($candidate['found']->date_found)->format('M d, Y') }}</small>
                                 <div class="match-reasons">
                                     @foreach($candidate['reasons'] as $reason)
                                         <span>{{ $reason }}</span>
                                     @endforeach
                                 </div>
                             </div>
-                            <a href="{{ route('admin.found-items.edit', $candidate['found']) }}" class="btn btn-sm btn-outline-primary">Inspect</a>
-                            <form method="POST" action="{{ route('dismiss.match') }}" class="d-inline">
-                                @csrf
-                                <input type="hidden" name="lost_item_id" value="{{ $group['lost']->id }}">
-                                <input type="hidden" name="found_item_id" value="{{ $candidate['found']->id }}">
-                                <button class="btn btn-sm btn-outline-secondary" title="Dismiss this match"><i class="fa-solid fa-xmark"></i></button>
-                            </form>
+                            <div class="match-actions">
+                                <a href="{{ route('admin.found-items.edit', $candidate['found']) }}" class="btn btn-sm btn-outline-primary">Inspect</a>
+                                <form method="POST" action="{{ route('dismiss.match') }}">
+                                    @csrf
+                                    <input type="hidden" name="lost_item_id" value="{{ $group['lost']->id }}">
+                                    <input type="hidden" name="found_item_id" value="{{ $candidate['found']->id }}">
+                                    <button class="btn btn-sm btn-outline-secondary" title="Dismiss this match"><i class="fa-solid fa-xmark"></i></button>
+                                </form>
+                            </div>
                         </div>
                     @endforeach
                 </div>
             </section>
         @empty
-            <div class="empty-state">
+            <div class="empty-state student-empty-action">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
                 <p>No possible matches yet.</p>
+                <a href="{{ route('admin.claims.index', ['status' => 'pending']) }}" class="btn btn-primary">Review Claims</a>
             </div>
         @endforelse
     </div>

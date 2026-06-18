@@ -71,22 +71,9 @@ document.addEventListener('click',(event)=>{
         }).catch(()=>{});
     }
 
-    // Load the target page and replace the current history entry (notifications page)
-    // so that the browser back button skips the inbox and returns to the previous module
-    fetch(href,{credentials:'same-origin'}).then(r=>{
-        if(!r.ok)throw new Error('Navigation failed');
-        return r.text();
-    }).then(html=>{
-        // Replace current history entry instead of pushing a new one
-        window.history.replaceState(null,'',href);
-        // Render the fetched page
-        document.open();
-        document.write(html);
-        document.close();
-    }).catch(()=>{
-        // Fallback: normal navigation if fetch fails
-        window.location.href=href;
-    });
+    // Navigate to the target page, replacing the current history entry
+    // so that the browser back button skips the notifications inbox
+    window.location.replace(href);
 });
 setInterval(refreshNotificationCount,30000);
 refreshNotificationCount();

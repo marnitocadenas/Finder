@@ -196,6 +196,7 @@
                             @else
                                 <i class="fa-solid {{ $item->category->icon ?? 'fa-box-open' }}"></i>
                             @endif
+                            <span class="staff-card-status-badge"><x-status :status="$item->status" /></span>
                         </button>
                         <div class="staff-item-card-body">
                             <div class="staff-card-meta">
@@ -210,7 +211,6 @@
                                 <small>Location</small>
                                 <span><i class="fa-solid fa-location-dot"></i>{{ $item->location_found }}</span>
                             </div>
-                            <div class="staff-card-status"><x-status :status="$item->status" /></div>
                             <div class="staff-card-actions">
                                 <a class="btn btn-sm btn-outline-primary" href="{{ route('staff.found-items.edit', $item) }}"><i class="fa-solid fa-pen-to-square me-1"></i>Open</a>
                                 <a class="btn btn-sm btn-outline-secondary" href="{{ route('staff.matches') }}"><i class="fa-solid fa-wand-magic-sparkles me-1"></i>Matches</a>

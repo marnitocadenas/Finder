@@ -113,6 +113,8 @@ class FoundItemController extends Controller
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('found-items', 'public');
+        } else {
+            unset($data['image']);
         }
 
         $foundItem->update($data);

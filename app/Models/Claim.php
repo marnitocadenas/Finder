@@ -28,9 +28,11 @@ class Claim extends Model
     public function scopeFiltered(Builder $query, array $filters): Builder
     {
         return $query
-            ->when($filters['q'] ?? null, fn($q, $term) => $q->where('claim_description', 'like', "%$term%")
-                ->orWhereHas('foundItem', fn($i) => $i->where('title', 'like', "%$term%"))
-                ->orWhereHas('student', fn($u) => $u->where('name', 'like', "%$term%")))
+            ->when($filters['q'] ?? null, fn($q, $term) => $q->where(function ($sub) use ($term) {
+                $sub->where('claim_description', 'like', "%$term%")
+                    ->orWhereHas('foundItem', fn($i) => $i->where('title', 'like', "%$term%"))
+                    ->orWhereHas('student', fn($u) => $u->where('name', 'like', "%$term%"));
+            }))
             ->when($filters['status'] ?? null, fn($q, $s) => $q->where('status', $s));
     }
 }

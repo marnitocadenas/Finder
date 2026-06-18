@@ -78,11 +78,12 @@ class ClaimController extends Controller
 
         $data = $request->validate([
             'found_item_id' => ['required', Rule::exists('found_items', 'id')->where('status', 'unclaimed')],
-            'lost_item_id' => 'nullable|exists:lost_items,id',
+            'lost_item_id' => ['nullable', Rule::exists('lost_items', 'id')->where('user_id', $request->user()->id)],
             'claim_description' => 'required|string|min:30|max:1000',
             'proof_image' => $proofRule . '|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'found_item_id.exists' => 'This item is no longer available for claiming. It may have already been claimed or turned over.',
+            'lost_item_id.exists' => 'You can only link your own lost reports.',
         ]);
 
         $duplicate = Claim::where('student_id', $request->user()->id)
@@ -100,14 +101,16 @@ class ClaimController extends Controller
 
         $claim = Claim::create($data + ['student_id' => $request->user()->id, 'status' => 'pending']);
 
-        // Notify the staff member who owns the found item
-        TmcNotification::create([
-            'user_id' => $claim->foundItem->staff_id,
-            'title' => 'New claim request',
-            'message' => $request->user()->name . ' filed a claim for ' . $claim->foundItem->title . '.',
-            'type' => 'claim_update',
-            'link' => route('staff.claims.show', $claim),
-        ]);
+        // Notify the staff member who owns the found item (skip if no staff assigned)
+        if ($claim->foundItem->staff_id) {
+            TmcNotification::create([
+                'user_id' => $claim->foundItem->staff_id,
+                'title' => 'New claim request',
+                'message' => $request->user()->name . ' filed a claim for ' . $claim->foundItem->title . '.',
+                'type' => 'claim_update',
+                'link' => route('staff.claims.show', $claim),
+            ]);
+        }
 
         // Bulk notify all admins using a single insert instead of N+1 creates
         $adminIds = User::where('role', 'admin')->pluck('id');

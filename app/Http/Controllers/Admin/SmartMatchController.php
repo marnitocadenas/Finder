@@ -8,7 +8,6 @@ use App\Models\FoundItem;
 use App\Models\LostItem;
 use App\Support\SmartMatcher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class SmartMatchController extends Controller

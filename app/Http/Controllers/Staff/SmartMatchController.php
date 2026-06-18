@@ -14,7 +14,7 @@ class SmartMatchController extends Controller
 {
     public function index(Request $request): View
     {
-        $foundItems = FoundItem::with(['category', 'claims'])
+        $foundItems = FoundItem::with('category')
             ->where('staff_id', $request->user()->id)
             ->where('status', 'unclaimed')
             ->latest()
