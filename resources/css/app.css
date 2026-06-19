@@ -2377,35 +2377,124 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .landing-nav-actions {
         display: grid !important;
         grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
-        gap: 0.35rem !important;
+        gap: 0.25rem !important;
         width: 100% !important;
     }
     .landing-nav-actions .btn {
         width: 100% !important;
         min-width: 0 !important;
         white-space: nowrap !important;
-        font-size: 0.7rem !important;
-        padding: 0.35rem 0.3rem !important;
+        font-size: 0.63rem !important;
+        padding: 0.35rem 0.2rem !important;
         height: 34px !important;
         min-height: 34px !important;
-        gap: 0.15rem !important;
+        gap: 0.1rem !important;
         justify-content: center !important;
         display: inline-flex !important;
         align-items: center !important;
     }
     .landing-nav-actions .btn .me-2,
     .landing-nav-actions .btn .nav-btn-icon {
-        margin-right: 0.1rem !important;
+        margin-right: 0.05rem !important;
     }
     .landing-hero-actions .btn,
     .landing-final-actions .btn {
-        gap: 0.1rem !important;
+        gap: 0.35rem !important;
+        font-size: clamp(0.72rem, 3.2vw, 0.8rem) !important;
+        padding: 0.45rem 0.4rem !important;
     }
     .landing-hero-actions .btn .me-2,
     .landing-final-actions .btn .me-2,
     .landing-hero-actions .btn .me-1,
     .landing-final-actions .btn .me-1 {
-        margin-right: 0 !important;
+        margin-right: 0.15rem !important;
+    }
+    .landing-final-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 0.5rem !important;
+    }
+    .landing-final-actions .btn {
+        flex: none !important;
+        width: 100% !important;
+        max-width: none !important;
+    }
+    .landing-stats {
+        padding-top: 1.5rem !important;
+    }
+    .landing-section {
+        padding: 2rem 0 1.8rem !important;
+    }
+    .landing-process {
+        padding: 2rem 0 !important;
+    }
+    .landing-final-cta {
+        padding: 2rem 0 !important;
+    }
+    /* Centering elements inside red circles on mobile screens */
+    .hero-board-metric {
+        grid-template-columns: 50px minmax(0, 1fr) !important;
+        justify-items: stretch !important;
+        text-align: left !important;
+        align-items: center !important;
+    }
+    .hero-board-metric div {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    .hero-board-activity div {
+        grid-template-columns: 36px minmax(0, 1fr) !important;
+        justify-items: stretch !important;
+        text-align: left !important;
+    }
+    .hero-board-activity div span {
+        text-align: center !important;
+        display: block !important;
+    }
+    .landing-stat {
+        justify-items: stretch !important;
+    }
+    .landing-stat strong,
+    .landing-stat small {
+        text-align: center !important;
+    }
+    .process-step h3 {
+        text-align: center !important;
+    }
+    .landing-footer div {
+        text-align: center !important;
+        width: 100% !important;
+    }
+    .landing-footer span {
+        justify-content: center !important;
+    }
+    /* Equal-width 2-column grid layout for category chips to fill width and remove empty space */
+    .landing-category-chips {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        margin-top: 0.85rem !important;
+    }
+    .landing-category-chips a {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.45rem !important;
+        background: #fff !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 999px !important;
+        color: var(--primary) !important;
+        font-weight: 900 !important;
+        text-decoration: none !important;
+        padding: 0.45rem 0.5rem !important;
+        box-shadow: 0 10px 22px rgba(26,60,110,.08) !important;
+        transition: transform .18s ease,box-shadow .18s ease,background .18s ease !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 }
 
@@ -2585,3 +2674,30 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     z-index: 2;
     pointer-events: none;
 }
+
+/* Fix landing hero actions and final actions button spacing on tablet/iPad viewports */
+@media (min-width: 576px) and (max-width: 991px) {
+    .landing-hero-actions,
+    .landing-final-actions {
+        justify-content: flex-start !important;
+    }
+    .landing-hero-actions .btn,
+    .landing-final-actions .btn {
+        flex: 0 0 auto !important;
+        width: 220px !important;
+    }
+}
+
+/* Adjust footer button width and right-align it on Pixel 4 mobile views (353px width and below) */
+@media (max-width: 353px) {
+    .landing-footer .container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+    }
+    .landing-footer .btn {
+        width: 220px !important;
+    }
+}
+
+
