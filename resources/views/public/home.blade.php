@@ -109,7 +109,7 @@
 
         <div class="landing-category-chips" aria-label="Quick category filters">
             @foreach($categories->take(6) as $category)
-                <a href="{{ route('home', ['category_id' => $category->id]) }}" class="@if(request('category_id') == $category->id) active @endif">
+                <a href="{{ route('home', ['category_id' => $category->id]) }}#recent-found" class="@if(request('category_id') == $category->id) active @endif">
                     <i class="fa-solid {{ $category->icon ?? 'fa-tag' }}"></i>{{ $category->name }}
                 </a>
             @endforeach
@@ -248,4 +248,18 @@
         <a href="{{ route('login') }}" class="btn btn-warning">Get Started</a>
     </div>
 </footer>
+
+<script>
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('q') || params.get('category_id')) {
+        var target = document.getElementById('recent-found');
+        if (target) {
+            setTimeout(function() {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
+        }
+    }
+})();
+</script>
 @endsection

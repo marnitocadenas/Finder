@@ -139,8 +139,8 @@
 .student-action-warning span{background:#FFF7DF;color:#9A6700}
 .student-action-danger span{background:#FDECEC;color:var(--danger)}
 .student-action-success span{background:#EAF7F1;color:var(--success)}
-.student-action strong{font-size:2rem;line-height:1}
-.student-action small{color:var(--text-muted);font-size:.75rem;font-weight:800;text-transform:uppercase}
+.student-action strong{font-size:2rem;line-height:1;text-align:center}
+.student-action small{color:var(--text-muted);font-size:.75rem;font-weight:800;text-transform:uppercase;text-align:center}
 
 .student-quick-links {
     display: grid !important;
@@ -1774,6 +1774,38 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     font-size: clamp(0.7rem, 1.2vw, 0.78rem);
 }
 
+/* Student Overview: center content in metric cards */
+.student-overview .metric-card {
+    position: relative !important;
+    align-items: center !important;
+}
+.student-overview .metric-card > div:first-child {
+    text-align: center;
+    width: 100%;
+}
+.student-overview .metric-card > div:first-child > span {
+    display: block;
+    text-align: left;
+}
+.student-overview .metric-icon {
+    position: absolute !important;
+    top: 0.75rem !important;
+    right: 0.75rem !important;
+}
+
+/* Public found item detail: right-align action buttons with equal width */
+.public-detail-actions {
+    justify-content: flex-end !important;
+}
+.public-detail-actions .btn {
+    flex: 0 0 auto !important;
+    width: 160px !important;
+    gap: 0.25rem !important;
+}
+.public-detail-actions .btn .me-1 {
+    margin-right: 0.15rem !important;
+}
+
 /* Module card header h2 – fluid */
 .module-card-header h2 {
     font-size: clamp(0.95rem, 1.8vw, 1.08rem) !important;
@@ -2788,12 +2820,15 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     }
     /* Found item card buttons: tighten icon-text spacing on tablet */
     .found-preview-actions .btn {
-        gap: 0.25rem !important;
-        font-size: 0.82rem !important;
-        padding: 0.4rem 0.6rem !important;
+        gap: 0.1rem !important;
+        font-size: 0.78rem !important;
+        padding: 0.35rem 0.5rem !important;
     }
     .found-preview-actions .btn .me-1 {
-        margin-right: 0.15rem !important;
+        margin-right: 0.1rem !important;
+    }
+    .found-preview-actions .btn .me-2 {
+        margin-right: 0.1rem !important;
     }
 }
 
