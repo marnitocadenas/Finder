@@ -63,9 +63,11 @@
                     @error('profile_photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
 
-                <button class="btn btn-primary">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>Save Profile
-                </button>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk me-2"></i>Save Profile
+                    </button>
+                </div>
             </form>
         </section>
 
@@ -149,9 +151,11 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-warning" data-loading-text="Changing password">
-                        <i class="fa-solid fa-key me-2"></i>Change Password
-                    </button>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-warning" data-loading-text="Changing password">
+                            <i class="fa-solid fa-key me-2"></i>Change Password
+                        </button>
+                    </div>
                 </form>
             </section>
         </aside>

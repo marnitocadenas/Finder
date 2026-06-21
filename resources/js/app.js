@@ -454,7 +454,7 @@ function showToast(msg){
 })();
 
 // Asynchronous search handler for the landing page
-async function performAsyncSearch(url) {
+async function performAsyncSearch(url, shouldScroll = false) {
     try {
         const response = await fetch(url, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -479,6 +479,14 @@ async function performAsyncSearch(url) {
             currentResults.innerHTML = newResults.innerHTML;
         }
 
+        // Scroll to the results section if requested
+        if (shouldScroll) {
+            const target = document.getElementById('recent-found');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
         // Update the URL in the address bar
         window.history.pushState(null, '', url);
     } catch (error) {
@@ -498,7 +506,7 @@ document.addEventListener('submit', async (event) => {
     const action = form.getAttribute('action') || window.location.pathname;
     const url = `${action}?${params}`;
 
-    await performAsyncSearch(url);
+    await performAsyncSearch(url, true);
 });
 
 // Intercept category chips and clear button clicks
@@ -511,6 +519,7 @@ document.addEventListener('click', async (event) => {
 
     event.preventDefault();
     const url = link.getAttribute('href');
-    await performAsyncSearch(url);
+    const shouldScroll = chipLink ? true : false;
+    await performAsyncSearch(url, shouldScroll);
 });
 

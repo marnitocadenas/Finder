@@ -65,15 +65,11 @@
 
             <div class="public-detail-actions">
                 @if($item->status === 'unclaimed')
-                    <a href="{{ $isStudent ? route('student.claims.create', ['found_item_id' => $item->id]) : route('login') }}" class="btn btn-primary">
-                        <i class="fa-solid fa-file-signature me-1"></i>{{ $isStudent ? 'File Claim' : 'Login to Claim' }}
-                    </a>
+<a href="{{ $isStudent ? route('student.claims.create', ['found_item_id' => $item->id]) : route('login') }}" class="btn btn-primary"><i class="fa-solid fa-file-signature me-1"></i>{{ $isStudent ? 'File Claim' : 'Login to Claim' }}</a>
                 @else
                     <span class="btn btn-light disabled"><i class="fa-solid fa-lock me-1"></i>Claim unavailable</span>
                 @endif
-                <a href="{{ $isStudent ? route('student.lost-items.create') : route('login') }}" class="btn btn-outline-primary">
-                    <i class="fa-solid fa-plus me-1"></i>Report Lost Item
-                </a>
+<a href="{{ $isStudent ? route('student.lost-items.create') : route('login') }}" class="btn btn-outline-primary"><i class="fa-solid fa-plus me-1"></i>Report Lost Item</a>
             </div>
         </article>
     </div>
