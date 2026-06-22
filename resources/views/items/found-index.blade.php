@@ -82,14 +82,14 @@
             </form>
         @endif
 
-        <div class="found-table-wrap">
-            <table class="table found-table excel-found-table {{ $role === 'staff' ? 'staff-found-table' : '' }} align-middle">
+        <div class="found-table-wrap" id="found-records-table">
+            <table class="table found-table excel-found-table {{ $role === 'student' ? 'student-found-table' : '' }} {{ $role === 'staff' ? 'staff-found-table' : '' }} align-middle">
                 <thead>
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
                         <th>Item</th>
                         @if(!($personalView ?? false))<th>Reported By</th>@endif
-                        <th>Category</th>
+                        <th class="text-center">Category</th>
                         <th>Date Found</th>
                         <th>Status</th>
                         <th class="text-end">Actions</th>
@@ -115,7 +115,7 @@
                             @if(!($personalView ?? false))
                             <td data-label="Reported By">{{ $item->staff->name ?? auth()->user()->name }}</td>
                             @endif
-                            <td data-label="Category">
+                            <td data-label="Category" class="text-center">
                                 <span class="found-category">
                                     <i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>{{ $item->category->name ?? '-' }}
                                 </span>
@@ -225,4 +225,20 @@
     </section>
 </div>
 @include('partials.confirm-modal')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var params = new URLSearchParams(window.location.search);
+        var hasFilter = ['q','category_id','status','from','to'].some(function (k) {
+            return params.has(k) && params.get(k) !== '';
+        });
+        if (hasFilter) {
+            var target = document.getElementById('found-records-table');
+            if (target) {
+                setTimeout(function () {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
+        }
+    });
+</script>
 @endsection

@@ -62,7 +62,7 @@
             </form>
         @endif
 
-        <div class="claims-table-wrap">
+        <div class="claims-table-wrap" id="claim-records-table">
             <table class="table claims-table excel-claims-table {{ $role === 'student' ? 'student-claims-table' : '' }} {{ $role === 'admin' ? 'admin-claims-table' : ($role === 'staff' ? 'staff-claims-table' : '') }} align-middle">
                 <thead>
                     <tr>
@@ -134,4 +134,20 @@
         </div>
     </section>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var params = new URLSearchParams(window.location.search);
+        var hasFilter = ['q','category_id','status','from','to'].some(function (k) {
+            return params.has(k) && params.get(k) !== '';
+        });
+        if (hasFilter) {
+            var target = document.getElementById('claim-records-table');
+            if (target) {
+                setTimeout(function () {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
+        }
+    });
+</script>
 @endsection

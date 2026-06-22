@@ -51,7 +51,7 @@
             </select>
         </form>
 
-        <div class="browse-grid">
+        <div class="browse-grid" id="browse-found-listings">
             @forelse($items as $item)
                 <article class="browse-card">
                     <button type="button" class="browse-card-media student-preview-trigger" data-image-preview="{{ $item->image ? asset('storage/'.$item->image) : '' }}" @disabled(!$item->image)>
@@ -156,4 +156,20 @@
     </div>
 </div>
 @include('partials.image-preview-modal')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var params = new URLSearchParams(window.location.search);
+        var hasFilter = ['q','category_id','status','from','to'].some(function (k) {
+            return params.has(k) && params.get(k) !== '';
+        });
+        if (hasFilter) {
+            var target = document.getElementById('browse-found-listings');
+            if (target) {
+                setTimeout(function () {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
+        }
+    });
+</script>
 @endsection

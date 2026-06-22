@@ -75,7 +75,7 @@
             </form>
         @endif
 
-        <div class="lost-table-wrap">
+        <div class="lost-table-wrap" id="lost-records-table">
             <table class="table lost-table {{ $role === 'student' ? 'student-lost-table' : '' }} {{ $role === 'staff' ? 'staff-lost-table' : '' }} {{ $role !== 'student' ? 'excel-lost-table' : '' }} align-middle">
                 <thead>
                     <tr>
@@ -183,4 +183,20 @@
     </section>
 </div>
 @include('partials.confirm-modal')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var params = new URLSearchParams(window.location.search);
+        var hasFilter = ['q','category_id','status','from','to'].some(function (k) {
+            return params.has(k) && params.get(k) !== '';
+        });
+        if (hasFilter) {
+            var target = document.getElementById('lost-records-table');
+            if (target) {
+                setTimeout(function () {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
+        }
+    });
+</script>
 @endsection
