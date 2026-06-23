@@ -694,9 +694,9 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 }
 .student-claims-table .claim-item{
     display:grid!important;
-    grid-template-columns:20px minmax(0,1fr);
+    grid-template-columns:40px minmax(0,1fr);
     align-items:center;
-    gap:.45rem;
+    gap:1.25rem;
 }
 .student-claims-table .claim-item > div{
     text-align:left;

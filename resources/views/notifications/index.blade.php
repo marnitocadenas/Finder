@@ -76,9 +76,6 @@
                             <p>{{ $notification->message }}</p>
                         </div>
                     </a>
-                    <button type="button" class="notification-card-delete" data-notification-delete="{{ $notification->id }}" title="Delete notification">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
                 </div>
             @empty
                 <div class="notifications-empty">
