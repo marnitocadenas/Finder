@@ -87,6 +87,14 @@ refreshNotificationCount();
         e.preventDefault();
         const csrfMeta=document.querySelector('meta[name="csrf-token"]');
         if(!csrfMeta)return;
+        
+        const checkboxes=getNotificationCheckboxes();
+        const checked=checkboxes.filter(cb=>cb.checked);
+        const total=checkboxes.length;
+        if(total===0||checked.length!==total){
+            return;
+        }
+
         const originalHTML=btn?btn.innerHTML:'';
         if(btn){btn.innerHTML='<i class="fa-solid fa-circle-notch fa-spin me-1"></i>Working';btn.disabled=true;}
         fetch(form.action,{
@@ -114,12 +122,16 @@ function getNotificationCheckboxes(){return Array.from(document.querySelectorAll
 function updateBulkDeleteUI(){
     const checked=getNotificationCheckboxes().filter(cb=>cb.checked);
     const btn=document.getElementById('notification-bulk-delete-btn');
+    const readBtn=document.getElementById('notification-bulk-read-btn');
     const countEl=document.getElementById('notification-bulk-count');
     const selectAll=document.getElementById('notification-select-all');
     if(!btn)return;
     const total=getNotificationCheckboxes().length;
     if(countEl)countEl.textContent=checked.length;
     btn.classList.toggle('d-none',checked.length===0);
+    if(readBtn){
+        readBtn.classList.toggle('d-none',checked.length===0 || checked.length===total);
+    }
     if(selectAll)selectAll.checked=total>0&&checked.length===total;
 }
 
@@ -181,6 +193,53 @@ function updateBulkDeleteUI(){
                 updateBulkDeleteUI();
             }
         }).catch(()=>{});
+    });
+})();
+
+// Bulk read: populate IDs and submit form via AJAX
+(function(){
+    const btn=document.getElementById('notification-bulk-read-btn');
+    if(!btn)return;
+    btn.addEventListener('click',function(){
+        const form=document.getElementById('notification-bulk-read-form');
+        if(!form)return;
+        const checkedBoxes=getNotificationCheckboxes().filter(cb=>cb.checked);
+        const ids=checkedBoxes.map(cb=>cb.value);
+        const idsField=document.getElementById('notification-bulk-read-ids');
+        if(idsField)idsField.value=ids.join(',');
+        
+        const csrfMeta=document.querySelector('meta[name="csrf-token"]');
+        if(!csrfMeta)return;
+        
+        const originalHTML=btn.innerHTML;
+        btn.innerHTML='<i class="fa-solid fa-circle-notch fa-spin me-1"></i>Working';
+        btn.disabled=true;
+        
+        fetch(form.action,{
+            method:'POST',
+            headers:{'X-CSRF-TOKEN':csrfMeta.content,'X-Requested-With':'XMLHttpRequest'},
+            body:new FormData(form)
+        }).then(r=>r.json()).then(data=>{
+            if(data.success){
+                checkedBoxes.forEach(cb=>{
+                    const card=cb.closest('.notification-card');
+                    if(card && card.classList.contains('is-unread')){
+                        card.classList.remove('is-unread');
+                        const statusEl=card.querySelector('[data-notification-status]');
+                        if(statusEl){
+                            statusEl.textContent='Read';
+                            statusEl.classList.add('text-success');
+                        }
+                    }
+                });
+                refreshNotificationCount();
+                updateNotificationStatCards();
+                updateBulkDeleteUI();
+            }
+        }).catch(()=>{}).finally(()=>{
+            btn.innerHTML=originalHTML;
+            btn.disabled=false;
+        });
     });
 })();
 document.addEventListener('change',(event)=>{

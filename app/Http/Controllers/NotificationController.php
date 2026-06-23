@@ -88,6 +88,26 @@ class NotificationController extends Controller
         return back()->with('success', count($ids).' notification(s) deleted.');
     }
 
+    public function bulkRead(Request $request): JsonResponse|RedirectResponse
+    {
+        $rawIds = $request->input('ids', '');
+        $ids = is_array($rawIds) ? $rawIds : explode(',', $rawIds);
+        $ids = array_filter(array_map('intval', $ids), fn($id) => $id > 0);
+        if (!empty($ids)) {
+            $request->user()->notifications()->whereIn('id', $ids)->update(['is_read' => true]);
+        }
+
+        if ($request->expectsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'count' => $request->user()->notifications()->where('is_read', false)->count(),
+                'marked_read' => count($ids),
+            ]);
+        }
+
+        return back()->with('success', count($ids).' notification(s) marked as read.');
+    }
+
     public function dismissMatch(Request $request): RedirectResponse
     {
         $data = $request->validate([

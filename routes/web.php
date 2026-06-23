@@ -116,5 +116,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{id}/mark-read', [NotificationController::class, 'markRead'])->name('notifications.markRead');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
     Route::post('/notifications/bulk-delete', [NotificationController::class, 'bulkDestroy'])->name('notifications.bulkDelete');
+    Route::post('/notifications/bulk-read', [NotificationController::class, 'bulkRead'])->name('notifications.bulkRead');
     Route::post('/dismiss-match', [NotificationController::class, 'dismissMatch'])->name('dismiss.match');
 });

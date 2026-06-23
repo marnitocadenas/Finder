@@ -173,6 +173,21 @@
 .student-list-item small,.student-claim-item small{color:var(--text-muted);font-weight:700}
 .student-list-item small i{color:var(--primary);margin-right:.25rem}
 
+.student-list-item > div,
+.student-claim-item > div,
+.staff-list-item > div,
+.staff-claim-item > div {
+    min-width: 0;
+}
+.student-list-item strong,
+.student-claim-item strong,
+.staff-list-item strong,
+.staff-claim-item strong {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .student-notification-grid {
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;

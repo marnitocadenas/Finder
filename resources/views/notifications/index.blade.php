@@ -39,8 +39,15 @@
                     @csrf
                     <input type="hidden" name="ids" id="notification-bulk-ids">
                 </form>
+                <form method="POST" action="{{ route('notifications.bulkRead') }}" id="notification-bulk-read-form" class="d-none" data-ajax>
+                    @csrf
+                    <input type="hidden" name="ids" id="notification-bulk-read-ids">
+                </form>
                 <button type="button" id="notification-bulk-delete-btn" class="btn btn-sm btn-outline-danger d-none" data-confirm-submit data-confirm-title="Delete selected" data-confirm-message="Are you sure you want to delete the selected notifications? This action cannot be undone." data-confirm-button="Delete" data-confirm-class="btn-danger" form="notification-bulk-delete-form">
                     <i class="fa-solid fa-trash me-1"></i><span id="notification-bulk-count">0</span> selected
+                </button>
+                <button type="button" id="notification-bulk-read-btn" class="btn btn-sm btn-outline-primary d-none" form="notification-bulk-read-form">
+                    <i class="fa-solid fa-envelope-open me-1"></i>Mark as Read
                 </button>
                 <span class="notification-result-count">{{ $notifications->total() }} messages</span>
             </div>
