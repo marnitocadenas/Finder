@@ -20,8 +20,8 @@
                     <span><i class="fa-solid {{ $group['lost']->category->icon ?? 'fa-magnifying-glass' }}"></i></span>
                     <div>
                         <small>Your lost report</small>
-                        <strong>{{ $group['lost']->title }}</strong>
-                        <em>{{ $group['lost']->location_lost }} &bull; {{ optional($group['lost']->date_lost)->format('M d, Y') }}</em>
+                        <strong title="{{ $group['lost']->title }}">{{ $group['lost']->title }}</strong>
+                        <em title="{{ $group['lost']->location_lost }} • {{ optional($group['lost']->date_lost)->format('M d, Y') }}">{{ $group['lost']->location_lost }} &bull; {{ optional($group['lost']->date_lost)->format('M d, Y') }}</em>
                     </div>
                     <a href="{{ route(($role ?? 'student').'.lost-items.show', $group['lost']) }}" class="btn btn-sm btn-outline-primary">Open</a>
                 </div>
@@ -31,8 +31,8 @@
                         <div class="match-candidate">
                             <div class="match-score">{{ $candidate['score'] }}%</div>
                             <div>
-                                <strong>{{ $candidate['found']->title }}</strong>
-                                <small>{{ $candidate['found']->location_found }} &bull; {{ optional($candidate['found']->date_found)->format('M d, Y') }}</small>
+                                <strong title="{{ $candidate['found']->title }}">{{ $candidate['found']->title }}</strong>
+                                <small title="{{ $candidate['found']->location_found }} • {{ optional($candidate['found']->date_found)->format('M d, Y') }}">{{ $candidate['found']->location_found }} &bull; {{ optional($candidate['found']->date_found)->format('M d, Y') }}</small>
                                 <div class="match-reasons">
                                     @foreach($candidate['reasons'] as $reason)
                                         <span>{{ $reason }}</span>

@@ -70,13 +70,13 @@
                                 <i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>
                                 {{ $item->category->name ?? 'Uncategorized' }}
                             </span>
-                            <h3>{{ $item->title }}</h3>
+                            <h3 title="{{ $item->title }}">{{ $item->title }}</h3>
                         </div>
                         <div class="browse-meta">
-                            <span><i class="fa-solid fa-calendar-day"></i>{{ optional($item->date_found)->format('M d, Y') ?: 'No date' }}</span>
-                            <span><i class="fa-solid fa-location-dot"></i>{{ $item->location_found }}</span>
+                            <span><i class="fa-solid fa-calendar-day"></i><span>{{ optional($item->date_found)->format('M d, Y') ?: 'No date' }}</span></span>
+                            <span title="{{ $item->location_found }}"><i class="fa-solid fa-location-dot"></i><span>{{ $item->location_found }}</span></span>
                         </div>
-                        <p>{{ Illuminate\Support\Str::limit($item->description, 135) }}</p>
+                        <p title="{{ $item->description }}">{{ Illuminate\Support\Str::limit($item->description, 135) }}</p>
                     </div>
                     <div class="browse-card-footer">
                         <button type="button" class="btn btn-outline-primary student-detail-button"
@@ -131,10 +131,10 @@
 </div>
 <div class="modal fade" id="studentItemPreviewModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content student-preview-modal">
-            <div class="modal-header">
-                <h2 class="modal-title h5" data-student-preview-modal-title>Found Item</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content student-preview-modal" style="overflow:hidden">
+            <div class="modal-header" style="min-width:0">
+                <h2 class="modal-title h5" data-student-preview-modal-title style="word-break:break-all;overflow-wrap:anywhere;min-width:0">Found Item</h2>
+                <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="student-preview-grid">
