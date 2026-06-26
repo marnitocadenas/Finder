@@ -37,11 +37,11 @@
                     <div class="browse-card-body">
                         <div class="browse-card-heading">
                             <span class="browse-category"><i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>{{ $item->category->name ?? 'Uncategorized' }}</span>
-                            <h3>{{ $item->title }}</h3>
+                            <h3 title="{{ $item->title }}">{{ $item->title }}</h3>
                         </div>
                         <div class="browse-meta">
-                            <span><i class="fa-solid fa-calendar-day"></i>{{ optional($item->date_found)->format('M d, Y') ?: 'No date' }}</span>
-                            <span><i class="fa-solid fa-location-dot"></i>{{ $item->location_found }}</span>
+                            <span><i class="fa-solid fa-calendar-day"></i><span>{{ optional($item->date_found)->format('M d, Y') ?: 'No date' }}</span></span>
+                            <span title="{{ $item->location_found }}"><i class="fa-solid fa-location-dot"></i><span>{{ $item->location_found }}</span></span>
                         </div>
                     </div>
                     <div class="browse-card-footer student-card-actions">

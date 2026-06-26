@@ -157,8 +157,8 @@
                             <span class="found-preview-category">
                                 <i class="fa-solid {{ $item->category->icon ?? 'fa-tag' }}"></i>{{ $item->category->name ?? 'General' }}
                             </span>
-                            <h3>{{ $item->title }}</h3>
-                            <p><i class="fa-solid fa-location-dot"></i>{{ $item->location_found }}</p>
+                            <h3 title="{{ $item->title }}">{{ $item->title }}</h3>
+                            <p title="{{ $item->location_found }}"><i class="fa-solid fa-location-dot"></i><span class="truncate-text">{{ $item->location_found }}</span></p>
                             <p><i class="fa-solid fa-calendar-day"></i>{{ optional($item->date_found)->format('M d, Y') ?? 'Date pending' }}</p>
                         </div>
                         <div class="found-preview-actions">
