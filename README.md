@@ -57,5 +57,62 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# finder
-# Finder
+# TMC Lost and Found
+
+## Docker Development
+
+This project includes a Laravel Sail Docker setup for local development.
+
+Before starting, install Docker Desktop and make sure it is running.
+
+### Start the app on Windows
+
+Use PowerShell, Command Prompt, or Git Bash with Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+The website will be available at:
+
+```text
+http://localhost:8080
+```
+
+### First-time setup on Windows
+
+```bash
+docker compose exec laravel.test composer install
+docker compose exec laravel.test npm install
+docker compose exec laravel.test php artisan key:generate
+docker compose exec laravel.test php artisan migrate
+docker compose exec laravel.test npm run dev
+```
+
+### Laravel Sail with WSL2/macOS/Linux
+
+Laravel Sail also works from WSL2, macOS, or Linux:
+
+```bash
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail npm run dev
+```
+
+On Windows PowerShell, Sail may still call Git Bash and fail unless you are using WSL2.
+
+### Common Windows commands
+
+```bash
+docker compose exec laravel.test php artisan migrate
+docker compose exec laravel.test php artisan test
+docker compose exec laravel.test npm run build
+docker compose down
+```
+
+Docker services included:
+
+- Laravel/PHP 8.4 app container
+- MySQL 8.4 database
+- Redis
+- Vite dev server port
