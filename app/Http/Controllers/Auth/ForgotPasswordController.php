@@ -8,12 +8,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use App\Models\User;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 class ForgotPasswordController extends Controller
 {
     public function showLinkRequestForm(): View { return view('auth.forgot-password'); }
@@ -63,9 +65,23 @@ class ForgotPasswordController extends Controller
             'updated_at' => now(),
         ]);
 
-        Mail::send('emails.password-otp', ['user' => $user, 'otp' => $otp], function ($message) use ($user) {
-            $message->to($user->email)->subject('Your TMC password reset OTP');
-        });
+        try {
+            Mail::send('emails.password-otp', ['user' => $user, 'otp' => $otp], function ($message) use ($user) {
+                $message->to($user->email)->subject('Your TMC password reset OTP');
+            });
+        } catch (TransportExceptionInterface $exception) {
+            DB::table('password_reset_otps')->where('email', $user->email)->delete();
+
+            Log::warning('Password reset OTP email failed to send.', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'error' => $exception->getMessage(),
+            ]);
+
+            return back()
+                ->withErrors(['email' => 'We could not send the OTP email. Please check the mail settings or try again later.'])
+                ->withInput();
+        }
 
         $request->session()->put('password_reset_email', $user->email);
         $request->session()->forget('password_reset_verified');

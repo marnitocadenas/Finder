@@ -64,6 +64,17 @@
 
         <div class="claims-table-wrap" id="claim-records-table">
             <table class="table claims-table excel-claims-table {{ $role === 'student' ? 'student-claims-table' : '' }} {{ $role === 'admin' ? 'admin-claims-table' : ($role === 'staff' ? 'staff-claims-table' : '') }} align-middle">
+                @if($role === 'admin')
+                    <colgroup>
+                        <col class="admin-claims-col-select">
+                        <col class="admin-claims-col-claim">
+                        <col class="admin-claims-col-student">
+                        <col class="admin-claims-col-found">
+                        <col class="admin-claims-col-status">
+                        <col class="admin-claims-col-reviewed">
+                        <col class="admin-claims-col-action">
+                    </colgroup>
+                @endif
                 <thead>
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif
@@ -90,8 +101,8 @@
                                     <div class="claim-person">
                                         <span>{{ strtoupper(substr($claim->student->name ?? auth()->user()->name, 0, 1)) }}</span>
                                         <div>
-                                            <strong>{{ $claim->student->name ?? auth()->user()->name }}</strong>
-                                            <small>{{ $claim->student->email ?? auth()->user()->email }}</small>
+                                            <strong title="{{ $claim->student->name ?? auth()->user()->name }}">{{ $claim->student->name ?? auth()->user()->name }}</strong>
+                                            <small title="{{ $claim->student->email ?? auth()->user()->email }}">{{ $claim->student->email ?? auth()->user()->email }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -100,13 +111,13 @@
                                 <div class="claim-item">
                                     <i class="fa-solid {{ $claim->foundItem->category->icon ?? 'fa-box-open' }}"></i>
                                     <div>
-                                        <strong>{{ $claim->foundItem->title ?? '-' }}</strong>
+                                        <strong title="{{ $claim->foundItem->title ?? '-' }}">{{ $claim->foundItem->title ?? '-' }}</strong>
                                         <small>{{ $claim->foundItem->category->name ?? 'Uncategorized' }}</small>
                                     </div>
                                 </div>
                             </td>
                             <td data-label="Status"><x-status :status="$claim->status" /></td>
-                            <td data-label="Reviewed">{{ optional($claim->reviewed_at)->format('M d, Y') ?? '-' }}</td>
+                            <td data-label="Reviewed" title="{{ optional($claim->reviewed_at)->format('M d, Y') ?? '-' }}">{{ optional($claim->reviewed_at)->format('M d, Y') ?? '-' }}</td>
                             <td data-label="Action" class="text-end">
                                 @php
                                     $showRoute = isset($claimRoute)
