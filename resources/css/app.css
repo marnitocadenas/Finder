@@ -1085,86 +1085,13 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 .admin-claims-table tbody td:nth-child(7) .btn{
     display:inline-flex;
     justify-content:center;
-    white-space:nowrap;
-}
-.admin-claims-table{
-    table-layout:fixed;
-    width:100%;
-}
-.admin-claims-col-select{width:4%;}
-.admin-claims-col-claim{width:12%;}
-.admin-claims-col-student{width:23%;}
-.admin-claims-col-found{width:27%;}
-.admin-claims-col-status{width:11%;}
-.admin-claims-col-reviewed{width:13%;}
-.admin-claims-col-action{width:10%;}
-.admin-claims-table tbody td:nth-child(3),
-.admin-claims-table tbody td:nth-child(4),
-.admin-claims-table tbody td:nth-child(6),
-.admin-claims-table tbody td:nth-child(7){
-    overflow:hidden;
-}
-.admin-claims-table tbody td:nth-child(2) .claim-id span,
-.admin-claims-table tbody td:nth-child(2) .claim-id small{
-    white-space:nowrap;
-}
-.admin-claims-table tbody td:nth-child(5),
-.admin-claims-table tbody td:nth-child(6),
-.admin-claims-table tbody td:nth-child(7){
-    white-space:nowrap;
-}
-.admin-claims-table .claim-person{
-    min-width:0;
-}
-.admin-claims-table .claim-person > div{
-    min-width:0;
-    overflow:hidden;
-}
-.admin-claims-table .claim-person > div strong,
-.admin-claims-table .claim-person > div small{
-    display:block;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    word-break:normal;
-    overflow-wrap:normal;
-}
-.admin-claims-table .claim-item{
-    display:grid!important;
-    grid-template-columns:40px minmax(0,1fr);
-    align-items:center;
-    gap:.75rem;
-    min-width:0;
-    max-width:100%;
-}
-.admin-claims-table .claim-item > div{
-    min-width:0;
-    max-width:100%;
-    overflow:hidden;
-}
-.admin-claims-table .claim-item > div strong,
-.admin-claims-table .claim-item > div small{
-    display:block;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    word-break:normal;
-    overflow-wrap:normal;
 }
 
 /* Excel-like grid for Admin > Activity Logs table */
 .excel-logs-table{
     border-collapse:collapse!important;
     background:#fff;
-    table-layout:fixed;
-    width:100%;
 }
-.admin-logs-col-user{width:24%;}
-.admin-logs-col-action{width:28%;}
-.admin-logs-col-target{width:14%;}
-.admin-logs-col-ip{width:14%;}
-.admin-logs-col-date{width:12%;}
-.admin-logs-col-time{width:8%;}
 .excel-logs-table thead th{
     background:#EEF2F8!important;
     color:#334155;
@@ -1179,7 +1106,6 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     border:1px solid #D1D5DB!important;
     background:#fff;
     vertical-align:middle;
-    overflow:hidden;
 }
 .excel-logs-table tbody tr:nth-child(even) td{
     background:#F5F8FC;
@@ -1207,20 +1133,6 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     justify-content:flex-start;
     text-align:left;
     gap:.3rem;
-    min-width:0;
-}
-.excel-logs-table .log-user > div{
-    min-width:0;
-    overflow:hidden;
-}
-.excel-logs-table .log-user strong,
-.excel-logs-table .log-user small{
-    display:block;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    word-break:normal;
-    overflow-wrap:normal;
 }
 .excel-logs-table .log-action,
 .excel-logs-table .log-time{
@@ -1229,18 +1141,6 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     justify-content:center;
     text-align:center;
     gap:.3rem;
-    min-width:0;
-    max-width:100%;
-    white-space:nowrap;
-    overflow:hidden;
-}
-.excel-logs-table .log-action span,
-.excel-logs-table .log-time span{
-    display:block;
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
 }
 .excel-logs-table .log-target,
 .excel-logs-table .log-ip{
@@ -1249,19 +1149,6 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     justify-content:center;
     text-align:center;
     gap:.3rem;
-    max-width:100%;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    word-break:normal;
-    overflow-wrap:normal;
-}
-.excel-logs-table .log-target small{
-    flex:0 0 auto;
-}
-.excel-logs-table tbody td:nth-child(5),
-.excel-logs-table tbody td:nth-child(6){
-    white-space:nowrap;
 }
 
 /* Found Items table: prevent oversized Actions column on staff/admin */
