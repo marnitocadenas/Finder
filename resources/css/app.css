@@ -1077,6 +1077,8 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 .excel-logs-table{
     border-collapse:collapse!important;
     background:#fff;
+    table-layout:fixed!important;
+    min-width:980px!important;
 }
 .excel-logs-table thead th{
     background:#EEF2F8!important;
@@ -1106,6 +1108,10 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     text-align:center!important;
     vertical-align:middle!important;
 }
+.excel-logs-table thead th:nth-child(1){
+    text-align:center!important;
+    vertical-align:middle!important;
+}
 .excel-logs-table tbody td:nth-child(2),
 .excel-logs-table tbody td:nth-child(3),
 .excel-logs-table tbody td:nth-child(4),
@@ -1113,12 +1119,50 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 .excel-logs-table tbody td:nth-child(6){
     text-align:center!important;
 }
+.excel-logs-table thead th:nth-child(1),
+.excel-logs-table tbody td:nth-child(1){
+    width:270px!important;
+}
+.excel-logs-table thead th:nth-child(2),
+.excel-logs-table tbody td:nth-child(2){
+    width:240px!important;
+    max-width:240px!important;
+}
+.excel-logs-table thead th:nth-child(3),
+.excel-logs-table tbody td:nth-child(3){
+    width:125px!important;
+}
+.excel-logs-table thead th:nth-child(4),
+.excel-logs-table tbody td:nth-child(4){
+    width:105px!important;
+}
+.excel-logs-table thead th:nth-child(5),
+.excel-logs-table tbody td:nth-child(5){
+    width:105px!important;
+}
+.excel-logs-table thead th:nth-child(6),
+.excel-logs-table tbody td:nth-child(6){
+    width:85px!important;
+}
 .excel-logs-table .log-user{
     display:flex;
     align-items:center;
     justify-content:flex-start;
     text-align:left;
     gap:.3rem;
+    min-width:0;
+}
+.excel-logs-table .log-user > div{
+    min-width:0;
+    overflow:hidden;
+}
+.excel-logs-table .log-user strong,
+.excel-logs-table .log-user small{
+    display:block;
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 .excel-logs-table .log-action,
 .excel-logs-table .log-time{
@@ -1128,6 +1172,17 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     text-align:center;
     gap:.3rem;
 }
+.excel-logs-table .log-action{
+    min-width:0;
+}
+.excel-logs-table .log-action span{
+    display:block;
+    min-width:0;
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
 .excel-logs-table .log-target,
 .excel-logs-table .log-ip{
     display:inline-flex;
@@ -1135,6 +1190,12 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     justify-content:center;
     text-align:center;
     gap:.3rem;
+}
+.excel-logs-table tbody td:nth-child(3),
+.excel-logs-table tbody td:nth-child(4),
+.excel-logs-table tbody td:nth-child(5),
+.excel-logs-table tbody td:nth-child(6){
+    white-space:nowrap!important;
 }
 
 /* Found Items table: prevent oversized Actions column on staff/admin */
@@ -2973,6 +3034,165 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     pointer-events: none;
 }
 
+/* Staff My Found Items: keep preview cards compact instead of stretching one card full-width. */
+.staff-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 320px)) !important;
+    justify-content: start !important;
+}
+.staff-item-card {
+    width: 100% !important;
+    max-width: 320px !important;
+}
+
+@media (max-width: 1199px) {
+    .staff-card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(230px, 300px)) !important;
+    }
+    .staff-item-card {
+        max-width: 300px !important;
+    }
+}
+
+@media (max-width: 575px) {
+    .staff-card-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .staff-item-card {
+        max-width: none !important;
+    }
+}
+
+/* Staff All Lost Reports: keep long item titles from making the Item column too wide. */
+.staff-all-lost-table {
+    table-layout: fixed !important;
+    min-width: 980px !important;
+}
+.staff-all-lost-table thead th:nth-child(1),
+.staff-all-lost-table tbody td:nth-child(1) {
+    width: 42% !important;
+    min-width: 320px !important;
+    max-width: 420px !important;
+}
+.staff-all-lost-table thead th:nth-child(2),
+.staff-all-lost-table tbody td:nth-child(2) {
+    width: 90px !important;
+    min-width: 90px !important;
+}
+.staff-all-lost-table thead th:nth-child(3),
+.staff-all-lost-table tbody td:nth-child(3) {
+    width: 150px !important;
+    min-width: 150px !important;
+}
+.staff-all-lost-table thead th:nth-child(4),
+.staff-all-lost-table tbody td:nth-child(4) {
+    width: 130px !important;
+    min-width: 130px !important;
+}
+.staff-all-lost-table thead th:nth-child(5),
+.staff-all-lost-table tbody td:nth-child(5) {
+    width: 90px !important;
+    min-width: 90px !important;
+}
+.staff-all-lost-table thead th:nth-child(6),
+.staff-all-lost-table tbody td:nth-child(6) {
+    width: 110px !important;
+    min-width: 110px !important;
+}
+.staff-all-lost-table .lost-item-cell {
+    grid-template-columns: 42px minmax(0, 1fr) !important;
+}
+.staff-all-lost-table .lost-thumb,
+.staff-all-lost-table .lost-thumb-placeholder {
+    width: 42px !important;
+    height: 42px !important;
+}
+
+/* Admin Lost Items: prevent long item text from stretching the column and row height. */
+.admin-lost-table {
+    table-layout: fixed !important;
+    min-width: 1040px !important;
+}
+.admin-lost-table tbody td {
+    height: 72px !important;
+    padding-top: .45rem !important;
+    padding-bottom: .45rem !important;
+}
+.admin-lost-table thead th:nth-child(1),
+.admin-lost-table tbody td:nth-child(1) {
+    width: 38px !important;
+    min-width: 38px !important;
+}
+.admin-lost-table thead th:nth-child(2),
+.admin-lost-table tbody td:nth-child(2) {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+}
+.admin-lost-table thead th:nth-child(3),
+.admin-lost-table tbody td:nth-child(3) {
+    width: 140px !important;
+    min-width: 140px !important;
+}
+.admin-lost-table thead th:nth-child(4),
+.admin-lost-table tbody td:nth-child(4) {
+    width: 150px !important;
+    min-width: 150px !important;
+}
+.admin-lost-table thead th:nth-child(5),
+.admin-lost-table tbody td:nth-child(5) {
+    width: 130px !important;
+    min-width: 130px !important;
+}
+.admin-lost-table thead th:nth-child(6),
+.admin-lost-table tbody td:nth-child(6) {
+    width: 110px !important;
+    min-width: 110px !important;
+}
+.admin-lost-table thead th:nth-child(7),
+.admin-lost-table tbody td:nth-child(7) {
+    width: 230px !important;
+    min-width: 230px !important;
+    white-space: nowrap !important;
+}
+.admin-lost-table .lost-item-cell {
+    display: grid !important;
+    grid-template-columns: 52px minmax(0, 1fr) !important;
+    gap: .55rem !important;
+    min-width: 0 !important;
+}
+.admin-lost-table .lost-thumb,
+.admin-lost-table .lost-thumb-placeholder {
+    width: 52px !important;
+    height: 44px !important;
+    flex-basis: 52px !important;
+}
+.admin-lost-table .lost-item-cell > div {
+    min-width: 0 !important;
+    overflow: hidden !important;
+}
+.admin-lost-table .lost-item-cell strong,
+.admin-lost-table .lost-item-cell small {
+    display: block !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+.admin-lost-table tbody td:nth-child(7) {
+    text-align: center !important;
+}
+.admin-lost-table tbody td:nth-child(7) .btn,
+.admin-lost-table tbody td:nth-child(7) form {
+    display: inline-flex !important;
+    vertical-align: middle !important;
+}
+.admin-lost-table tbody td:nth-child(7) .btn {
+    min-width: 92px !important;
+    padding-left: .45rem !important;
+    padding-right: .45rem !important;
+    white-space: nowrap !important;
+}
+
 /* Fix landing hero actions and final actions button spacing on tablet/iPad viewports */
 @media (min-width: 576px) and (max-width: 991px) {
     .landing-hero-actions {
@@ -3077,5 +3297,3 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         word-break: break-word !important;
     }
 }
-
-

@@ -14,6 +14,7 @@ class WatchlistController extends Controller
     public function index(Request $request): View
     {
         $watched = WatchedFoundItem::with('foundItem.category')
+            ->whereHas('foundItem')
             ->where('user_id', $request->user()->id)
             ->latest()
             ->paginate(12);

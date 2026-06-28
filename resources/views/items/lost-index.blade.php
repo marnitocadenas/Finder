@@ -76,7 +76,7 @@
         @endif
 
         <div class="lost-table-wrap" id="lost-records-table">
-            <table class="table lost-table {{ $role === 'student' ? 'student-lost-table' : '' }} {{ $role === 'staff' ? 'staff-lost-table' : '' }} {{ $role !== 'student' ? 'excel-lost-table' : '' }} align-middle">
+            <table class="table lost-table {{ $role === 'admin' ? 'admin-lost-table' : '' }} {{ $role === 'student' ? 'student-lost-table' : '' }} {{ $role === 'staff' ? 'staff-lost-table' : '' }} {{ $role === 'staff' && !($personalView ?? false) ? 'staff-all-lost-table' : '' }} {{ $role !== 'student' ? 'excel-lost-table' : '' }} align-middle">
                 <thead>
                     <tr>
                         @if($role === 'admin')<th><input type="checkbox" data-check-all></th>@endif

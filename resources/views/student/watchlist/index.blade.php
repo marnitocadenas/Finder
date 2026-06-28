@@ -25,6 +25,7 @@
         <div class="browse-grid">
             @forelse($watched as $watch)
                 @php($item = $watch->foundItem)
+                @continue(!$item)
                 <article class="browse-card">
                     <button type="button" class="browse-card-media student-preview-trigger" data-image-preview="{{ $item->image ? asset('storage/'.$item->image) : '' }}" @disabled(!$item->image)>
                         @if($item->image)
