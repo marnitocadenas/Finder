@@ -1775,8 +1775,10 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     min-width: 0;
 }
 
-/* Lost item detail page: prevent long text from overflowing containers */
-.lost-detail-list dd {
+/* Lost/Found/Claim item detail pages: prevent long text from overflowing containers */
+.lost-detail-list dd,
+.found-detail-list dd,
+.claim-detail-list dd {
     word-break: break-all;
     overflow-wrap: anywhere;
 }
@@ -3297,3 +3299,46 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         word-break: break-word !important;
     }
 }
+
+/* ── Student Overview mobile fixes: Position badges in the top right of cards ── */
+@media (max-width: 767px) {
+    .student-list-item,
+    .student-claim-item {
+        position: relative !important;
+    }
+    .student-list-item > .badge,
+    .student-claim-item > .badge {
+        position: absolute !important;
+        top: 0.75rem !important;
+        right: 0.75rem !important;
+        grid-column: auto !important;
+        justify-self: auto !important;
+    }
+    .student-list-item > div,
+    .student-claim-item > div {
+        padding-right: 80px !important;
+    }
+}
+
+/* ── Landing Page: Truncate found-preview-card titles and locations to a single row ── */
+.found-preview-body h3 {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+}
+
+.found-preview-body p {
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.found-preview-body p i {
+    margin-right: 0.5rem !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+
+
