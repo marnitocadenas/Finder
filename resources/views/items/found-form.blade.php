@@ -109,7 +109,7 @@
             </div>
         </div>
 
-        <div class="found-form-actions">
+        <div class="found-form-actions found-form-actions-{{ $role }}">
             @if($role === 'staff')
                 <a href="{{ route('staff.matches') }}" class="btn btn-outline-primary">
                     <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Review Matches

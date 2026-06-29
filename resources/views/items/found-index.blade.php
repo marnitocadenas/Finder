@@ -136,6 +136,7 @@
                                         </button>
                                     </form>
                                 @else
+                                    @if($role === 'student')<div class="student-found-actions">@endif
                                     <a class="btn btn-sm btn-outline-primary" href="{{ $role === 'student' ? route('student.found-items.edit', $item) : ($role === 'staff' ? route('staff.found-items.edit', $item) : route('admin.found-items.edit', $item)) }}">
                                         <i class="fa-solid fa-pen-to-square me-1"></i>View/Edit
                                     </a>
@@ -161,6 +162,7 @@
                                             <i class="fa-solid fa-trash-can me-1"></i>Delete
                                         </button>
                                     </form>
+                                    @if($role === 'student')</div>@endif
                                 @endif
                             </td>
                         </tr>

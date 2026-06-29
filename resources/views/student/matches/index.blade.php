@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', ($role ?? 'student') === 'staff' ? 'My Smart Matches' : 'Student Smart Matches')
 @section('content')
-<div class="matches-module student-match-module">
+<div class="matches-module student-match-module student-matches-only">
     <div class="matches-hero">
         <div>
             <span class="module-eyebrow">Match assistant</span>
