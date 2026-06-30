@@ -235,18 +235,18 @@
     .student-found-actions{display:flex!important;flex-direction:row!important;gap:.5rem!important;width:100%!important}
     .student-found-actions a.btn,
     .student-found-actions form{flex:1 1 0!important;width:auto!important;min-width:0!important}
-    .student-found-actions a.btn{display:inline-flex!important;align-items:center!important;justify-content:flex-start!important;white-space:normal!important;text-align:left!important;width:100%!important}
+    .student-found-actions a.btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:normal!important;text-align:center!important;width:100%!important}
     .student-found-actions form{display:flex!important;width:100%!important;margin:0!important}
-    .student-found-actions form .btn{width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:flex-start!important}
+    .student-found-actions form .btn{width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
 }
 
 /* Student Found Items: equal width buttons at all breakpoints */
 .student-found-actions{display:flex!important;flex-direction:row!important;gap:.5rem!important;width:100%!important}
 .student-found-actions a.btn,
 .student-found-actions form{flex:1 1 0!important;width:auto!important;min-width:0!important}
-.student-found-actions a.btn{display:inline-flex!important;align-items:center!important;justify-content:flex-start!important;white-space:normal!important;text-align:left!important;width:100%!important}
+.student-found-actions a.btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:normal!important;text-align:center!important;width:100%!important}
 .student-found-actions form{display:flex!important;width:100%!important;margin:0!important}
-.student-found-actions form .btn{width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:flex-start!important}
+.student-found-actions form .btn{width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
 
 .browse-module{display:grid;gap:1.25rem}.browse-hero{background:linear-gradient(135deg,#102F57 0%,#1A3C6E 54%,#226B68 100%);color:#fff;border-radius:8px;padding:1.35rem;box-shadow:0 18px 44px rgba(26,60,110,.18);display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;position:relative;overflow:hidden}.browse-hero:after{content:"";position:absolute;right:1.35rem;top:-58px;width:210px;height:210px;border:1px solid rgba(255,255,255,.16);border-radius:50%}.browse-hero>*{position:relative;z-index:1}.browse-hero h1{font-size:2.55rem;line-height:1;margin:0 0 .45rem}.browse-hero p{max-width:760px;color:rgba(255,255,255,.78);margin:0}.browse-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.browse-stat-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem;box-shadow:0 12px 30px var(--shadow);display:flex;align-items:center;gap:.85rem;min-height:96px}.browse-stat-card>span{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;background:#EEF4FF;color:var(--primary);flex:0 0 44px}.browse-stat-card small{display:block;color:var(--text-muted);font-size:.76rem;font-weight:800;text-transform:uppercase}.browse-stat-card strong{display:block;font-size:1.8rem;line-height:1.1}.browse-stat-success>span{background:#EAF7F1;color:var(--success)}.browse-stat-warning>span{background:#FFF7DF;color:#9A6700}.browse-stat-danger>span{background:#FDECEC;color:var(--danger)}.browse-panel{background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 30px var(--shadow);padding:1rem}.browse-panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}.browse-panel-header h2{font-family:'DM Sans',sans-serif;font-size:1.08rem;font-weight:800;margin:0}.browse-result-count{display:inline-flex;align-items:center;justify-content:center;background:#EEF4FF;border:1px solid #DCE8FB;color:var(--primary);border-radius:999px;font-size:.78rem;font-weight:800;padding:.32rem .7rem;white-space:nowrap}.browse-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.browse-card{border:1px solid var(--border);border-radius:8px;background:#fff;box-shadow:0 10px 24px rgba(26,60,110,.08);overflow:hidden;display:flex;flex-direction:column;min-width:0;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.browse-card:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(26,60,110,.13);border-color:#BFD0E9}.browse-card-media{height:190px;background:#F8FBFF;position:relative;display:grid;place-items:center}.browse-card-media img{width:100%;height:100%;object-fit:cover}.browse-card-media>div{width:64px;height:64px;border-radius:8px;display:grid;place-items:center;background:#EAF7F1;color:var(--success);font-size:1.6rem}.browse-card-media .badge{position:absolute;top:.75rem;right:.75rem;box-shadow:0 8px 18px rgba(0,0,0,.12)}.browse-card-body{padding:1rem;display:grid;gap:.75rem;flex:1}.browse-card-heading{display:grid;gap:.45rem}.browse-category{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-muted);font-size:.78rem;font-weight:800;text-transform:uppercase}.browse-category i{color:var(--primary)}.browse-card h3{font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:800;margin:0;color:var(--text-dark);line-height:1.25}.browse-meta{display:grid;gap:.38rem}.browse-meta span{display:flex;align-items:flex-start;gap:.45rem;color:var(--text-muted);font-size:.88rem;font-weight:700;line-height:1.35}.browse-meta i{width:16px;color:var(--primary);margin-top:.12rem}.browse-card p{color:var(--text-dark);line-height:1.6;margin:0}.browse-card-footer{border-top:1px solid var(--border);padding:1rem;margin-top:auto}.browse-card-footer .btn{width:100%;display:inline-flex;align-items:center;justify-content:center}.browse-unavailable{display:flex;align-items:center;justify-content:center;gap:.45rem;width:100%;min-height:38px;border:1px solid var(--border);border-radius:8px;background:#F8FBFF;color:var(--text-muted);font-weight:800}.browse-empty{grid-column:1 / -1;display:grid;place-items:center;gap:.4rem;padding:2rem;color:var(--text-muted);border:1px dashed var(--border);border-radius:8px;background:#F8FBFF}.browse-empty i{font-size:1.8rem;color:var(--primary)}.browse-empty p{margin:0}.browse-pagination{margin-top:1rem}@media(max-width:1199px){.browse-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.browse-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:767px){.browse-hero{display:grid;align-items:start}.browse-hero h1{font-size:2.1rem}.browse-stat-grid,.browse-grid{grid-template-columns:1fr}.browse-panel-header{display:grid}.browse-card-media{height:210px}}
 
@@ -414,6 +414,7 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .browse-hero,
     .claims-hero,
     .lost-hero,
+    .found-hero,
     .matches-hero,
     .notifications-hero{
         display:grid!important;
@@ -426,10 +427,12 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     .browse-hero > .btn,
     .claims-hero > .btn,
     .lost-hero > .btn,
+    .found-hero > .btn,
     .matches-hero > .btn,
     .notifications-hero > .btn,
     .student-match-module .matches-hero > .btn,
     .lost-module .lost-hero > .btn,
+    .found-module .found-hero > .btn,
     .claims-module .claims-hero > .btn,
     .browse-module .browse-hero > .btn,
     .notifications-module .notifications-hero > .btn{
@@ -965,12 +968,40 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 .excel-found-table tbody td:nth-child(2){
     min-width:220px;
 }
-/* Student Found Items: control Item column width (col 1, no checkbox) */
+/* Student Found Items: control column widths (no checkbox, no Reported By) */
 .student-found-table thead th:nth-child(1),
 .student-found-table tbody td:nth-child(1){
+    width:28%;
     min-width:180px;
-    max-width:240px;
+    max-width:none;
     overflow:hidden;
+}
+.student-found-table thead th:nth-child(2),
+.student-found-table tbody td:nth-child(2){
+    width:12%;
+    min-width:100px;
+    max-width:140px;
+    white-space:nowrap;
+}
+.student-found-table thead th:nth-child(3),
+.student-found-table tbody td:nth-child(3){
+    width:12%;
+    min-width:100px;
+    max-width:130px;
+    white-space:nowrap;
+}
+.student-found-table thead th:nth-child(4),
+.student-found-table tbody td:nth-child(4){
+    width:10%;
+    min-width:90px;
+    max-width:110px;
+    white-space:nowrap;
+}
+.student-found-table thead th:nth-child(5),
+.student-found-table tbody td:nth-child(5){
+    width:auto;
+    min-width:160px;
+    white-space:nowrap;
 }
 /* Admin Found Items: control Item column width only */
 .found-table.excel-found-table:not(.staff-found-table) thead th:nth-child(2),
@@ -3419,6 +3450,33 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
         justify-content: center !important;
     }
 }
+
+/* ── Student My Found Reports mobile fixes: Position buttons in a single row with equal size and align cells left ── */
+@media (max-width: 767px) {
+    [class*="-table-wrap"].table-cards-mode .student-found-table.excel-found-table tbody td {
+        justify-content: flex-start !important;
+        text-align: left !important;
+    }
+    [class*="-table-wrap"].table-cards-mode .student-found-table.excel-found-table tbody td::before {
+        text-align: left !important;
+    }
+    [class*="-table-wrap"].table-cards-mode .student-found-actions {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        margin-top: 0.25rem !important;
+    }
+    [class*="-table-wrap"].table-cards-mode .student-found-actions .btn,
+    [class*="-table-wrap"].table-cards-mode .student-found-actions form {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    [class*="-table-wrap"].table-cards-mode .student-found-actions form button {
+        width: 100% !important;
+    }
+}
+
 
 
 

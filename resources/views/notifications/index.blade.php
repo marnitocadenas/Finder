@@ -196,6 +196,9 @@
     line-height: 1.5;
     margin: 0;
     font-size: .88rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Delete column */
