@@ -27,6 +27,7 @@
 .browse-hero,
 .claims-hero,
 .lost-hero,
+.found-hero,
 .matches-hero,
 .notifications-hero {
     background: linear-gradient(135deg, #102F57 0%, #1A3C6E 54%, #226B68 100%) !important;
@@ -47,6 +48,7 @@
 .browse-hero:after,
 .claims-hero:after,
 .lost-hero:after,
+.found-hero:after,
 .matches-hero:after,
 .notifications-hero:after {
     content: "";
@@ -63,6 +65,7 @@
 .browse-hero > *,
 .claims-hero > *,
 .lost-hero > *,
+.found-hero > *,
 .matches-hero > *,
 .notifications-hero > * {
     position: relative;
@@ -73,6 +76,7 @@
 .browse-hero > div:first-child,
 .claims-hero > div:first-child,
 .lost-hero > div:first-child,
+.found-hero > div:first-child,
 .matches-hero > div:first-child,
 .notifications-hero > div:first-child {
     flex: 1 1 380px !important;
@@ -83,6 +87,7 @@
 .browse-hero h1,
 .claims-hero h1,
 .lost-hero h1,
+.found-hero h1,
 .matches-hero h1,
 .notifications-hero h1 {
     font-size: clamp(1.8rem, 4.5vw, 2.55rem) !important;
@@ -94,6 +99,7 @@
 .browse-hero p,
 .claims-hero p,
 .lost-hero p,
+.found-hero p,
 .matches-hero p,
 .notifications-hero p {
     font-size: clamp(0.92rem, 2vw, 1.05rem) !important;
@@ -107,6 +113,7 @@
 .browse-hero > .btn,
 .claims-hero > .btn,
 .lost-hero > .btn,
+.found-hero > .btn,
 .matches-hero > .btn,
 .notifications-hero > form {
     flex: 0 1 auto !important;
@@ -123,6 +130,7 @@
     .browse-hero > .btn,
     .claims-hero > .btn,
     .lost-hero > .btn,
+    .found-hero > .btn,
     .matches-hero > .btn,
     .notifications-hero > form {
         margin-top: 0;
@@ -232,21 +240,17 @@
     .student-list-item img,.student-list-item>span{width:52px;height:46px}
     .student-notification{min-height:100px}
     .student-notification time{white-space:normal}
-    .student-found-actions{display:flex!important;flex-direction:row!important;gap:.5rem!important;width:100%!important}
-    .student-found-actions a.btn,
-    .student-found-actions form{flex:1 1 0!important;width:auto!important;min-width:0!important}
-    .student-found-actions a.btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:normal!important;text-align:center!important;width:100%!important}
+    .student-found-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:.5rem!important;width:100%!important}
+    .student-found-actions a.btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;text-align:center!important;width:100%!important}
     .student-found-actions form{display:flex!important;width:100%!important;margin:0!important}
-    .student-found-actions form .btn{width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+    .student-found-actions form .btn{width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important}
 }
 
 /* Student Found Items: equal width buttons at all breakpoints */
-.student-found-actions{display:flex!important;flex-direction:row!important;gap:.5rem!important;width:100%!important}
-.student-found-actions a.btn,
-.student-found-actions form{flex:1 1 0!important;width:auto!important;min-width:0!important}
-.student-found-actions a.btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:normal!important;text-align:center!important;width:100%!important}
+.student-found-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:.5rem!important;width:100%!important}
+.student-found-actions a.btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;text-align:center!important;width:100%!important}
 .student-found-actions form{display:flex!important;width:100%!important;margin:0!important}
-.student-found-actions form .btn{width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+.student-found-actions form .btn{width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important}
 
 .browse-module{display:grid;gap:1.25rem}.browse-hero{background:linear-gradient(135deg,#102F57 0%,#1A3C6E 54%,#226B68 100%);color:#fff;border-radius:8px;padding:1.35rem;box-shadow:0 18px 44px rgba(26,60,110,.18);display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;position:relative;overflow:hidden}.browse-hero:after{content:"";position:absolute;right:1.35rem;top:-58px;width:210px;height:210px;border:1px solid rgba(255,255,255,.16);border-radius:50%}.browse-hero>*{position:relative;z-index:1}.browse-hero h1{font-size:2.55rem;line-height:1;margin:0 0 .45rem}.browse-hero p{max-width:760px;color:rgba(255,255,255,.78);margin:0}.browse-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.browse-stat-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem;box-shadow:0 12px 30px var(--shadow);display:flex;align-items:center;gap:.85rem;min-height:96px}.browse-stat-card>span{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;background:#EEF4FF;color:var(--primary);flex:0 0 44px}.browse-stat-card small{display:block;color:var(--text-muted);font-size:.76rem;font-weight:800;text-transform:uppercase}.browse-stat-card strong{display:block;font-size:1.8rem;line-height:1.1}.browse-stat-success>span{background:#EAF7F1;color:var(--success)}.browse-stat-warning>span{background:#FFF7DF;color:#9A6700}.browse-stat-danger>span{background:#FDECEC;color:var(--danger)}.browse-panel{background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 30px var(--shadow);padding:1rem}.browse-panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}.browse-panel-header h2{font-family:'DM Sans',sans-serif;font-size:1.08rem;font-weight:800;margin:0}.browse-result-count{display:inline-flex;align-items:center;justify-content:center;background:#EEF4FF;border:1px solid #DCE8FB;color:var(--primary);border-radius:999px;font-size:.78rem;font-weight:800;padding:.32rem .7rem;white-space:nowrap}.browse-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.browse-card{border:1px solid var(--border);border-radius:8px;background:#fff;box-shadow:0 10px 24px rgba(26,60,110,.08);overflow:hidden;display:flex;flex-direction:column;min-width:0;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.browse-card:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(26,60,110,.13);border-color:#BFD0E9}.browse-card-media{height:190px;background:#F8FBFF;position:relative;display:grid;place-items:center}.browse-card-media img{width:100%;height:100%;object-fit:cover}.browse-card-media>div{width:64px;height:64px;border-radius:8px;display:grid;place-items:center;background:#EAF7F1;color:var(--success);font-size:1.6rem}.browse-card-media .badge{position:absolute;top:.75rem;right:.75rem;box-shadow:0 8px 18px rgba(0,0,0,.12)}.browse-card-body{padding:1rem;display:grid;gap:.75rem;flex:1}.browse-card-heading{display:grid;gap:.45rem}.browse-category{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-muted);font-size:.78rem;font-weight:800;text-transform:uppercase}.browse-category i{color:var(--primary)}.browse-card h3{font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:800;margin:0;color:var(--text-dark);line-height:1.25}.browse-meta{display:grid;gap:.38rem}.browse-meta span{display:flex;align-items:flex-start;gap:.45rem;color:var(--text-muted);font-size:.88rem;font-weight:700;line-height:1.35}.browse-meta i{width:16px;color:var(--primary);margin-top:.12rem}.browse-card p{color:var(--text-dark);line-height:1.6;margin:0}.browse-card-footer{border-top:1px solid var(--border);padding:1rem;margin-top:auto}.browse-card-footer .btn{width:100%;display:inline-flex;align-items:center;justify-content:center}.browse-unavailable{display:flex;align-items:center;justify-content:center;gap:.45rem;width:100%;min-height:38px;border:1px solid var(--border);border-radius:8px;background:#F8FBFF;color:var(--text-muted);font-weight:800}.browse-empty{grid-column:1 / -1;display:grid;place-items:center;gap:.4rem;padding:2rem;color:var(--text-muted);border:1px dashed var(--border);border-radius:8px;background:#F8FBFF}.browse-empty i{font-size:1.8rem;color:var(--primary)}.browse-empty p{margin:0}.browse-pagination{margin-top:1rem}@media(max-width:1199px){.browse-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.browse-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:767px){.browse-hero{display:grid;align-items:start}.browse-hero h1{font-size:2.1rem}.browse-stat-grid,.browse-grid{grid-template-columns:1fr}.browse-panel-header{display:grid}.browse-card-media{height:210px}}
 
@@ -1391,22 +1395,34 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     white-space:nowrap;
 }
 /* Override excel-lost-table nth-child min-widths (designed for 6-col admin, not 5-col staff personal) */
+.staff-lost-table thead th:nth-child(1),
+.staff-lost-table tbody td:nth-child(1){
+    width:30% !important;
+    min-width:0 !important;
+}
 .staff-lost-table thead th:nth-child(2),
 .staff-lost-table tbody td:nth-child(2){
-    min-width:130px;
+    width:18% !important;
+    min-width:0 !important;
+    white-space:nowrap !important;
 }
 .staff-lost-table thead th:nth-child(3),
 .staff-lost-table tbody td:nth-child(3){
-    min-width:110px;
+    width:16% !important;
+    min-width:0 !important;
+    white-space:nowrap !important;
 }
 .staff-lost-table thead th:nth-child(4),
 .staff-lost-table tbody td:nth-child(4){
-    min-width:100px;
+    width:14% !important;
+    min-width:0 !important;
+    white-space:nowrap !important;
 }
 .staff-lost-table thead th:nth-child(5),
 .staff-lost-table tbody td:nth-child(5){
-    min-width:0;
-    width:1%;
+    min-width:0 !important;
+    width:1% !important;
+    white-space:nowrap !important;
 }
 
 /* Staff Claims: center headers, Claim column, Status/Reviewed/Action */
@@ -1547,13 +1563,6 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 }
 
 @media (max-width:1200px){
-    .found-hero{
-        align-items:flex-start;
-        flex-wrap:wrap;
-    }
-    .found-hero .btn{
-        width:100%;
-    }
     .staff-found-table td.text-end{
         min-width:165px!important;
     }
@@ -3116,33 +3125,33 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
 }
 .staff-all-lost-table thead th:nth-child(1),
 .staff-all-lost-table tbody td:nth-child(1) {
-    width: 42% !important;
-    min-width: 320px !important;
-    max-width: 420px !important;
+    width: 20% !important;
+    min-width: 180px !important;
+    max-width: none !important;
 }
 .staff-all-lost-table thead th:nth-child(2),
 .staff-all-lost-table tbody td:nth-child(2) {
-    width: 90px !important;
+    width: 18% !important;
     min-width: 90px !important;
 }
 .staff-all-lost-table thead th:nth-child(3),
 .staff-all-lost-table tbody td:nth-child(3) {
-    width: 150px !important;
-    min-width: 150px !important;
+    width: 14% !important;
+    min-width: 110px !important;
 }
 .staff-all-lost-table thead th:nth-child(4),
 .staff-all-lost-table tbody td:nth-child(4) {
-    width: 130px !important;
-    min-width: 130px !important;
+    width: 13% !important;
+    min-width: 100px !important;
 }
 .staff-all-lost-table thead th:nth-child(5),
 .staff-all-lost-table tbody td:nth-child(5) {
-    width: 90px !important;
-    min-width: 90px !important;
+    width: 11% !important;
+    min-width: 80px !important;
 }
 .staff-all-lost-table thead th:nth-child(6),
 .staff-all-lost-table tbody td:nth-child(6) {
-    width: 110px !important;
+    width: 16% !important;
     min-width: 110px !important;
 }
 .staff-all-lost-table .lost-item-cell {
@@ -3474,6 +3483,17 @@ body.app-page{height:100dvh;overflow:hidden}.app-shell{align-items:stretch;heigh
     }
     [class*="-table-wrap"].table-cards-mode .student-found-actions form button {
         width: 100% !important;
+    }
+    /* Status badge: keep single row */
+    [class*="-table-wrap"].table-cards-mode .student-found-table.excel-found-table tbody td[data-label="Status"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+    }
+    [class*="-table-wrap"].table-cards-mode .student-found-table.excel-found-table tbody td[data-label="Status"] .badge {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
 }
 
